@@ -4,17 +4,56 @@ using TopEndLibraryHub.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// Configure the SQL Server database.
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException(
+        "Connection string 'DefaultConnection' was not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+// Configure authentication, secure passwords and staff roles.
+builder.Services
+    .AddDefaultIdentity<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+
+        options.Password.RequiredLength = 8;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireDigit = true;
+        options.Password.RequireNonAlphanumeric = true;
+
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.DefaultLockoutTimeSpan =
+            TimeSpan.FromMinutes(10);
+    })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Apply migrations and create the demonstration staff accounts.
+try
+{
+    await DbInitializer.InitialiseAsync(app.Services);
+}
+catch (Exception exception)
+{
+    var logger = app.Services
+        .GetRequiredService<ILogger<Program>>();
+
+    logger.LogCritical(
+        exception,
+        "The database could not be initialised.");
+
+    throw;
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -24,13 +63,13 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -41,6 +80,6 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.MapRazorPages()
-   .WithStaticAssets();
+    .WithStaticAssets();
 
 app.Run();
