@@ -1,0 +1,88 @@
+@model TopEndLibraryHub.Models.Music
+@using TopEndLibraryHub.Models
+
+@{
+    ViewData["Title"] = "Delete music";
+    var cannotDelete = Model.Status == ItemStatus.Borrowed;
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h1 class="h4 mb-0">Delete music</h1>
+            </div>
+
+            <div class="card-body p-4">
+                @if (cannotDelete)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <strong>This music item cannot be deleted.</strong>
+                        It is currently borrowed and must be returned before
+                        deletion can be considered.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Are you sure?</strong>
+                        This action permanently removes the music item.
+                        Items with borrowing history are protected and will not
+                        be deleted.
+                    </div>
+                }
+
+                <h2 class="h3 mb-1">@Model.Name</h2>
+                <p class="text-muted mb-4">@Model.LibraryCode</p>
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Artist</dt>
+                    <dd class="col-sm-8">@Model.Artist</dd>
+
+                    <dt class="col-sm-4">Genre</dt>
+                    <dd class="col-sm-8">@Model.MusicGenre</dd>
+
+                    <dt class="col-sm-4">Release year</dt>
+                    <dd class="col-sm-8">@Model.ReleaseYear</dd>
+
+                    <dt class="col-sm-4">Format</dt>
+                    <dd class="col-sm-8">@Model.Format</dd>
+
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">@Model.Status</dd>
+
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+                </dl>
+
+                <hr class="my-4" />
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        @if (cannotDelete)
+                        {
+                            <button type="submit"
+                                    class="btn btn-danger"
+                                    disabled>
+                                Delete music
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger">
+                                Confirm deletion
+                            </button>
+                        }
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

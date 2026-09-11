@@ -1,0 +1,82 @@
+@model TopEndLibraryHub.Models.Toy
+@using TopEndLibraryHub.Models
+
+@{
+    ViewData["Title"] = "Delete toy";
+    var cannotDelete = Model.Status == ItemStatus.Borrowed;
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h1 class="h4 mb-0">Delete toy</h1>
+            </div>
+
+            <div class="card-body p-4">
+                @if (cannotDelete)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <strong>This toy cannot be deleted.</strong>
+                        It is currently borrowed and must be returned before
+                        deletion can be considered.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Are you sure?</strong>
+                        This action permanently removes the toy. Items with
+                        borrowing history are protected and will not be deleted.
+                    </div>
+                }
+
+                <h2 class="h3 mb-1">@Model.Name</h2>
+                <p class="text-muted mb-4">@Model.LibraryCode</p>
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Toy type</dt>
+                    <dd class="col-sm-8">@Model.ToyType</dd>
+
+                    <dt class="col-sm-4">Recommended age</dt>
+                    <dd class="col-sm-8">@Model.RecommendedAge</dd>
+
+                    <dt class="col-sm-4">Manufacturer</dt>
+                    <dd class="col-sm-8">@Model.Manufacturer</dd>
+
+                    <dt class="col-sm-4">Material</dt>
+                    <dd class="col-sm-8">@Model.Material</dd>
+
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">@Model.Status</dd>
+                </dl>
+
+                <form asp-action="Delete" method="post" class="mt-4">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        @if (cannotDelete)
+                        {
+                            <button type="submit"
+                                    class="btn btn-danger"
+                                    disabled>
+                                Delete toy
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger">
+                                Delete toy
+                            </button>
+                        }
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

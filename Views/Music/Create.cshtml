@@ -1,0 +1,135 @@
+@model TopEndLibraryHub.Models.Music
+
+@{
+    ViewData["Title"] = "Add music";
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-9">
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <h1 class="display-6 fw-semibold mb-1">Add music</h1>
+                <p class="text-muted mb-0">
+                    Add a new music item to the library catalogue.
+                </p>
+            </div>
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Back to music
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert"></div>
+
+                    <h2 class="h5 mb-3">Catalogue information</h2>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label asp-for="LibraryCode" class="form-label"></label>
+                            <input asp-for="LibraryCode"
+                                   class="form-control text-uppercase"
+                                   placeholder="MU-0002" />
+                            <span asp-validation-for="LibraryCode"
+                                  class="text-danger"></span>
+                            <div class="form-text">
+                                Use 2–4 capital letters followed by four numbers.
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name"
+                                   class="form-control"
+                                   placeholder="Enter the music title" />
+                            <span asp-validation-for="Name"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="Describe this music item"></textarea>
+                            <span asp-validation-for="Description"
+                                  class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h2 class="h5 mb-3">Music details</h2>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Artist" class="form-label"></label>
+                            <input asp-for="Artist"
+                                   class="form-control"
+                                   placeholder="Artist or group name" />
+                            <span asp-validation-for="Artist"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="MusicGenre" class="form-label">
+                                Genre
+                            </label>
+                            <input asp-for="MusicGenre"
+                                   class="form-control"
+                                   placeholder="For example, Ambient" />
+                            <span asp-validation-for="MusicGenre"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="ReleaseYear" class="form-label">
+                                Release year
+                            </label>
+                            <input asp-for="ReleaseYear"
+                                   class="form-control"
+                                   placeholder="2025" />
+                            <span asp-validation-for="ReleaseYear"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Format" class="form-label"></label>
+                            <input asp-for="Format"
+                                   class="form-control"
+                                   placeholder="For example, CD or Vinyl" />
+                            <span asp-validation-for="Format"
+                                  class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-4 mb-0">
+                        New music items are automatically recorded as
+                        <strong>Available</strong> with today’s date.
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            Add music
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
