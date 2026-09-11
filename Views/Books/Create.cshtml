@@ -1,0 +1,138 @@
+@model TopEndLibraryHub.Models.Book
+
+@{
+    ViewData["Title"] = "Add Book";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-1">Add a new book</h1>
+                    <p class="text-muted mb-0">
+                        Enter the book information for the library catalogue.
+                    </p>
+                </div>
+
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Back to books
+                </a>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"></div>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label asp-for="LibraryCode"
+                                       class="form-label"></label>
+                                <input asp-for="LibraryCode"
+                                       class="form-control"
+                                       placeholder="BK-0001" />
+                                <span asp-validation-for="LibraryCode"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-8">
+                                <label asp-for="Name"
+                                       class="form-label"></label>
+                                <input asp-for="Name"
+                                       class="form-control"
+                                       placeholder="Book title" />
+                                <span asp-validation-for="Name"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Author"
+                                       class="form-label"></label>
+                                <input asp-for="Author"
+                                       class="form-control"
+                                       placeholder="Author name" />
+                                <span asp-validation-for="Author"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="BookGenre"
+                                       class="form-label"></label>
+                                <input asp-for="BookGenre"
+                                       class="form-control"
+                                       placeholder="For example: Mystery" />
+                                <span asp-validation-for="BookGenre"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Isbn"
+                                       class="form-label"></label>
+                                <input asp-for="Isbn"
+                                       class="form-control"
+                                       placeholder="Optional" />
+                                <span asp-validation-for="Isbn"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="PublicationYear"
+                                       class="form-label"></label>
+                                <input asp-for="PublicationYear"
+                                       class="form-control" />
+                                <span asp-validation-for="PublicationYear"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Publisher"
+                                       class="form-label"></label>
+                                <input asp-for="Publisher"
+                                       class="form-control"
+                                       placeholder="Optional" />
+                                <span asp-validation-for="Publisher"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Description"
+                                       class="form-label"></label>
+                                <textarea asp-for="Description"
+                                          class="form-control"
+                                          rows="4"
+                                          placeholder="Write a useful catalogue description."></textarea>
+                                <span asp-validation-for="Description"
+                                      class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Add book
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3 mb-0">
+                New items are automatically recorded as
+                <strong>Available</strong>.
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,200 @@
+@model IEnumerable<TopEndLibraryHub.Models.Book>
+@using TopEndLibraryHub.Models
+
+@{
+    ViewData["Title"] = "Manage Books";
+
+    var currentSearch = ViewData["CurrentSearch"] as string;
+    var currentStatus = ViewData["CurrentStatus"]?.ToString();
+}
+
+<div class="container py-4">
+    <div class="d-flex flex-column flex-md-row
+        justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h1 class="h2 mb-1">Manage books</h1>
+            <p class="text-muted mb-0">
+                Create, review and maintain the library’s book collection.
+            </p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Add new book
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] is not null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] is not null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label for="searchTerm" class="form-label">
+                            Search books
+                        </label>
+                        <input id="searchTerm"
+                               name="searchTerm"
+                               value="@currentSearch"
+                               class="form-control"
+                               placeholder="Title, code, author or genre" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="status" class="form-label">
+                            Item status
+                        </label>
+                        <select id="status"
+                                name="status"
+                                class="form-select">
+                            <option value="">All statuses</option>
+
+                            @foreach (var itemStatus
+                                in Enum.GetValues<ItemStatus>())
+                            {
+                                if (currentStatus == itemStatus.ToString())
+                                {
+                                    <option value="@itemStatus" selected>
+                                        @itemStatus
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@itemStatus">
+                                        @itemStatus
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 d-flex gap-2">
+                        <button type="submit"
+                                class="btn btn-dark flex-grow-1">
+                            Search
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Reset
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No books matched your search. Try changing the search
+            text or status filter.
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Library code</th>
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Year</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var book in Model)
+                        {
+                            var statusClass = book.Status switch
+                            {
+                                ItemStatus.Available => "text-bg-success",
+                                ItemStatus.Borrowed => "text-bg-primary",
+                                ItemStatus.Damaged => "text-bg-warning",
+                                ItemStatus.Destroyed => "text-bg-danger",
+                                _ => "text-bg-secondary"
+                            };
+
+                            var shortDescription =
+                                book.Description.Length > 75
+                                    ? book.Description[..75] + "..."
+                                    : book.Description;
+
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold">
+                                        @book.LibraryCode
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="fw-semibold">@book.Name</div>
+                                    <small class="text-muted">
+                                        @shortDescription
+                                    </small>
+                                </td>
+
+                                <td>@book.Author</td>
+                                <td>@book.BookGenre</td>
+                                <td>@book.PublicationYear</td>
+
+                                <td>
+                                    <span class="badge @statusClass">
+                                        @book.Status
+                                    </span>
+                                </td>
+
+                                <td class="text-end text-nowrap">
+                                    <a asp-action="Details"
+                                       asp-route-id="@book.Id"
+                                       class="btn btn-sm btn-outline-info">
+                                        Details
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@book.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Edit
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@book.Id"
+                                       class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

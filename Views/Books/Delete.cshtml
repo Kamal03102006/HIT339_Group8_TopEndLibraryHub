@@ -1,0 +1,76 @@
+@model TopEndLibraryHub.Models.Book
+@using TopEndLibraryHub.Models
+
+@{
+    ViewData["Title"] = "Delete Book";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <h1 class="h2 mb-1">Delete book</h1>
+                <p class="text-muted mb-0">
+                    Review the book information before confirming deletion.
+                </p>
+            </div>
+
+            @if (Model.Status == ItemStatus.Borrowed)
+            {
+                <div class="alert alert-danger">
+                    This book is currently borrowed and cannot be deleted.
+                    It must first be returned through Reception.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    This action permanently removes the book. Items with
+                    borrowing history will be protected from deletion.
+                </div>
+            }
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Library code</dt>
+                        <dd class="col-sm-8">@Model.LibraryCode</dd>
+
+                        <dt class="col-sm-4">Book</dt>
+                        <dd class="col-sm-8">@Model.Name</dd>
+
+                        <dt class="col-sm-4">Author</dt>
+                        <dd class="col-sm-8">@Model.Author</dd>
+
+                        <dt class="col-sm-4">Genre</dt>
+                        <dd class="col-sm-8">@Model.BookGenre</dd>
+
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">@Model.Status</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <form asp-action="Delete"
+                  asp-route-id="@Model.Id"
+                  method="post"
+                  class="d-flex gap-2 mt-4">
+
+                <input type="hidden" asp-for="Id" />
+
+                @if (Model.Status != ItemStatus.Borrowed)
+                {
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Delete permanently
+                    </button>
+                }
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
