@@ -1,0 +1,165 @@
+@model TopEndLibraryHub.Models.Borrower
+
+@{
+    ViewData["Title"] = "Borrower details";
+    var today = DateTime.UtcNow.Date;
+    var activeLoanCount = Model.Loans.Count(loan => loan.ReturnedDate == null);
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-10">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+                    <div>
+                        <h1 class="display-6 fw-semibold mb-1">
+                            @Model.FullName
+                        </h1>
+                        <p class="text-muted mb-0">
+                            @Model.MembershipNumber
+                        </p>
+                    </div>
+
+                    <div>
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success fs-6">
+                                Active member
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary fs-6">
+                                Inactive member
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 col-lg-3">Email</dt>
+                    <dd class="col-sm-8 col-lg-9">
+                        <a href="mailto:@Model.Email">@Model.Email</a>
+                    </dd>
+
+                    <dt class="col-sm-4 col-lg-3">Phone</dt>
+                    <dd class="col-sm-8 col-lg-9">@Model.Phone</dd>
+
+                    <dt class="col-sm-4 col-lg-3">Address</dt>
+                    <dd class="col-sm-8 col-lg-9">@Model.Address</dd>
+
+                    <dt class="col-sm-4 col-lg-3">Date registered</dt>
+                    <dd class="col-sm-8 col-lg-9">
+                        @Model.DateRegistered.ToString("dd MMMM yyyy")
+                    </dd>
+
+                    <dt class="col-sm-4 col-lg-3">Active loans</dt>
+                    <dd class="col-sm-8 col-lg-9">@activeLoanCount</dd>
+                </dl>
+
+                <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-primary">
+                        Edit borrower
+                    </a>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Back to borrowers
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h2 class="h5 mb-0">Borrowing history</h2>
+            </div>
+
+            @if (!Model.Loans.Any())
+            {
+                <div class="card-body text-center py-5">
+                    <p class="text-muted mb-0">
+                        This borrower does not have any borrowing history.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Item</th>
+                                <th>Borrowed</th>
+                                <th>Due</th>
+                                <th>Returned</th>
+                                <th>Fine</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var loan in Model.Loans
+                                .OrderByDescending(loan => loan.BorrowedDate))
+                            {
+                                var isReturned = loan.ReturnedDate != null;
+                                var isOverdue = !isReturned &&
+                                    loan.DueDate.Date < today;
+
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">
+                                            @(loan.Item?.Name ?? "Unknown item")
+                                        </div>
+                                        <small class="text-muted">
+                                            @(loan.Item?.LibraryCode ?? "Not available")
+                                        </small>
+                                    </td>
+
+                                    <td>
+                                        @loan.BorrowedDate.ToString("dd MMM yyyy")
+                                    </td>
+
+                                    <td>
+                                        @loan.DueDate.ToString("dd MMM yyyy")
+                                    </td>
+
+                                    <td>
+                                        @(loan.ReturnedDate?.ToString("dd MMM yyyy") ?? "-")
+                                    </td>
+
+                                    <td>
+                                        @loan.FineAmount.ToString("C")
+                                    </td>
+
+                                    <td>
+                                        @if (isReturned)
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Returned
+                                            </span>
+                                        }
+                                        else if (isOverdue)
+                                        {
+                                            <span class="badge bg-danger">
+                                                Overdue
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary">
+                                                On loan
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

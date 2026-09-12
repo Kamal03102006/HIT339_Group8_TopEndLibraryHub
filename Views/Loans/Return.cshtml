@@ -1,0 +1,90 @@
+﻿@model TopEndLibraryHub.ViewModels.ReturnItemViewModel
+
+@{
+    ViewData["Title"] = "Return item";
+
+    var dailyFineRate =
+        ViewData["DailyFineRate"] is decimal rate
+            ? rate
+            : 1.50m;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <h1 class="display-6 fw-semibold mb-1">Return item</h1>
+                <p class="text-muted mb-0">
+                    Complete an active loan and calculate any late fine.
+                </p>
+            </div>
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Loan records
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form asp-action="Return" method="post">
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="LibraryCode" class="form-label"></label>
+                        <input asp-for="LibraryCode"
+                               class="form-control form-control-lg text-uppercase"
+                               placeholder="For example, BK-0001"
+                               autofocus />
+                        <span asp-validation-for="LibraryCode"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ReturnDate" class="form-label"></label>
+                        <input asp-for="ReturnDate"
+                               class="form-control form-control-lg" />
+                        <span asp-validation-for="ReturnDate"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="PayFineNow"
+                               class="form-check-input" />
+                        <label asp-for="PayFineNow"
+                               class="form-check-label"></label>
+                        <div class="form-text">
+                            Select this only if the borrower pays any calculated
+                            late fine during this transaction.
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        Late returns are charged
+                        <strong>@dailyFineRate.ToString("C") per day</strong>.
+                        The system calculates the fine automatically using the
+                        due date and return date.
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            Confirm return
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,94 @@
+@model TopEndLibraryHub.Models.Borrower
+
+@{
+    ViewData["Title"] = "Delete borrower";
+
+    var hasLoanHistory = Model.Loans.Any();
+    var hasActiveLoan = Model.Loans.Any(
+        loan => loan.ReturnedDate == null);
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h1 class="h4 mb-0">Delete borrower</h1>
+            </div>
+
+            <div class="card-body p-4">
+                @if (hasActiveLoan)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <strong>This borrower cannot be deleted.</strong>
+                        They currently have one or more active loans.
+                    </div>
+                }
+                else if (hasLoanHistory)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <strong>This borrower cannot be deleted.</strong>
+                        Their record is retained to preserve borrowing and
+                        financial history.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Are you sure?</strong>
+                        This will permanently remove the borrower’s record.
+                    </div>
+                }
+
+                <h2 class="h3 mb-1">@Model.FullName</h2>
+                <p class="text-muted mb-4">@Model.MembershipNumber</p>
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4">Phone</dt>
+                    <dd class="col-sm-8">@Model.Phone</dd>
+
+                    <dt class="col-sm-4">Address</dt>
+                    <dd class="col-sm-8">@Model.Address</dd>
+
+                    <dt class="col-sm-4">Membership status</dt>
+                    <dd class="col-sm-8">
+                        @(Model.IsActive ? "Active" : "Inactive")
+                    </dd>
+
+                    <dt class="col-sm-4">Date registered</dt>
+                    <dd class="col-sm-8">
+                        @Model.DateRegistered.ToString("dd MMMM yyyy")
+                    </dd>
+                </dl>
+
+                <form asp-action="Delete" method="post" class="mt-4">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        @if (hasLoanHistory)
+                        {
+                            <button type="submit"
+                                    class="btn btn-danger"
+                                    disabled>
+                                Delete borrower
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger">
+                                Confirm deletion
+                            </button>
+                        }
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

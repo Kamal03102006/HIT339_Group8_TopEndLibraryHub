@@ -1,0 +1,130 @@
+@model TopEndLibraryHub.Models.Borrower
+
+@{
+    ViewData["Title"] = "Edit borrower";
+    var registrationDate = Model.DateRegistered.ToString("dd MMMM yyyy");
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <h1 class="display-6 fw-semibold mb-1">Edit borrower</h1>
+                <p class="text-muted mb-0">
+                    Update contact details and membership status.
+                </p>
+            </div>
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Back to borrowers
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <label asp-for="MembershipNumber"
+                                   class="form-label"></label>
+                            <input asp-for="MembershipNumber"
+                                   class="form-control text-uppercase" />
+                            <span asp-validation-for="MembershipNumber"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-7">
+                            <label asp-for="FullName"
+                                   class="form-label"></label>
+                            <input asp-for="FullName"
+                                   class="form-control"
+                                   autocomplete="name" />
+                            <span asp-validation-for="FullName"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-7">
+                            <label asp-for="Email"
+                                   class="form-label"></label>
+                            <input asp-for="Email"
+                                   class="form-control"
+                                   autocomplete="email" />
+                            <span asp-validation-for="Email"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label asp-for="Phone"
+                                   class="form-label"></label>
+                            <input asp-for="Phone"
+                                   class="form-control"
+                                   type="tel"
+                                   autocomplete="tel" />
+                            <span asp-validation-for="Phone"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Address"
+                                   class="form-label"></label>
+                            <textarea asp-for="Address"
+                                      class="form-control"
+                                      rows="3"
+                                      autocomplete="street-address"></textarea>
+                            <span asp-validation-for="Address"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Date registered</label>
+                            <input value="@registrationDate"
+                                   class="form-control"
+                                   readonly />
+                            <div class="form-text">
+                                The original registration date cannot be changed.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="form-check mt-4">
+                                <input asp-for="IsActive"
+                                       class="form-check-input" />
+                                <label asp-for="IsActive"
+                                       class="form-check-label"></label>
+                                <span asp-validation-for="IsActive"
+                                      class="text-danger d-block"></span>
+                                <div class="form-text">
+                                    Borrowers with active loans cannot be deactivated.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            Save changes
+                        </button>
+
+                        <a asp-action="Details"
+                           asp-route-id="@Model Id"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

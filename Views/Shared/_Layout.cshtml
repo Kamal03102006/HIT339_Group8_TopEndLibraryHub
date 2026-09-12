@@ -2,50 +2,189 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TopEndLibraryHub</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Top End Library Hub</title>
+
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TopEndLibraryHub.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/TopEndLibraryHub.styles.css"
+          asp-append-version="true" />
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TopEndLibraryHub</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-4">
+            <div class="container">
+                <a class="navbar-brand fw-semibold"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index">
+                    Top End Library Hub
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavigation"
+                        aria-controls="mainNavigation"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div id="mainNavigation"
+                     class="navbar-collapse collapse">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link"
+                               asp-area=""
+                               asp-controller="Home"
+                               asp-action="Index">
+                                Home
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle"
+                                   href="#"
+                                   id="adminDropdown"
+                                   role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    Administration
+                                </a>
+
+                                <ul class="dropdown-menu"
+                                    aria-labelledby="adminDropdown">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Admin"
+                                           asp-action="Index">
+                                            Admin dashboard
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider" /></li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Books"
+                                           asp-action="Index">
+                                            Manage books
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Music"
+                                           asp-action="Index">
+                                            Manage music
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Toys"
+                                           asp-action="Index">
+                                            Manage toys
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Reception") ||
+                             User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle"
+                                   href="#"
+                                   id="receptionDropdown"
+                                   role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    Front desk
+                                </a>
+
+                                <ul class="dropdown-menu"
+                                    aria-labelledby="receptionDropdown">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Borrowers"
+                                           asp-action="Index">
+                                            Manage borrowers
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Loans"
+                                           asp-action="Index">
+                                            Loan records
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider" /></li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Loans"
+                                           asp-action="Borrow">
+                                            Borrow item
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Loans"
+                                           asp-action="Return">
+                                            Return item
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
+
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-5">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - TopEndLibraryHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - Top End Library Hub -
+            <a asp-area=""
+               asp-controller="Home"
+               asp-action="Privacy">
+                Privacy
+            </a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

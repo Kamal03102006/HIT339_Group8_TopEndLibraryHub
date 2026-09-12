@@ -1,0 +1,207 @@
+@model IEnumerable<TopEndLibraryHub.Models.Borrower>
+
+@{
+    ViewData["Title"] = "Manage borrowers";
+
+    var currentSearch = Context.Request.Query["searchString"].ToString();
+    var currentActivity = Context.Request.Query["activity"].ToString();
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="display-6 fw-semibold mb-1">Manage borrowers</h1>
+        <p class="text-muted mb-0">
+            Register borrowers and maintain their contact and membership details.
+        </p>
+    </div>
+
+    <a asp-action="Create" class="btn btn-primary">
+        Register borrower
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @successMessage
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @errorMessage
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-6">
+                    <label for="searchString" class="form-label">
+                        Search borrowers
+                    </label>
+                    <input id="searchString"
+                           name="searchString"
+                           value="@currentSearch"
+                           class="form-control"
+                           placeholder="Name, membership number, email or phone" />
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <label for="activity" class="form-label">
+                        Membership status
+                    </label>
+                    <select id="activity"
+                            name="activity"
+                            class="form-select">
+                        <option value="">All borrowers</option>
+
+                        @if (currentActivity == "active")
+                        {
+                            <option value="active" selected>Active only</option>
+                        }
+                        else
+                        {
+                            <option value="active">Active only</option>
+                        }
+
+                        @if (currentActivity == "inactive")
+                        {
+                            <option value="inactive" selected>Inactive only</option>
+                        }
+                        else
+                        {
+                            <option value="inactive">Inactive only</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="d-flex gap-2">
+                        <button type="submit"
+                                class="btn btn-dark flex-grow-1">
+                            Search
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Reset
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body py-5 text-center">
+            <h2 class="h5">No borrowers found</h2>
+            <p class="text-muted mb-3">
+                Try changing the search criteria or register a new borrower.
+            </p>
+
+            <a asp-action="Create" class="btn btn-primary">
+                Register borrower
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Membership number</th>
+                        <th>Borrower</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Date registered</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var borrower in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-nowrap">
+                                @borrower.MembershipNumber
+                            </td>
+
+                            <td>
+                                <div class="fw-semibold">
+                                    @borrower.FullName
+                                </div>
+                                <a href="mailto:@borrower.Email"
+                                   class="small">
+                                    @borrower.Email
+                                </a>
+                            </td>
+
+                            <td class="text-nowrap">
+                                @borrower.Phone
+                            </td>
+
+                            <td style="min-width: 190px;">
+                                @borrower.Address
+                            </td>
+
+                            <td class="text-nowrap">
+                                @borrower.DateRegistered.ToString("dd MMM yyyy")
+                            </td>
+
+                            <td>
+                                @if (borrower.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactive</span>
+                                }
+                            </td>
+
+                            <td class="text-end text-nowrap">
+                                <div class="btn-group">
+                                    <a asp-action="Details"
+                                       asp-route-id="@borrower.Id"
+                                       class="btn btn-sm btn-outline-secondary">
+                                        Details
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@borrower.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Edit
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@borrower.Id"
+                                       class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

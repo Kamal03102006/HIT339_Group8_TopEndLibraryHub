@@ -1,0 +1,178 @@
+﻿@model TopEndLibraryHub.Models.Loan
+
+@{
+    ViewData["Title"] = "Loan details";
+
+    var isReturned = Model.ReturnedDate != null;
+    var isOverdue = !isReturned &&
+        Model.DueDate.Date < DateTime.UtcNow.Date;
+
+    var statusText = isReturned
+        ? "Returned"
+        : isOverdue
+            ? "Overdue"
+            : "Active";
+
+    var statusClass = isReturned
+        ? "bg-secondary"
+        : isOverdue
+            ? "bg-danger"
+            : "bg-primary";
+}
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @successMessage
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @errorMessage
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+    </div>
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-9">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+                    <div>
+                        <h1 class="display-6 fw-semibold mb-1">
+                            Loan details
+                        </h1>
+                        <p class="text-muted mb-0">
+                            Transaction #@Model.Id
+                        </p>
+                    </div>
+
+                    <div>
+                        <span class="badge @statusClass fs-6">
+                            @statusText
+                        </span>
+                    </div>
+                </div>
+
+                <h2 class="h5">Item information</h2>
+                <dl class="row mb-4">
+                    <dt class="col-sm-4">Library code</dt>
+                    <dd class="col-sm-8">@Model.Item.LibraryCode</dd>
+
+                    <dt class="col-sm-4">Item name</dt>
+                    <dd class="col-sm-8">@Model.Item.Name</dd>
+                </dl>
+
+                <h2 class="h5">Borrower information</h2>
+                <dl class="row mb-4">
+                    <dt class="col-sm-4">Membership number</dt>
+                    <dd class="col-sm-8">
+                        @Model.Borrower.MembershipNumber
+                    </dd>
+
+                    <dt class="col-sm-4">Borrower</dt>
+                    <dd class="col-sm-8">@Model.Borrower.FullName</dd>
+                </dl>
+
+                <h2 class="h5">Loan information</h2>
+                <dl class="row mb-4">
+                    <dt class="col-sm-4">Borrowed date</dt>
+                    <dd class="col-sm-8">
+                        @Model.BorrowedDate.ToString("dd MMMM yyyy")
+                    </dd>
+
+                    <dt class="col-sm-4">Due date</dt>
+                    <dd class="col-sm-8">
+                        @Model.DueDate.ToString("dd MMMM yyyy")
+                    </dd>
+
+                    <dt class="col-sm-4">Returned date</dt>
+                    <dd class="col-sm-8">
+                        @(Model.ReturnedDate?.ToString("dd MMMM yyyy")
+                            ?? "Not returned")
+                    </dd>
+                </dl>
+
+                <h2 class="h5">Fine information</h2>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Fine amount</dt>
+                    <dd class="col-sm-8">
+                        @Model.FineAmount.ToString("C")
+                    </dd>
+
+                    <dt class="col-sm-4">Payment status</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.FineAmount <= 0)
+                        {
+                            <span class="badge bg-success">No fine</span>
+                        }
+                        else if (Model.FinePaid)
+                        {
+                            <span class="badge bg-success">Paid</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Outstanding
+                            </span>
+                        }
+                    </dd>
+
+                    @if (Model.FinePaidDate != null)
+                    {
+                        <dt class="col-sm-4">Payment date</dt>
+                        <dd class="col-sm-8">
+                            @Model.FinePaidDate.Value.ToString("dd MMMM yyyy")
+                        </dd>
+                    }
+                </dl>
+
+                @if (Model.FineAmount > 0 && !Model.FinePaid)
+                {
+                    <form asp-action="PayFine"
+                          asp-route-id="@Model.Id"
+                          method="post"
+                          class="mt-4">
+                        <button type="submit" class="btn btn-success">
+                            Record fine as paid
+                        </button>
+                    </form>
+                }
+
+                <hr class="my-4" />
+
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    @if (!isReturned)
+                    {
+                        <a asp-action="Return"
+                           asp-route-libraryCode="@Model.Item.LibraryCode"
+                           class="btn btn-primary">
+                            Return item
+                        </a>
+                    }
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Back to loan records
+                    </a>
+
+                    <a asp-controller="Borrowers"
+                       asp-action="Details"
+                       asp-route-id="@Model.BorrowerId"
+                       class="btn btn-outline-secondary">
+                        View borrower
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
