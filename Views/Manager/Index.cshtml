@@ -1,0 +1,435 @@
+﻿@model TopEndLibraryHub.ViewModels.ManagerDashboardViewModel
+
+@{
+    ViewData["Title"] = "Manager dashboard";
+
+    var safeItemTotal = Math.Max(Model.TotalItems, 1);
+
+    var availablePercentage =
+        (int)Math.Round((double)Model.AvailableItems / safeItemTotal * 100);
+
+    var borrowedPercentage =
+        (int)Math.Round((double)Model.BorrowedItems / safeItemTotal * 100);
+
+    var damagedPercentage =
+        (int)Math.Round((double)Model.DamagedItems / safeItemTotal * 100);
+
+    var destroyedPercentage =
+        (int)Math.Round((double)Model.DestroyedItems / safeItemTotal * 100);
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="display-6 fw-semibold mb-1">Manager dashboard</h1>
+        <p class="text-muted mb-0">
+            Review collection performance, borrowing activity and library fines.
+        </p>
+    </div>
+
+    <span class="badge rounded-pill text-bg-light border px-3 py-2">
+        Updated @DateTime.Now.ToString("dd MMMM yyyy, h:mm tt")
+    </span>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-uppercase text-muted small fw-semibold mb-2">
+                    Total items
+                </p>
+                <p class="display-6 fw-semibold mb-1">@Model.TotalItems</p>
+                <p class="text-muted mb-0">Across the complete collection</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-uppercase text-muted small fw-semibold mb-2">
+                    Availability
+                </p>
+                <p class="display-6 fw-semibold text-success mb-1">
+                    @Model.AvailabilityRate.ToString("0.0")%
+                </p>
+                <p class="text-muted mb-0">
+                    @Model.AvailableItems item(s) currently available
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-uppercase text-muted small fw-semibold mb-2">
+                    Active loans
+                </p>
+                <p class="display-6 fw-semibold text-primary mb-1">
+                    @Model.ActiveLoans
+                </p>
+                <p class="text-muted mb-0">Items currently on loan</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-uppercase text-muted small fw-semibold mb-2">
+                    Overdue loans
+                </p>
+                <p class="display-6 fw-semibold text-danger mb-1">
+                    @Model.OverdueLoans
+                </p>
+                <p class="text-muted mb-0">Active loans past their due date</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0 pt-4 px-4">
+                <h2 class="h4 mb-1">Item status overview</h2>
+                <p class="text-muted mb-0">
+                    Current condition and circulation status of all items.
+                </p>
+            </div>
+
+            <div class="card-body px-4">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Available</span>
+                        <strong>@Model.AvailableItems</strong>
+                    </div>
+                    <div class="progress" role="progressbar"
+                         aria-label="Available items"
+                         aria-valuenow="@availablePercentage"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="progress-bar bg-success"
+                             style="width: @availablePercentage%">
+                            @availablePercentage%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Borrowed</span>
+                        <strong>@Model.BorrowedItems</strong>
+                    </div>
+                    <div class="progress" role="progressbar"
+                         aria-label="Borrowed items"
+                         aria-valuenow="@borrowedPercentage"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="progress-bar bg-primary"
+                             style="width: @borrowedPercentage%">
+                            @borrowedPercentage%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Damaged</span>
+                        <strong>@Model.DamagedItems</strong>
+                    </div>
+                    <div class="progress" role="progressbar"
+                         aria-label="Damaged items"
+                         aria-valuenow="@damagedPercentage"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="progress-bar bg-warning text-dark"
+                             style="width: @damagedPercentage%">
+                            @damagedPercentage%
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Destroyed</span>
+                        <strong>@Model.DestroyedItems</strong>
+                    </div>
+                    <div class="progress" role="progressbar"
+                         aria-label="Destroyed items"
+                         aria-valuenow="@destroyedPercentage"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="progress-bar bg-dark"
+                             style="width: @destroyedPercentage%">
+                            @destroyedPercentage%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0 pt-4 px-4">
+                <h2 class="h4 mb-1">Fine summary</h2>
+                <p class="text-muted mb-0">
+                    Recorded, collected and outstanding late fines.
+                </p>
+            </div>
+
+            <div class="card-body px-4">
+                <div class="border rounded-3 p-3 mb-3">
+                    <span class="text-muted">Total fines recorded</span>
+                    <div class="fs-3 fw-semibold">
+                        @Model.TotalFines.ToString("C")
+                    </div>
+                </div>
+
+                <div class="border rounded-3 p-3 mb-3">
+                    <span class="text-muted">Fines paid</span>
+                    <div class="fs-3 fw-semibold text-success">
+                        @Model.PaidFines.ToString("C")
+                    </div>
+                </div>
+
+                <div class="border rounded-3 p-3">
+                    <span class="text-muted">Outstanding fines</span>
+                    <div class="fs-3 fw-semibold text-danger">
+                        @Model.OutstandingFines.ToString("C")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0 pt-4 px-4">
+                <h2 class="h4 mb-1">Collection by type</h2>
+                <p class="text-muted mb-0">
+                    Availability across books, music and toys.
+                </p>
+            </div>
+
+            <div class="card-body px-4">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Type</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Available</th>
+                                <th scope="col">Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var itemType in Model.ItemsByType)
+                            {
+                                var typeAvailability = itemType.TotalItems == 0
+                                    ? 0
+                                    : (double)itemType.AvailableItems /
+                                      itemType.TotalItems * 100;
+
+                                <tr>
+                                    <td class="fw-semibold">@itemType.ItemType</td>
+                                    <td>@itemType.TotalItems</td>
+                                    <td>@itemType.AvailableItems</td>
+                                    <td>@typeAvailability.ToString("0.0")%</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0 pt-4 px-4">
+                <h2 class="h4 mb-1">Borrowing activity</h2>
+                <p class="text-muted mb-0">
+                    Summary of all recorded loan transactions.
+                </p>
+            </div>
+
+            <div class="card-body px-4">
+                <div class="row g-3 text-center">
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3">
+                            <div class="fs-2 fw-semibold">@Model.TotalLoans</div>
+                            <span class="text-muted">Total loans</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3">
+                            <div class="fs-2 fw-semibold text-success">
+                                @Model.ReturnedLoans
+                            </div>
+                            <span class="text-muted">Returned</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3">
+                            <div class="fs-2 fw-semibold text-primary">
+                                @Model.ActiveLoans
+                            </div>
+                            <span class="text-muted">Active</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3">
+                            <div class="fs-2 fw-semibold text-danger">
+                                @Model.OverdueLoans
+                            </div>
+                            <span class="text-muted">Overdue</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 pt-4 px-4">
+        <h2 class="h4 mb-1">Most borrowed items</h2>
+        <p class="text-muted mb-0">
+            Items ranked by their number of loan transactions.
+        </p>
+    </div>
+
+    <div class="card-body px-4">
+        @if (Model.PopularItems.Count == 0)
+        {
+            <div class="alert alert-light border mb-0">
+                No borrowing activity has been recorded yet.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Library code</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Times borrowed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.PopularItems)
+                        {
+                            <tr>
+                                <td>@item.LibraryCode</td>
+                                <td class="fw-semibold">@item.Name</td>
+                                <td>
+                                    <span class="badge text-bg-primary">
+                                        @item.LoanCount
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 pt-4 px-4">
+        <h2 class="h4 mb-1">Recent loan activity</h2>
+        <p class="text-muted mb-0">
+            The five most recently created loan records.
+        </p>
+    </div>
+
+    <div class="card-body px-4">
+        @if (Model.RecentLoans.Count == 0)
+        {
+            <div class="alert alert-light border mb-0">
+                No loan records are available.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Borrower</th>
+                            <th scope="col">Borrowed</th>
+                            <th scope="col">Due</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Fine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var loan in Model.RecentLoans)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@loan.ItemName</div>
+                                    <small class="text-muted">
+                                        @loan.LibraryCode
+                                    </small>
+                                </td>
+                                <td>@loan.BorrowerName</td>
+                                <td>@loan.BorrowedDate.ToString("dd MMM yyyy")</td>
+                                <td>@loan.DueDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if (loan.ReturnedDate.HasValue)
+                                    {
+                                        <span class="badge text-bg-secondary">
+                                            Returned
+                                        </span>
+                                    }
+                                    else if (loan.DueDate.Date < DateTime.UtcNow.Date)
+                                    {
+                                        <span class="badge text-bg-danger">
+                                            Overdue
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge text-bg-primary">
+                                            Active
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (loan.FineAmount <= 0)
+                                    {
+                                        <span class="text-muted">None</span>
+                                    }
+                                    else if (loan.FinePaid)
+                                    {
+                                        <span class="text-success">
+                                            @loan.FineAmount.ToString("C") paid
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">
+                                            @loan.FineAmount.ToString("C") outstanding
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

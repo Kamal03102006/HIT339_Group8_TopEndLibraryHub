@@ -54,6 +54,15 @@
                             </a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-area=""
+                               asp-controller="Catalogue"
+                               asp-action="Index">
+                                Catalogue
+                            </a>
+                        </li>
+
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
@@ -76,7 +85,9 @@
                                         </a>
                                     </li>
 
-                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
 
                                     <li>
                                         <a class="dropdown-item"
@@ -136,7 +147,9 @@
                                         </a>
                                     </li>
 
-                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
 
                                     <li>
                                         <a class="dropdown-item"
@@ -154,6 +167,19 @@
                                         </a>
                                     </li>
                                 </ul>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Manager") ||
+                             User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-area=""
+                                   asp-controller="Manager"
+                                   asp-action="Index">
+                                    Manager dashboard
+                                </a>
                             </li>
                         }
                     </ul>
@@ -183,7 +209,8 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
