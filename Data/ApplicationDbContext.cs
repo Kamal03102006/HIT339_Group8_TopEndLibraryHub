@@ -19,11 +19,34 @@ namespace TopEndLibraryHub.Data
         public DbSet<Toy> Toys => Set<Toy>();
         public DbSet<Borrower> Borrowers => Set<Borrower>();
         public DbSet<Loan> Loans => Set<Loan>();
-
+        public DbSet<Branch> Branches => Set<Branch>();
+        public DbSet<ReceptionDesk> ReceptionDesks => Set<ReceptionDesk>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            // Each physical branch has a unique code.
+            builder.Entity<Branch>()
+                .HasIndex(branch => branch.BranchCode)
+                .IsUnique();
 
+            // Each reception desk has a unique code.
+            builder.Entity<ReceptionDesk>()
+                .HasIndex(desk => desk.DeskCode)
+                .IsUnique();
+
+            // Items belong to a physical branch.
+            builder.Entity<Item>()
+                .HasOne(item => item.Branch)
+                .WithMany()
+                .HasForeignKey(item => item.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Reception desks belong to a physical branch.
+            builder.Entity<ReceptionDesk>()
+                .HasOne(desk => desk.Branch)
+                .WithMany()
+                .HasForeignKey(desk => desk.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
             // Store all item types in one table while preserving inheritance.
             builder.Entity<Item>()
                 .HasDiscriminator<string>("ItemType")
