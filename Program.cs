@@ -37,6 +37,9 @@ builder.Services
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<HoldQueueService>();
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddSingleton<LibraryClock>();
+builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();
 
