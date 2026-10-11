@@ -7,12 +7,12 @@ namespace TopEndLibraryHub.Controllers
 {
     [ApiController]
     [Route("api/catalogue")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class CatalogueApiController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CatalogueApiController(
-            ApplicationDbContext context)
+        public CatalogueApiController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -65,14 +65,101 @@ namespace TopEndLibraryHub.Controllers
                     i.LibraryCode,
                     i.Name,
                     i.Description,
-                    Status = i.Status,
+                    Status = i.Status.ToString(),
                     Available = i.Status == ItemStatus.Available
                 })
                 .ToListAsync();
 
-            Response.Headers.CacheControl = "no-store";
+            return Ok(records);
+        }
+
+        // GET: api/catalogue/available
+        // GET: api/catalogue/available?limit=20
+
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAvailable(
+            [FromQuery] int limit = 30)
+        {
+            if (limit < 1 || limit > 100)
+            {
+                return BadRequest(new
+                {
+                    error = "Limit must be between 1 and 100."
+                });
+            }
+
+            var records = await _context.Items
+                .AsNoTracking()
+                .Where(i => i.Status == ItemStatus.Available)
+                .OrderBy(i => i.Name)
+                .ThenBy(i => i.Id)
+                .Take(limit)
+                .Select(i => new
+                {
+                    i.LibraryCode,
+                    i.Name,
+                    i.Description,
+                    Status = i.Status.ToString(),
+                    Available = true
+                })
+                .ToListAsync();
 
             return Ok(records);
+        }
+
+        // GET: api/catalogue/categories
+
+        [HttpGet("categories")]
+        public IActionResult GetCategories()
+        {
+            var categories = new[]
+            {
+                new
+                {
+                    Name = "Book",
+                    Description = "Books available in the library catalogue."
+                },
+                new
+                {
+                    Name = "Music",
+                    Description = "Music items available in the library catalogue."
+                },
+                new
+                {
+                    Name = "Toy",
+                    Description = "Toys available in the library catalogue."
+                }
+            };
+
+            return Ok(categories);
+        }
+
+        // GET: api/catalogue/status
+
+        [HttpGet("status")]
+        public async Task<IActionResult> GetOperatingStatus()
+        {
+            bool databaseConnected =
+                await _context.Database.CanConnectAsync();
+
+            if (!databaseConnected)
+            {
+                return StatusCode(503, new
+                {
+                    Service = "TopEndLibraryHub Catalogue API",
+                    Status = "Unavailable",
+                    DatabaseConnected = false,
+                    CheckedAtUtc = DateTime.UtcNow
+                });
+            }
+
+            return Ok(new
+            {
+                Service = "TopEndLibraryHub Catalogue API",
+                Status = "Operational",
+                DatabaseConnected = true,
+                CheckedAtUtc = DateTime.UtcNow
+            });
         }
 
         // GET: api/catalogue/BK-0001
@@ -98,12 +185,10 @@ namespace TopEndLibraryHub.Controllers
                     i.LibraryCode,
                     i.Name,
                     i.Description,
-                    Status = i.Status,
+                    Status = i.Status.ToString(),
                     Available = i.Status == ItemStatus.Available
                 })
                 .FirstOrDefaultAsync();
-
-            Response.Headers.CacheControl = "no-store";
 
             if (item == null)
             {
