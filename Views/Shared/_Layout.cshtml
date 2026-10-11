@@ -182,6 +182,19 @@
                                 </a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin") ||
+                            User.IsInRole("Reception") ||
+                            User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    asp-area=""
+                        asp-controller="Notifications"
+                                asp-action="Index">
+                                    Notifications
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                     <partial name="_LoginPartial" />

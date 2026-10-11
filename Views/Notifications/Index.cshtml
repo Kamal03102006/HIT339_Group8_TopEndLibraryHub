@@ -1,0 +1,182 @@
+﻿@model TopEndLibraryHub.ViewModels.NotificationDashboardViewModel
+@inject TopEndLibraryHub.Services.LibraryClock Clock
+
+@{
+    ViewData["Title"] = "Notification desk";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="display-6 fw-semibold mb-1">Notification desk</h1>
+        <p class="text-muted mb-0">
+            Review loan reminders and pickup messages for library members.
+        </p>
+    </div>
+    <span class="badge rounded-pill text-bg-info px-3 py-2">Simulated messages</span>
+</div>
+
+@if (TempData["NotificationSuccess"] is string success)
+{
+    <div class="alert alert-success" role="status">@success</div>
+}
+@if (TempData["NotificationError"] is string error)
+{
+    <div class="alert alert-danger" role="alert">@error</div>
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+        <div>
+            <h2 class="h5 mb-1">Automatic loan checks</h2>
+            <p class="mb-1">Loan checks run at startup and every minute while the app is running.</p>
+            <p class="text-muted small mb-0">
+                Email and SMS records are stored here as simulations. Use the button to check active loans sooner.
+            </p>
+        </div>
+        <form asp-controller="Notifications" asp-action="CheckNow" method="post">
+            <button type="submit" class="btn btn-primary btn-lg text-nowrap">
+                Check active loans now
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-controller="Notifications" asp-action="Index" method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label asp-for="Search" class="form-label">Membership or item code</label>
+                <input asp-for="Search" class="form-control text-uppercase" maxlength="20"
+                       placeholder="MBR-0001 or TY-0001" autocomplete="off" spellcheck="false" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Kind" class="form-label">Message type</label>
+                <select asp-for="Kind" asp-items="Model.KindOptions" class="form-select">
+                    <option value="">All types</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label asp-for="Channel" class="form-label">Channel</label>
+                <select asp-for="Channel" asp-items="Model.ChannelOptions" class="form-select">
+                    <option value="">All channels</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Filter records</button>
+                <a asp-controller="Notifications" asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
+    <p class="mb-0">
+        <strong>@Model.TotalRecords</strong> matching simulated records
+        @if (Model.TotalRecords > 0)
+        {
+            <span class="text-muted">&middot; showing @Model.FirstRecord&ndash;@Model.LastRecord</span>
+        }
+    </p>
+    <p class="text-muted small mb-0">Newest first &middot; Darwin time (ACST, UTC+09:30)</p>
+</div>
+
+@if (Model.Records.Count == 0)
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            @if (Model.HasFilters)
+            {
+                <h2 class="h4">No records match these filters</h2>
+                <p class="text-muted mb-3">Try a shorter code or reset the filters to see all records.</p>
+                <a asp-controller="Notifications" asp-action="Index" class="btn btn-outline-primary">Reset filters</a>
+            }
+            else
+            {
+                <h2 class="h4">No simulated messages recorded yet</h2>
+                <p class="text-muted mb-0">
+                    Eligible active loans create records during the automatic checks.
+                    Pickup records appear when a held item is ready at its pickup branch.
+                </p>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <caption class="visually-hidden">Simulated notifications, newest first, with Darwin timestamps.</caption>
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="ps-4">Created (ACST)</th>
+                        <th scope="col">Member and item</th>
+                        <th scope="col">Message type</th>
+                        <th scope="col">Channel and recipient</th>
+                        <th scope="col" class="pe-4">Simulated message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in Model.Records)
+                    {
+                        <tr>
+                            <td class="ps-4 text-nowrap">
+                                @Clock.ToDarwinTime(record.CreatedAtUtc).ToString("dd MMM yyyy")
+                                <div class="text-muted small">
+                                    @Clock.ToDarwinTime(record.CreatedAtUtc).ToString("h:mm:ss tt")
+                                </div>
+                            </td>
+                            <td style="min-width: 13rem;">
+                                <strong>@record.MembershipNumber</strong>
+                                <div class="small mb-2">@record.BorrowerName</div>
+                                <span class="badge text-bg-light border">@record.ItemCode</span>
+                                <div class="text-muted small">@record.ItemName</div>
+                            </td>
+                            <td class="text-nowrap">@record.KindLabel</td>
+                            <td style="min-width: 12rem;">
+                                <span class="badge text-bg-secondary">@record.ChannelLabel</span>
+                                <div class="small text-break mt-1">@record.Recipient</div>
+                            </td>
+                            <td class="pe-4" style="min-width: 18rem;">@record.Message</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Notification pages" class="mt-4">
+            <ul class="pagination justify-content-center mb-0">
+                @if (Model.Page > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="Notifications" asp-action="Index"
+                           asp-route-page="@(Model.Page - 1)" asp-route-kind="@((int?)Model.Kind)"
+                           asp-route-channel="@((int?)Model.Channel)" asp-route-search="@Model.Search">Previous</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                }
+                <li class="page-item disabled">
+                    <span class="page-link">Page @Model.Page of @Model.TotalPages</span>
+                </li>
+                @if (Model.Page < Model.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="Notifications" asp-action="Index"
+                           asp-route-page="@(Model.Page + 1)" asp-route-kind="@((int?)Model.Kind)"
+                           asp-route-channel="@((int?)Model.Channel)" asp-route-search="@Model.Search">Next</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                }
+            </ul>
+        </nav>
+    }
+}
