@@ -20,12 +20,14 @@ namespace TopEndLibraryHub.Data
         public DbSet<Borrower> Borrowers => Set<Borrower>();
         public DbSet<Loan> Loans => Set<Loan>();
         public DbSet<Hold> Holds => Set<Hold>();
+        public DbSet<NotificationLog> NotificationLogs => Set<NotificationLog>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new HoldConfiguration());
+            builder.ApplyConfiguration(new NotificationLogConfiguration());
 
             // Store all item types in one table while preserving inheritance.
             builder.Entity<Item>()
