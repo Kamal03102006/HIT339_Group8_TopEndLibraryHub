@@ -1,0 +1,260 @@
+﻿@model IEnumerable<TopEndLibraryHub.Models.Item>
+@using TopEndLibraryHub.Models
+
+@{
+    ViewData["Title"] = "Self-Service Library Kiosk";
+
+    var search = ViewBag.Search as string ?? "";
+    var status = ViewBag.Status as string ?? "";
+    var type = ViewBag.Type as string ?? "";
+}
+
+<link rel="stylesheet"
+      href="~/css/kiosk.css"
+      asp-append-version="true" />
+
+<main class="kiosk">
+
+    <header class="kiosk-hero">
+
+        <span class="kiosk-eyebrow">
+            TOP END LIBRARY HUB
+        </span>
+
+        <h1>Welcome to Your Library</h1>
+
+        <p>
+            Discover books, music and toys.
+            Search our catalogue and check item availability.
+        </p>
+
+    </header>
+
+    <section class="kiosk-search-section">
+
+        <h2>Search Library Catalogue</h2>
+
+        <form method="get"
+              asp-controller="Kiosk"
+              asp-action="Index"
+              class="kiosk-search"
+              role="search">
+
+            <div class="kiosk-field">
+
+                <label for="search">
+                    Search Items
+                </label>
+
+                <input type="search"
+                       id="search"
+                       name="search"
+                       value="@search"
+                       maxlength="100"
+                       placeholder="Search by title, code or keyword" />
+
+            </div>
+
+            <div class="kiosk-field">
+
+                <label for="type">
+                    Item Category
+                </label>
+
+                <select id="type" name="type">
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    <option value="Book"
+                            selected="@(type == "Book")">
+                        Books
+                    </option>
+
+                    <option value="Toy"
+                            selected="@(type == "Toy")">
+                        Toys
+                    </option>
+
+                    <option value="Music"
+                            selected="@(type == "Music")">
+                        Music
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="kiosk-field">
+
+                <label for="status">
+                    Availability
+                </label>
+
+                <select id="status" name="status">
+
+                    <option value="">
+                        All Statuses
+                    </option>
+
+                    <option value="Available"
+                            selected="@(status == "Available")">
+                        Available
+                    </option>
+
+                    <option value="Borrowed"
+                            selected="@(status == "Borrowed")">
+                        Borrowed
+                    </option>
+
+                    <option value="Damaged"
+                            selected="@(status == "Damaged")">
+                        Damaged
+                    </option>
+
+                    <option value="Destroyed"
+                            selected="@(status == "Destroyed")">
+                        Destroyed
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button type="submit"
+                    class="kiosk-button">
+                Search Catalogue
+            </button>
+
+            <a asp-controller="Kiosk"
+               asp-action="Index"
+               class="kiosk-clear">
+                Clear Filters
+            </a>
+
+        </form>
+
+    </section>
+
+    <section class="kiosk-results"
+             aria-labelledby="results-heading">
+
+        <div class="kiosk-results-heading">
+
+            <h2 id="results-heading">
+                Library Catalogue
+            </h2>
+
+            <p>
+                @Model.Count() items displayed
+                (maximum 100)
+            </p>
+
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="kiosk-empty">
+
+                <h3>No Items Found</h3>
+
+                <p>
+                    Try searching for another item
+                    or clear the filters.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="kiosk-grid">
+
+                @foreach (var item in Model)
+                {
+                    var available =
+                        item.Status == ItemStatus.Available;
+
+                    var category =
+                        item is Book ? "Book" :
+                        item is Toy ? "Toy" :
+                        item is Music ? "Music" :
+                        "Library Item";
+
+                    <article class="kiosk-card">
+
+                        <div class="kiosk-card-top">
+
+                            <span class="kiosk-type">
+                                @category
+                            </span>
+
+                            <span class="kiosk-status
+                                @(available ? "is-available" : "is-unavailable")">
+
+                                @item.Status
+
+                            </span>
+
+                        </div>
+
+                        <h3>
+                            @item.Name
+                        </h3>
+
+                        <p>
+                            @item.Description
+                        </p>
+
+                        <div class="kiosk-card-bottom">
+
+                            <p>
+                                <strong>Library Code:</strong>
+                                @item.LibraryCode
+                            </p>
+
+                            @if (available)
+                            {
+                                <p class="available-message">
+                                    Available — ask reception about borrowing.
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="unavailable-message">
+                                    Not currently available to borrow.
+                                </p>
+                            }
+
+                        </div>
+
+                    </article>
+                }
+
+            </div>
+        }
+
+    </section>
+
+    <aside class="kiosk-help">
+
+        <h2>Need Assistance?</h2>
+
+        <p>
+            Please note the library code of your
+            selected item and contact reception.
+        </p>
+
+        <p>
+            Our staff can help you with borrowing,
+            returns and collection enquiries.
+        </p>
+
+        <p>
+            This catalogue does not currently
+            process loans or reservations.
+        </p>
+
+    </aside>
+
+</main>
