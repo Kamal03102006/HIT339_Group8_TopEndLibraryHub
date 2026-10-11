@@ -13,6 +13,10 @@
       href="~/css/kiosk.css"
       asp-append-version="true" />
 
+<link rel="stylesheet"
+      href="~/css/kiosk-additions.css"
+      asp-append-version="true" />
+
 <main class="kiosk">
 
     <header class="kiosk-hero">
@@ -25,8 +29,25 @@
 
         <p>
             Discover books, music and toys.
-            Search our catalogue and check item availability.
+            Search the catalogue and check availability.
         </p>
+
+        <nav class="kiosk-actions"
+             aria-label="Self-service options">
+
+            <a asp-controller="Kiosk"
+               asp-action="Scan"
+               class="kiosk-button">
+                Scan Library Item
+            </a>
+
+            <a asp-controller="Kiosk"
+               asp-action="Account"
+               class="kiosk-button">
+                My Library Account
+            </a>
+
+        </nav>
 
     </header>
 
@@ -160,8 +181,7 @@
                 <h3>No Items Found</h3>
 
                 <p>
-                    Try searching for another item
-                    or clear the filters.
+                    Try another search or clear the filters.
                 </p>
 
             </div>
@@ -191,20 +211,14 @@
 
                             <span class="kiosk-status
                                 @(available ? "is-available" : "is-unavailable")">
-
                                 @item.Status
-
                             </span>
 
                         </div>
 
-                        <h3>
-                            @item.Name
-                        </h3>
+                        <h3>@item.Name</h3>
 
-                        <p>
-                            @item.Description
-                        </p>
+                        <p>@item.Description</p>
 
                         <div class="kiosk-card-bottom">
 
@@ -216,7 +230,7 @@
                             @if (available)
                             {
                                 <p class="available-message">
-                                    Available — ask reception about borrowing.
+                                    Available in the catalogue.
                                 </p>
                             }
                             else
@@ -241,18 +255,19 @@
         <h2>Need Assistance?</h2>
 
         <p>
-            Please note the library code of your
-            selected item and contact reception.
+            Use Scan Library Item to enter or scan
+            a library code.
         </p>
 
         <p>
-            Our staff can help you with borrowing,
-            returns and collection enquiries.
+            Our staff can assist with borrowing,
+            returns and account enquiries.
         </p>
 
         <p>
-            This catalogue does not currently
-            process loans or reservations.
+            Self-service checkout will become available
+            after patron verification and borrowing-rule
+            integration are completed.
         </p>
 
     </aside>

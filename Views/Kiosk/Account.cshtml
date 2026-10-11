@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Patron Account";
+}
+
+<link rel="stylesheet"
+      href="~/css/kiosk.css"
+      asp-append-version="true" />
+
+<link rel="stylesheet"
+      href="~/css/kiosk-additions.css"
+      asp-append-version="true" />
+
+<main class="kiosk kiosk-journey">
+
+    <header class="kiosk-hero">
+
+        <span class="kiosk-eyebrow">
+            TOP END LIBRARY HUB
+        </span>
+
+        <h1>Patron Account</h1>
+
+        <p>
+            Access your library borrowing information.
+        </p>
+
+    </header>
+
+    <section class="kiosk-search-section">
+
+        <h2>Secure Account Access</h2>
+
+        <p>
+            Account summaries require verified
+            patron identification.
+        </p>
+
+        <p>
+            The application currently has separate
+            library membership and sign-in records.
+            Your borrowing history will be available
+            once these records are securely linked.
+        </p>
+
+        @if (!User.Identity?.IsAuthenticated ?? true)
+        {
+            <a asp-area="Identity"
+               asp-page="/Account/Login"
+               class="kiosk-button">
+                Sign In
+            </a>
+        }
+        else
+        {
+            <p>
+                You are signed in. Patron account
+                verification is still required before
+                borrowing details can be displayed.
+            </p>
+        }
+
+    </section>
+
+    <nav class="kiosk-actions">
+
+        <a asp-controller="Kiosk"
+           asp-action="Scan"
+           class="kiosk-button">
+            Scan an Item
+        </a>
+
+        <a asp-controller="Kiosk"
+           asp-action="Index"
+           class="kiosk-button">
+            Finish / Back to Catalogue
+        </a>
+
+    </nav>
+
+    <p class="kiosk-alert">
+        Returning to the catalogue does not sign you out.
+        On a shared kiosk, close your session and sign out
+        before leaving.
+    </p>
+
+</main>

@@ -17,34 +17,26 @@ namespace TopEndLibraryHub.Controllers
             _context = context;
         }
 
-        // GET: api/catalogue
-        // GET: api/catalogue?search=book
-        // GET: api/catalogue?limit=20
-
+        // GET /api/catalogue
+        // GET /api/catalogue?search=book&limit=20
         [HttpGet]
         public async Task<IActionResult> Search(
             [FromQuery] string? search,
             [FromQuery] int limit = 30)
         {
             if (search != null && search.Length > 100)
-            {
                 return BadRequest(new
                 {
                     error = "Search must be 100 characters or fewer."
                 });
-            }
 
             if (limit < 1 || limit > 100)
-            {
                 return BadRequest(new
                 {
                     error = "Limit must be between 1 and 100."
                 });
-            }
 
-            var query = _context.Items
-                .AsNoTracking()
-                .AsQueryable();
+            var query = _context.Items.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -56,7 +48,7 @@ namespace TopEndLibraryHub.Controllers
                     i.Description.Contains(term));
             }
 
-            var records = await query
+            var items = await query
                 .OrderBy(i => i.Name)
                 .ThenBy(i => i.Id)
                 .Take(limit)
@@ -70,25 +62,21 @@ namespace TopEndLibraryHub.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(records);
+            return Ok(items);
         }
 
-        // GET: api/catalogue/available
-        // GET: api/catalogue/available?limit=20
-
+        // GET /api/catalogue/available
         [HttpGet("available")]
-        public async Task<IActionResult> GetAvailable(
+        public async Task<IActionResult> Available(
             [FromQuery] int limit = 30)
         {
             if (limit < 1 || limit > 100)
-            {
                 return BadRequest(new
                 {
                     error = "Limit must be between 1 and 100."
                 });
-            }
 
-            var records = await _context.Items
+            var items = await _context.Items
                 .AsNoTracking()
                 .Where(i => i.Status == ItemStatus.Available)
                 .OrderBy(i => i.Name)
@@ -99,77 +87,70 @@ namespace TopEndLibraryHub.Controllers
                     i.LibraryCode,
                     i.Name,
                     i.Description,
-                    Status = i.Status.ToString(),
+                    Status = "Available",
                     Available = true
                 })
                 .ToListAsync();
 
-            return Ok(records);
+            return Ok(items);
         }
 
-        // GET: api/catalogue/categories
-
+        // GET /api/catalogue/categories
         [HttpGet("categories")]
-        public IActionResult GetCategories()
+        public IActionResult Categories()
         {
-            var categories = new[]
+            return Ok(new[]
             {
-                new
-                {
-                    Name = "Book",
-                    Description = "Books available in the library catalogue."
-                },
-                new
-                {
-                    Name = "Music",
-                    Description = "Music items available in the library catalogue."
-                },
-                new
-                {
-                    Name = "Toy",
-                    Description = "Toys available in the library catalogue."
-                }
-            };
-
-            return Ok(categories);
+                new { Name = "Book" },
+                new { Name = "Music" },
+                new { Name = "Toy" }
+            });
         }
 
-        // GET: api/catalogue/status
-
+        // GET /api/catalogue/status
         [HttpGet("status")]
-        public async Task<IActionResult> GetOperatingStatus()
+        public async Task<IActionResult> Status()
         {
-            bool databaseConnected =
-                await _context.Database.CanConnectAsync();
+            try
+            {
+                bool connected =
+                    await _context.Database.CanConnectAsync();
 
-            if (!databaseConnected)
+                if (!connected)
+                {
+                    return StatusCode(503, new
+                    {
+                        Service = "TopEndLibraryHub Catalogue API",
+                        Status = "Unavailable",
+                        DatabaseConnected = false
+                    });
+                }
+
+                return Ok(new
+                {
+                    Service = "TopEndLibraryHub Catalogue API",
+                    Status = "Operational",
+                    DatabaseConnected = true,
+                    CheckedAtUtc = DateTime.UtcNow
+                });
+            }
+            catch
             {
                 return StatusCode(503, new
                 {
                     Service = "TopEndLibraryHub Catalogue API",
                     Status = "Unavailable",
-                    DatabaseConnected = false,
-                    CheckedAtUtc = DateTime.UtcNow
+                    DatabaseConnected = false
                 });
             }
-
-            return Ok(new
-            {
-                Service = "TopEndLibraryHub Catalogue API",
-                Status = "Operational",
-                DatabaseConnected = true,
-                CheckedAtUtc = DateTime.UtcNow
-            });
         }
 
-        // GET: api/catalogue/BK-0001
-
+        // GET /api/catalogue/BK-0001
         [HttpGet("{code}")]
-        public async Task<IActionResult> GetByCode(
-            string code)
+        public async Task<IActionResult> GetByCode(string code)
         {
-            if (string.IsNullOrWhiteSpace(code)
-                || code.Length > 20)
+            if (string.IsNullOrWhiteSpace(code) ||
+                code.Length > 20)
             {
                 return BadRequest(new
                 {
@@ -191,12 +172,10 @@ namespace TopEndLibraryHub.Controllers
                 .FirstOrDefaultAsync();
 
             if (item == null)
-            {
                 return NotFound(new
                 {
                     error = "Item not found."
                 });
-            }
 
             return Ok(item);
         }

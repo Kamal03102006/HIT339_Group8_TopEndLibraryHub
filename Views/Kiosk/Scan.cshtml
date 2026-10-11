@@ -1,0 +1,127 @@
+﻿@model TopEndLibraryHub.Models.Item
+@using TopEndLibraryHub.Models
+
+@{
+    ViewData["Title"] = "Scan Library Item";
+}
+
+<link rel="stylesheet"
+      href="~/css/kiosk.css"
+      asp-append-version="true" />
+
+<link rel="stylesheet"
+      href="~/css/kiosk-additions.css"
+      asp-append-version="true" />
+
+<main class="kiosk kiosk-journey">
+
+    <header class="kiosk-hero">
+        <span class="kiosk-eyebrow">
+            TOP END LIBRARY HUB
+        </span>
+
+        <h1>Scan Your Library Item</h1>
+
+        <p>
+            Scan a library barcode or type the
+            library code and press Enter.
+        </p>
+    </header>
+
+    <section class="kiosk-search-section">
+
+        <h2>Enter Library Code</h2>
+
+        <form method="post"
+              asp-controller="Kiosk"
+              asp-action="Scan">
+
+            @Html.AntiForgeryToken()
+
+            <label for="libraryCode">
+                Library Code
+            </label>
+
+            <input id="libraryCode"
+                   name="libraryCode"
+                   type="text"
+                   maxlength="20"
+                   placeholder="Example: BK-0001"
+                   autocomplete="off"
+                   autofocus
+                   required />
+
+            <button type="submit"
+                    class="kiosk-button kiosk-large-button">
+                Find Item
+            </button>
+
+        </form>
+
+        @if (ViewBag.Message != null)
+        {
+            <p class="kiosk-alert" role="alert">
+                @ViewBag.Message
+            </p>
+        }
+
+    </section>
+
+    @if (Model != null)
+    {
+        <section class="kiosk-search-section">
+
+            <h2>Item Found</h2>
+
+            <h3>@Model.Name</h3>
+
+            <p>@Model.Description</p>
+
+            <p>
+                <strong>Library Code:</strong>
+                @Model.LibraryCode
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                @Model.Status
+            </p>
+
+            @if (Model.Status == ItemStatus.Available)
+            {
+                <p class="available-message">
+                    This item is marked available
+                    in the catalogue.
+                </p>
+
+                <p>
+                    Self-service checkout is awaiting
+                    patron verification and borrowing-rule
+                    integration.
+                </p>
+            }
+            else
+            {
+                <p class="unavailable-message">
+                    This item cannot currently be borrowed.
+                </p>
+            }
+
+        </section>
+    }
+
+    <nav class="kiosk-actions">
+        <a asp-controller="Kiosk"
+           asp-action="Index"
+           class="kiosk-button">
+            Back to Catalogue
+        </a>
+
+        <a asp-controller="Kiosk"
+           asp-action="Account"
+           class="kiosk-button">
+            Account Access
+        </a>
+    </nav>
+
+</main>
