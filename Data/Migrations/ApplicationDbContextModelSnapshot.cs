@@ -274,6 +274,40 @@ namespace TopEndLibraryHub.Data.Migrations
                     b.ToTable("Borrowers");
                 });
 
+            modelBuilder.Entity("TopEndLibraryHub.Models.Branch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BranchCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchCode")
+                        .IsUnique();
+
+                    b.ToTable("Branches");
+                });
+
             modelBuilder.Entity("TopEndLibraryHub.Models.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -281,6 +315,9 @@ namespace TopEndLibraryHub.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
@@ -309,6 +346,8 @@ namespace TopEndLibraryHub.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
 
                     b.HasIndex("LibraryCode")
                         .IsUnique();
@@ -360,6 +399,40 @@ namespace TopEndLibraryHub.Data.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("Loans");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.ReceptionDesk", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DeskCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("DeskCode")
+                        .IsUnique();
+
+                    b.ToTable("ReceptionDesks");
                 });
 
             modelBuilder.Entity("TopEndLibraryHub.Models.Book", b =>
@@ -491,6 +564,17 @@ namespace TopEndLibraryHub.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TopEndLibraryHub.Models.Item", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("TopEndLibraryHub.Models.Loan", b =>
                 {
                     b.HasOne("TopEndLibraryHub.Models.Borrower", "Borrower")
@@ -508,6 +592,17 @@ namespace TopEndLibraryHub.Data.Migrations
                     b.Navigation("Borrower");
 
                     b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.ReceptionDesk", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("TopEndLibraryHub.Models.Borrower", b =>
