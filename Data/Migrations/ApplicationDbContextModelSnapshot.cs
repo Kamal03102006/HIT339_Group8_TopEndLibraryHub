@@ -359,6 +359,70 @@ namespace TopEndLibraryHub.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("TopEndLibraryHub.Models.ItemTransfer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DestinationBranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DispatchDeskId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DispatchedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DispatchedByUserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OriginBranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReceivedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReceivedByUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ReceivingDeskId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DestinationBranchId");
+
+                    b.HasIndex("DispatchDeskId");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique()
+                        .HasFilter("[Status] = 1");
+
+                    b.HasIndex("OriginBranchId");
+
+                    b.HasIndex("ReceivingDeskId");
+
+                    b.ToTable("ItemTransfers");
+                });
+
             modelBuilder.Entity("TopEndLibraryHub.Models.Loan", b =>
                 {
                     b.Property<int>("Id")
@@ -573,6 +637,48 @@ namespace TopEndLibraryHub.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Branch");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.ItemTransfer", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "DestinationBranch")
+                        .WithMany()
+                        .HasForeignKey("DestinationBranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.ReceptionDesk", "DispatchDesk")
+                        .WithMany()
+                        .HasForeignKey("DispatchDeskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "OriginBranch")
+                        .WithMany()
+                        .HasForeignKey("OriginBranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.ReceptionDesk", "ReceivingDesk")
+                        .WithMany()
+                        .HasForeignKey("ReceivingDeskId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("DestinationBranch");
+
+                    b.Navigation("DispatchDesk");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("OriginBranch");
+
+                    b.Navigation("ReceivingDesk");
                 });
 
             modelBuilder.Entity("TopEndLibraryHub.Models.Loan", b =>
