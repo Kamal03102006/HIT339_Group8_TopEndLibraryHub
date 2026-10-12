@@ -21,6 +21,7 @@ namespace TopEndLibraryHub.Data
         public DbSet<Loan> Loans => Set<Loan>();
         public DbSet<Branch> Branches => Set<Branch>();
         public DbSet<ReceptionDesk> ReceptionDesks => Set<ReceptionDesk>();
+        public DbSet<ItemTransfer> ItemTransfers => Set<ItemTransfer>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -82,6 +83,41 @@ namespace TopEndLibraryHub.Data
             builder.Entity<Loan>()
                 .Property(loan => loan.FineAmount)
                 .HasPrecision(10, 2);
+            builder.Entity<ItemTransfer>()
+    .HasOne(t => t.Item)
+    .WithMany()
+    .HasForeignKey(t => t.ItemId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.OriginBranch)
+                .WithMany()
+                .HasForeignKey(t => t.OriginBranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.DestinationBranch)
+                .WithMany()
+                .HasForeignKey(t => t.DestinationBranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.DispatchDesk)
+                .WithMany()
+                .HasForeignKey(t => t.DispatchDeskId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.ReceivingDesk)
+                .WithMany()
+                .HasForeignKey(t => t.ReceivingDeskId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // SQL Server: only one in-transit transfer per item.
+            builder.Entity<ItemTransfer>()
+                .HasIndex(t => t.ItemId)
+                .IsUnique()
+                .HasFilter("[Status] = 1");
         }
     }
 }
