@@ -67,9 +67,82 @@ namespace TopEndLibraryHub.Data
                 "manager@topendlibrary.local",
                 "Manager#2026!",
                 "Manager");
-
+            await SeedBranchesAndDesksAsync(context);
             await SeedDemonstrationDataAsync(context);
         }
+          private static async Task SeedBranchesAndDesksAsync(
+    ApplicationDbContext context)
+        {
+            var locations = new[]
+            {
+        new
+        {
+            BranchCode = "DAR",
+            Name = "Darwin Hub",
+            Address = "Fictional demonstration location in Darwin NT",
+            DeskCode = "DAR-D01"
+        },
+        new
+        {
+            BranchCode = "PAL",
+            Name = "Palmerston Hub",
+            Address = "Fictional demonstration location in Palmerston NT",
+            DeskCode = "PAL-D01"
+        },
+        new
+        {
+            BranchCode = "CAS",
+            Name = "Casuarina Hub",
+            Address = "Fictional demonstration location in Casuarina NT",
+            DeskCode = "CAS-D01"
+        }
+    };
+
+            foreach (var location in locations)
+            {
+                var branch = await context.Branches
+                    .SingleOrDefaultAsync(b =>
+                        b.BranchCode == location.BranchCode);
+
+                if (branch is null)
+                {
+                    branch = new Branch
+                    {
+                        BranchCode = location.BranchCode,
+                        Name = location.Name,
+                        Address = location.Address,
+                        IsActive = true
+                    };
+
+                    context.Branches.Add(branch);
+                    await context.SaveChangesAsync();
+                }
+
+                var desk = await context.ReceptionDesks
+                    .SingleOrDefaultAsync(d =>
+                        d.DeskCode == location.DeskCode);
+
+                if (desk is null)
+                {
+                    context.ReceptionDesks.Add(new ReceptionDesk
+                    {
+                        DeskCode = location.DeskCode,
+                        Name = $"{location.Name} Reception",
+                        BranchId = branch.Id,
+                        IsActive = true
+                    });
+                }
+                else if (desk.BranchId != branch.Id)
+                {
+                    throw new InvalidOperationException(
+                        $"Desk {location.DeskCode} belongs to the wrong branch. " +
+                        "Check its branch assignment.");
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
+     
 
         private static async Task CreateStaffAccountAsync(
             UserManager<IdentityUser> userManager,
@@ -127,7 +200,10 @@ namespace TopEndLibraryHub.Data
             ApplicationDbContext context)
         {
             var today = DateTime.UtcNow.Date;
-
+            var darwinBranchId = await context.Branches
+    .Where(b => b.BranchCode == "DAR")
+    .Select(b => b.Id)
+    .SingleAsync();
             var borrower = await context.Borrowers
                 .FirstOrDefaultAsync(b =>
                     b.MembershipNumber == "MBR-0001");
@@ -156,6 +232,7 @@ namespace TopEndLibraryHub.Data
             {
                 book = new Book
                 {
+                    BranchId = darwinBranchId,
                     LibraryCode = "BK-0001",
                     Name = "Discovering the Top End",
                     Description =
@@ -179,6 +256,7 @@ namespace TopEndLibraryHub.Data
             {
                 music = new Music
                 {
+                    BranchId = darwinBranchId,
                     LibraryCode = "MU-0001",
                     Name = "Sounds of the Wet Season",
                     Description =
@@ -202,6 +280,7 @@ namespace TopEndLibraryHub.Data
             {
                 toy = new Toy
                 {
+                    BranchId = darwinBranchId,
                     LibraryCode = "TY-0001",
                     Name = "Build the Top End",
                     Description =
