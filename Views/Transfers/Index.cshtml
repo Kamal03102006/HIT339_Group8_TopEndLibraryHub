@@ -14,6 +14,7 @@
 }
 
 <h1>Interbranch transfers</h1>
+
 <p>
     <a asp-controller="Transfers"
        asp-action="Create"
@@ -21,6 +22,7 @@
         Create and dispatch transfer
     </a>
 </p>
+
 <p>
     Review item movements between library branches.
     Times are shown in Darwin time.
@@ -56,8 +58,10 @@ else
                     <th scope="col">Status</th>
                     <th scope="col">Dispatched</th>
                     <th scope="col">Received</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach (var transfer in Model)
                 {
@@ -66,19 +70,50 @@ else
                             @transfer.Item?.LibraryCode
                             — @transfer.Item?.Name
                         </td>
+
                         <td>@transfer.OriginBranch?.Name</td>
+
                         <td>@transfer.DestinationBranch?.Name</td>
+
                         <td>
                             @(transfer.Status ==
                                 TopEndLibraryHub.Models.TransferStatus.InTransit
                                 ? "In transit"
                                 : "Received")
                         </td>
-                        <td>@LocalTime(transfer.DispatchedAtUtc)</td>
+
+                        <td>
+                            @LocalTime(transfer.DispatchedAtUtc)
+                        </td>
+
                         <td>
                             @(transfer.ReceivedAtUtc.HasValue
                                 ? LocalTime(transfer.ReceivedAtUtc.Value)
                                 : "Not received")
+                        </td>
+
+                        <td>
+                            @if (transfer.Status ==
+                                TopEndLibraryHub.Models.TransferStatus.InTransit)
+                            {
+                                <form asp-controller="Transfers"
+                                      asp-action="Receive"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@transfer.Id" />
+
+                                    <button type="submit"
+                                            class="btn btn-success btn-sm">
+                                        Receive at destination
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span>Completed</span>
+                            }
                         </td>
                     </tr>
                 }

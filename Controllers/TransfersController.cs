@@ -249,5 +249,111 @@ namespace TopEndLibraryHub.Controllers
                 return View(model);
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Receive(int id)
+        {
+            var desk = await GetWorkingDeskAsync();
+
+            if (desk is null)
+            {
+                TempData["LocationMessage"] =
+                    "Select your working location before receiving.";
+
+                return RedirectToAction("Index", "StaffLocation");
+            }
+
+            await using var transaction =
+                await _context.Database.BeginTransactionAsync(
+                    IsolationLevel.Serializable);
+
+            try
+            {
+                var transfer = await _context.ItemTransfers
+                    .Include(t => t.Item)
+                    .SingleOrDefaultAsync(t => t.Id == id);
+
+                if (transfer is null)
+                {
+                    return NotFound();
+                }
+
+                if (transfer.DestinationBranchId != desk.BranchId)
+                {
+                    TempData["ErrorMessage"] =
+                        "Only the destination branch can receive this item. " +
+                        "Select a desk at the destination branch.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                if (transfer.Status == TransferStatus.Received)
+                {
+                    TempData["ErrorMessage"] =
+                        "This transfer has already been received. " +
+                        "No changes were made.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                if (transfer.Status != TransferStatus.InTransit ||
+                    transfer.Item is null ||
+                    transfer.Item.Status != ItemStatus.InTransit ||
+                    transfer.Item.BranchId != transfer.OriginBranchId)
+                {
+                    TempData["ErrorMessage"] =
+                        "The item and transfer records do not match. " +
+                        "Ask an administrator to check them before receiving.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var activeLoan = await _context.Loans.AnyAsync(l =>
+                    l.ItemId == transfer.ItemId &&
+                    l.ReturnedDate == null);
+
+                if (activeLoan)
+                {
+                    TempData["ErrorMessage"] =
+                        "This item has an active loan. " +
+                        "Ask an administrator to resolve it before receiving.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                transfer.Item.BranchId = desk.BranchId;
+
+                // Unreserved-item workflow only.
+                // Connect the shared hold rules before integration.
+                transfer.Item.Status = ItemStatus.Available;
+
+                transfer.Status = TransferStatus.Received;
+                transfer.ReceivingDeskId = desk.Id;
+                transfer.ReceivedAtUtc = DateTime.UtcNow;
+                transfer.ReceivedByUserId =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                TempData["SuccessMessage"] =
+                    $"{transfer.Item.LibraryCode} received at " +
+                    $"{desk.Branch!.Name}.";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                await transaction.RollbackAsync();
+                _context.ChangeTracker.Clear();
+
+                TempData["ErrorMessage"] =
+                    "Receipt could not be saved. Refresh the transfer list " +
+                    "and check whether another staff member has received it.";
+
+                return RedirectToAction(nameof(Index));
+            }
+        }
     }
 }
