@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace TopEndLibraryHub.Controllers
         {
             var toys = _context.Toys
                 .AsNoTracking()
+                .Include(toy => toy.Branch)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -61,14 +63,26 @@ namespace TopEndLibraryHub.Controllers
 
             var toy = await _context.Toys
                 .AsNoTracking()
+                .Include(toy => toy.Branch)
                 .FirstOrDefaultAsync(toy => toy.Id == id);
 
             return toy is null ? NotFound() : View(toy);
         }
 
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var desk = await GetWorkingDeskAsync();
+
+            if (desk is null)
+            {
+                return RequestWorkingLocation();
+            }
+
+            return View(new Toy
+            {
+                BranchId = desk.BranchId
+            });
         }
 
         [HttpPost]
@@ -79,6 +93,17 @@ namespace TopEndLibraryHub.Controllers
                 "LibraryCode,Name,Description")]
             Toy toy)
         {
+            var desk = await GetWorkingDeskAsync();
+
+            if (desk is null)
+            {
+                return RequestWorkingLocation();
+            }
+
+            // Assign the validated working branch.
+            toy.BranchId = desk.BranchId;
+            ModelState.Remove(nameof(Toy.BranchId));
+
             if (await LibraryCodeExistsAsync(toy.LibraryCode))
             {
                 ModelState.AddModelError(
@@ -100,20 +125,22 @@ namespace TopEndLibraryHub.Controllers
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] =
-                    $"Toy '{toy.Name}' was created successfully.";
+                    $"Toy '{toy.Name}' was created at {desk.Branch!.Name}.";
 
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(
-                    nameof(Toy.LibraryCode),
-                    "The toy could not be saved. Check that the library code is unique.");
+                    string.Empty,
+                    "The toy could not be saved. Check that its " +
+                    "library code is unique and its branch still exists.");
 
                 return View(toy);
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
@@ -121,7 +148,10 @@ namespace TopEndLibraryHub.Controllers
                 return NotFound();
             }
 
-            var toy = await _context.Toys.FindAsync(id);
+            var toy = await _context.Toys
+                .AsNoTracking()
+                .Include(toy => toy.Branch)
+                .FirstOrDefaultAsync(toy => toy.Id == id);
 
             return toy is null ? NotFound() : View(toy);
         }
@@ -135,12 +165,22 @@ namespace TopEndLibraryHub.Controllers
                 "LibraryCode,Name,Description,Status")]
             Toy input)
         {
-            var toy = await _context.Toys.FindAsync(id);
+            var toy = await _context.Toys
+                .Include(toy => toy.Branch)
+                .FirstOrDefaultAsync(toy => toy.Id == id);
 
             if (toy is null)
             {
                 return NotFound();
             }
+
+            // Ordinary edits preserve the existing location.
+            input.BranchId = toy.BranchId;
+            input.Branch = toy.Branch;
+            input.Id = toy.Id;
+            input.DateAdded = toy.DateAdded;
+
+            ModelState.Remove(nameof(Toy.BranchId));
 
             if (await LibraryCodeExistsAsync(input.LibraryCode, id))
             {
@@ -149,12 +189,43 @@ namespace TopEndLibraryHub.Controllers
                     "This library code is already being used.");
             }
 
-            if (toy.Status == ItemStatus.Borrowed &&
+            if (!Enum.IsDefined(typeof(ItemStatus), input.Status))
+            {
+                ModelState.AddModelError(
+                    nameof(Toy.Status),
+                    "Select a valid item status.");
+            }
+
+            var activeTransfer = await _context.ItemTransfers
+                .AnyAsync(t =>
+                    t.ItemId == id &&
+                    t.Status == TransferStatus.InTransit);
+
+            if (activeTransfer || toy.Status == ItemStatus.InTransit)
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "This toy is in transit. Receive the transfer " +
+                    "at its destination before editing it.");
+            }
+            else if (input.Status == ItemStatus.InTransit)
+            {
+                ModelState.AddModelError(
+                    nameof(Toy.Status),
+                    "Use the transfer workflow to dispatch a toy.");
+            }
+
+            var activeLoan = await _context.Loans.AnyAsync(loan =>
+                loan.ItemId == id &&
+                loan.ReturnedDate == null);
+
+            if ((toy.Status == ItemStatus.Borrowed || activeLoan) &&
                 input.Status != ItemStatus.Borrowed)
             {
                 ModelState.AddModelError(
                     nameof(Toy.Status),
-                    "A borrowed toy must be returned through Reception before its status can change.");
+                    "A borrowed toy must be returned through Reception " +
+                    "before its status can change.");
             }
 
             if (toy.Status != ItemStatus.Borrowed &&
@@ -162,13 +233,12 @@ namespace TopEndLibraryHub.Controllers
             {
                 ModelState.AddModelError(
                     nameof(Toy.Status),
-                    "Use the Reception borrowing process to mark a toy as borrowed.");
+                    "Use the Reception borrowing process " +
+                    "to mark a toy as borrowed.");
             }
 
             if (!ModelState.IsValid)
             {
-                input.Id = toy.Id;
-                input.DateAdded = toy.DateAdded;
                 return View(input);
             }
 
@@ -181,12 +251,15 @@ namespace TopEndLibraryHub.Controllers
             toy.Description = input.Description;
             toy.Status = input.Status;
 
+            // Deliberately leave toy.BranchId unchanged.
+
             try
             {
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] =
-                    $"Toy '{toy.Name}' was updated successfully.";
+                    $"Toy '{toy.Name}' was updated. " +
+                    "Its branch location was preserved.";
 
                 return RedirectToAction(nameof(Index));
             }
@@ -199,20 +272,21 @@ namespace TopEndLibraryHub.Controllers
 
                 ModelState.AddModelError(
                     string.Empty,
-                    "The toy was changed by another user. Reload the page and try again.");
+                    "The toy was changed by another user. " +
+                    "Reload the page and try again.");
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(
-                    nameof(Toy.LibraryCode),
-                    "The toy could not be updated. Check that the library code is unique.");
+                    string.Empty,
+                    "The toy could not be updated. " +
+                    "Check that its library code is unique.");
             }
 
-            input.Id = toy.Id;
-            input.DateAdded = toy.DateAdded;
             return View(input);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
@@ -222,6 +296,7 @@ namespace TopEndLibraryHub.Controllers
 
             var toy = await _context.Toys
                 .AsNoTracking()
+                .Include(toy => toy.Branch)
                 .FirstOrDefaultAsync(toy => toy.Id == id);
 
             return toy is null ? NotFound() : View(toy);
@@ -241,22 +316,77 @@ namespace TopEndLibraryHub.Controllers
             var hasLoanHistory = await _context.Loans
                 .AnyAsync(loan => loan.ItemId == id);
 
-            if (toy.Status == ItemStatus.Borrowed || hasLoanHistory)
+            var hasTransferHistory = await _context.ItemTransfers
+                .AnyAsync(transfer => transfer.ItemId == id);
+
+            if (toy.Status == ItemStatus.Borrowed ||
+                toy.Status == ItemStatus.InTransit ||
+                hasLoanHistory ||
+                hasTransferHistory)
             {
                 TempData["ErrorMessage"] =
-                    "This toy cannot be deleted because it is borrowed or has loan history. " +
-                    "Change its status to Damaged or Destroyed instead.";
+                    "This toy cannot be deleted because it is borrowed, " +
+                    "in transit, or has loan or transfer history. " +
+                    "Keep the record for audit purposes.";
 
                 return RedirectToAction(nameof(Index));
             }
 
-            _context.Toys.Remove(toy);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Toys.Remove(toy);
+                await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] =
-                $"Toy '{toy.Name}' was deleted successfully.";
+                TempData["SuccessMessage"] =
+                    $"Toy '{toy.Name}' was deleted successfully.";
+            }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] =
+                    "This toy could not be deleted. It may be referenced " +
+                    "by another record. Keep it and ask an administrator " +
+                    "to review it.";
+            }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<ReceptionDesk?> GetWorkingDeskAsync()
+        {
+            var userId = User.FindFirstValue(
+                ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId) ||
+                HttpContext.Session.GetString("StaffLocationUserId")
+                    != userId)
+            {
+                return null;
+            }
+
+            var branchId =
+                HttpContext.Session.GetInt32("StaffBranchId");
+
+            var deskId =
+                HttpContext.Session.GetInt32("StaffDeskId");
+
+            return await _context.ReceptionDesks
+                .AsNoTracking()
+                .Include(d => d.Branch)
+                .SingleOrDefaultAsync(d =>
+                    d.Id == deskId &&
+                    d.BranchId == branchId &&
+                    d.IsActive &&
+                    d.Branch != null &&
+                    d.Branch.IsActive);
+        }
+
+        private IActionResult RequestWorkingLocation()
+        {
+            TempData["LocationMessage"] =
+                "Select an active branch and reception desk, " +
+                "then return to Manage toys to create the toy.";
+
+            return RedirectToAction("Index", "StaffLocation");
         }
 
         private Task<bool> ToyExistsAsync(int id)
@@ -268,11 +398,13 @@ namespace TopEndLibraryHub.Controllers
             string libraryCode,
             int? excludedId = null)
         {
-            var normalisedCode = libraryCode.Trim();
+            var normalisedCode =
+                (libraryCode ?? string.Empty).Trim();
 
             return _context.Items.AnyAsync(item =>
                 item.LibraryCode == normalisedCode &&
-                (!excludedId.HasValue || item.Id != excludedId.Value));
+                (!excludedId.HasValue ||
+                 item.Id != excludedId.Value));
         }
     }
 }

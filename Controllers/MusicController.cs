@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace TopEndLibraryHub.Controllers
         {
             var musicItems = _context.MusicItems
                 .AsNoTracking()
+                .Include(music => music.Branch)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -59,14 +61,26 @@ namespace TopEndLibraryHub.Controllers
 
             var music = await _context.MusicItems
                 .AsNoTracking()
+                .Include(music => music.Branch)
                 .FirstOrDefaultAsync(music => music.Id == id);
 
             return music is null ? NotFound() : View(music);
         }
 
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var desk = await GetWorkingDeskAsync();
+
+            if (desk is null)
+            {
+                return RequestWorkingLocation();
+            }
+
+            return View(new Music
+            {
+                BranchId = desk.BranchId
+            });
         }
 
         [HttpPost]
@@ -77,6 +91,17 @@ namespace TopEndLibraryHub.Controllers
                 "LibraryCode,Name,Description")]
             Music music)
         {
+            var desk = await GetWorkingDeskAsync();
+
+            if (desk is null)
+            {
+                return RequestWorkingLocation();
+            }
+
+            // Use the validated working branch, not browser input.
+            music.BranchId = desk.BranchId;
+            ModelState.Remove(nameof(Music.BranchId));
+
             if (await LibraryCodeExistsAsync(music.LibraryCode))
             {
                 ModelState.AddModelError(
@@ -98,20 +123,23 @@ namespace TopEndLibraryHub.Controllers
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] =
-                    $"Music item '{music.Name}' was created successfully.";
+                    $"Music item '{music.Name}' was created at " +
+                    $"{desk.Branch!.Name}.";
 
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(
-                    nameof(Music.LibraryCode),
-                    "The music item could not be saved. Check that the library code is unique.");
+                    string.Empty,
+                    "The music item could not be saved. Check that " +
+                    "its library code is unique and its branch still exists.");
 
                 return View(music);
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
@@ -119,7 +147,10 @@ namespace TopEndLibraryHub.Controllers
                 return NotFound();
             }
 
-            var music = await _context.MusicItems.FindAsync(id);
+            var music = await _context.MusicItems
+                .AsNoTracking()
+                .Include(music => music.Branch)
+                .FirstOrDefaultAsync(music => music.Id == id);
 
             return music is null ? NotFound() : View(music);
         }
@@ -133,12 +164,22 @@ namespace TopEndLibraryHub.Controllers
                 "LibraryCode,Name,Description,Status")]
             Music input)
         {
-            var music = await _context.MusicItems.FindAsync(id);
+            var music = await _context.MusicItems
+                .Include(music => music.Branch)
+                .FirstOrDefaultAsync(music => music.Id == id);
 
             if (music is null)
             {
                 return NotFound();
             }
+
+            // Preserve the stored location during ordinary edits.
+            input.BranchId = music.BranchId;
+            input.Branch = music.Branch;
+            input.Id = music.Id;
+            input.DateAdded = music.DateAdded;
+
+            ModelState.Remove(nameof(Music.BranchId));
 
             if (await LibraryCodeExistsAsync(input.LibraryCode, id))
             {
@@ -147,12 +188,44 @@ namespace TopEndLibraryHub.Controllers
                     "This library code is already being used.");
             }
 
-            if (music.Status == ItemStatus.Borrowed &&
+            if (!Enum.IsDefined(typeof(ItemStatus), input.Status))
+            {
+                ModelState.AddModelError(
+                    nameof(Music.Status),
+                    "Select a valid item status.");
+            }
+
+            var activeTransfer = await _context.ItemTransfers
+                .AnyAsync(t =>
+                    t.ItemId == id &&
+                    t.Status == TransferStatus.InTransit);
+
+            if (activeTransfer ||
+                music.Status == ItemStatus.InTransit)
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "This item is in transit. Receive the transfer " +
+                    "at its destination before editing it.");
+            }
+            else if (input.Status == ItemStatus.InTransit)
+            {
+                ModelState.AddModelError(
+                    nameof(Music.Status),
+                    "Use the transfer workflow to dispatch an item.");
+            }
+
+            var activeLoan = await _context.Loans.AnyAsync(loan =>
+                loan.ItemId == id &&
+                loan.ReturnedDate == null);
+
+            if ((music.Status == ItemStatus.Borrowed || activeLoan) &&
                 input.Status != ItemStatus.Borrowed)
             {
                 ModelState.AddModelError(
                     nameof(Music.Status),
-                    "A borrowed music item must be returned through Reception before its status can change.");
+                    "A borrowed music item must be returned through " +
+                    "Reception before its status can change.");
             }
 
             if (music.Status != ItemStatus.Borrowed &&
@@ -160,13 +233,12 @@ namespace TopEndLibraryHub.Controllers
             {
                 ModelState.AddModelError(
                     nameof(Music.Status),
-                    "Use the Reception borrowing process to mark an item as borrowed.");
+                    "Use the Reception borrowing process " +
+                    "to mark an item as borrowed.");
             }
 
             if (!ModelState.IsValid)
             {
-                input.Id = music.Id;
-                input.DateAdded = music.DateAdded;
                 return View(input);
             }
 
@@ -179,12 +251,15 @@ namespace TopEndLibraryHub.Controllers
             music.Description = input.Description;
             music.Status = input.Status;
 
+            // Do not change music.BranchId here.
+
             try
             {
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] =
-                    $"Music item '{music.Name}' was updated successfully.";
+                    $"Music item '{music.Name}' was updated. " +
+                    "Its branch location was preserved.";
 
                 return RedirectToAction(nameof(Index));
             }
@@ -197,20 +272,21 @@ namespace TopEndLibraryHub.Controllers
 
                 ModelState.AddModelError(
                     string.Empty,
-                    "The item was changed by another user. Reload the page and try again.");
+                    "The item was changed by another user. " +
+                    "Reload the page and try again.");
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(
-                    nameof(Music.LibraryCode),
-                    "The item could not be updated. Check that the library code is unique.");
+                    string.Empty,
+                    "The item could not be updated. " +
+                    "Check that its library code is unique.");
             }
 
-            input.Id = music.Id;
-            input.DateAdded = music.DateAdded;
             return View(input);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
@@ -220,6 +296,7 @@ namespace TopEndLibraryHub.Controllers
 
             var music = await _context.MusicItems
                 .AsNoTracking()
+                .Include(music => music.Branch)
                 .FirstOrDefaultAsync(music => music.Id == id);
 
             return music is null ? NotFound() : View(music);
@@ -239,22 +316,77 @@ namespace TopEndLibraryHub.Controllers
             var hasLoanHistory = await _context.Loans
                 .AnyAsync(loan => loan.ItemId == id);
 
-            if (music.Status == ItemStatus.Borrowed || hasLoanHistory)
+            var hasTransferHistory = await _context.ItemTransfers
+                .AnyAsync(transfer => transfer.ItemId == id);
+
+            if (music.Status == ItemStatus.Borrowed ||
+                music.Status == ItemStatus.InTransit ||
+                hasLoanHistory ||
+                hasTransferHistory)
             {
                 TempData["ErrorMessage"] =
-                    "This music item cannot be deleted because it is borrowed or has loan history. " +
-                    "Change its status to Damaged or Destroyed instead.";
+                    "This music item cannot be deleted because it is " +
+                    "borrowed, in transit, or has loan or transfer history. " +
+                    "Keep the record for audit purposes.";
 
                 return RedirectToAction(nameof(Index));
             }
 
-            _context.MusicItems.Remove(music);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.MusicItems.Remove(music);
+                await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] =
-                $"Music item '{music.Name}' was deleted successfully.";
+                TempData["SuccessMessage"] =
+                    $"Music item '{music.Name}' was deleted successfully.";
+            }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] =
+                    "This item could not be deleted. It may be referenced " +
+                    "by another record. Keep it and ask an administrator " +
+                    "to review it.";
+            }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<ReceptionDesk?> GetWorkingDeskAsync()
+        {
+            var userId = User.FindFirstValue(
+                ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId) ||
+                HttpContext.Session.GetString("StaffLocationUserId")
+                    != userId)
+            {
+                return null;
+            }
+
+            var branchId =
+                HttpContext.Session.GetInt32("StaffBranchId");
+
+            var deskId =
+                HttpContext.Session.GetInt32("StaffDeskId");
+
+            return await _context.ReceptionDesks
+                .AsNoTracking()
+                .Include(d => d.Branch)
+                .SingleOrDefaultAsync(d =>
+                    d.Id == deskId &&
+                    d.BranchId == branchId &&
+                    d.IsActive &&
+                    d.Branch != null &&
+                    d.Branch.IsActive);
+        }
+
+        private IActionResult RequestWorkingLocation()
+        {
+            TempData["LocationMessage"] =
+                "Select an active branch and reception desk, " +
+                "then return to Manage music to create the item.";
+
+            return RedirectToAction("Index", "StaffLocation");
         }
 
         private Task<bool> LibraryCodeExistsAsync(
@@ -263,7 +395,8 @@ namespace TopEndLibraryHub.Controllers
         {
             return _context.Items.AnyAsync(item =>
                 item.LibraryCode == libraryCode &&
-                (!excludedId.HasValue || item.Id != excludedId.Value));
+                (!excludedId.HasValue ||
+                 item.Id != excludedId.Value));
         }
 
         private Task<bool> MusicExistsAsync(int id)
