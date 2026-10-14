@@ -1,6 +1,6 @@
 # Group 8 notification test and evidence record
 
-Recorded: 11 October 2026. Tester: Kamalpreet, using the Windows project. Times below are Darwin/ACST (UTC+09:30). Data belongs to fictional demonstration patrons.
+Observed run: 11 October 2026. Record updated: 14 October 2026. Tester: Kamalpreet, using the Windows project. Times below are Darwin/ACST (UTC+09:30). Data belongs to fictional demonstration patrons.
 
 Implementation inspected at commit `bcf6844` on `feature/holds-notifications`. Results below come from the user's guided local run and supplied screenshots. The assistant did not independently compile the project or run SQL Server. Source review is kept separate from runtime results.
 
@@ -12,7 +12,7 @@ Implementation inspected at commit `bcf6844` on `feature/holds-notifications`. R
 | N-OBS-02 / repeated notification scan | Open `/Notifications` and use the guided repeated “Check active loans now” procedure. | An unchanged scan should not add the same event/channel again. | **Observed:** six matching simulated records and “Check complete. No new records were needed.” | Photo supplied at approximately 12:45, `image-1791688526957.jpg`. It supports an unchanged scan; a complete before/after count sequence and concurrent scans were not captured. |
 | N-OBS-03 / N01 borrowing and N02 due soon | Guided procedure: borrow `BK-0001` for `MBR-0001`, due 12 October 2026; leave the app running for 60–90 seconds without a manual scan; filter by `bk-0001`. | Borrowed and due-soon messages use the correct borrower, item and date, with one record for each configured channel. | **Observed:** four matching rows: loan confirmed via Email and SMS; due soon via Email and SMS. Messages identify Discovering the Top End, `BK-0001`, due 12 October and “tomorrow.” All four show 11 October, 12:50:33 PM ACST. | Photo supplied at approximately 12:51, `image-1791688879276.jpg`. Message content and item filtering are visible. The guided procedure supports the automatic scan; the screenshot alone does not identify the triggering process. Capture a worker log or timed recording for direct scheduler evidence. |
 
-The original photos were supplied in the conversation; they have **not** been copied into this repository. Save clean screenshots from the actual application into an evidence folder and replace these photo references with repository paths before the final portfolio. Do not present missing files as attached evidence.
+The original photos were supplied in the conversation and their observed content remains recorded here. Kamalpreet reports that the old photos are not retained among the three current hold-test screenshots on the laptop. They are **not attached repository assets**. The current screenshot collection can begin with the three hold checks. During the final integrated notification checks, capture only the evidence needed to demonstrate the final implementation; there is no need to recreate an old interface photograph merely to reproduce its historical filename.
 
 ## Remaining runtime checks
 
@@ -40,6 +40,6 @@ No test in this table is marked passed until its actual result and evidence are 
 - A hold-ready recording method exists, but the complete hold/branch workflow has not yet called and demonstrated it.
 - Messages are simulations. Neither an actual email nor an actual SMS has been sent by this implementation.
 
-## How to add a result
+## Record maintenance
 
-Append the date/time, tester, exact Git revision, input data, action, expected result, actual result, pass/fail decision and screenshot/log path. For a failure, link the fix and record a retest. Record actual time spent separately in [GROUP_WORK_RECORD.md](GROUP_WORK_RECORD.md).
+Kamalpreet runs the guided checks and reports the actual behaviour. Written results are then compiled with the date, tester, revision, input, expected and observed outcome, and evidence reference. New hold-test completion reports are recorded in [HOLD_WORKFLOW_TEST_RECORD.md](HOLD_WORKFLOW_TEST_RECORD.md); they do not mark the outstanding notification checks as passed. Actual person-hours remain in [GROUP_WORK_RECORD.md](GROUP_WORK_RECORD.md).

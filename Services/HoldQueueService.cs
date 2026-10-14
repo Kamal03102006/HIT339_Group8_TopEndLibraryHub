@@ -19,7 +19,8 @@ namespace TopEndLibraryHub.Services
                 .Where(hold =>
                     hold.ItemId == itemId &&
                     hold.Status == HoldStatus.Waiting &&
-                    hold.Borrower.IsActive)
+                    hold.Borrower.IsActive &&
+                    hold.PickupBranch.IsActive)
                 .OrderBy(hold => hold.CreatedAtUtc)
                 .ThenBy(hold => hold.Id);
         }
@@ -32,6 +33,7 @@ namespace TopEndLibraryHub.Services
                 .AsNoTracking()
                 .Include(hold => hold.Borrower)
                 .Include(hold => hold.Item)
+                .Include(hold => hold.PickupBranch)
                 .ToListAsync(cancellationToken);
         }
 

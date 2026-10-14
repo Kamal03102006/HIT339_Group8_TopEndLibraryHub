@@ -1,249 +1,191 @@
-﻿@{
+@{
     ViewData["Title"] = "Home";
-
     var isSignedIn = User.Identity?.IsAuthenticated ?? false;
+    var canUseFrontDesk = User.IsInRole("Reception") || User.IsInRole("Admin");
+    var canUseManager = User.IsInRole("Manager") || User.IsInRole("Admin");
+    var canUseNotifications = canUseFrontDesk || canUseManager;
 }
 
-<section class="bg-light border rounded-4 p-4 p-md-5 mb-5">
-    <div class="row align-items-center g-5">
-        <div class="col-lg-7">
-            <span class="badge text-bg-primary mb-3">
-                Top End Library Hub
-            </span>
-
-            <h1 class="display-4 fw-semibold mb-3">
-                One collection. Smarter library service.
-            </h1>
-
-            <p class="lead text-muted mb-4">
-                Discover books, music and toys through a responsive public
-                catalogue, supported by secure tools for library staff.
-            </p>
-
-            <div class="d-flex flex-column flex-sm-row gap-2">
-                <a asp-controller="Catalogue"
-                   asp-action="Index"
-                   class="btn btn-primary btn-lg">
-                    Search the catalogue
-                </a>
-
-                @if (!isSignedIn)
-                {
-                    <a asp-area="Identity"
-                       asp-page="/Account/Login"
-                       class="btn btn-outline-secondary btn-lg">
-                        Staff login
-                    </a>
-                }
-            </div>
+<section class="te-hero" aria-labelledby="home-heading">
+    <div class="te-hero-copy">
+        <span class="te-eyebrow">A collection for every kind of curious</span>
+        <h1 id="home-heading">
+            A good book.<br />
+            A new adventure.<br />
+            <em>A little more play.</em>
+        </h1>
+        <p>
+            Discover books, music and toys in the Top End Library collection.
+            Find something to read, listen to or explore, and check its
+            availability before your next visit.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+            <a asp-controller="Catalogue" asp-action="Index" class="btn btn-primary te-button">
+                Explore the collection <span aria-hidden="true">↗</span>
+            </a>
+            @if (!isSignedIn)
+            {
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-secondary te-button">Staff login</a>
+            }
+            else if (canUseFrontDesk)
+            {
+                <a asp-controller="Loans" asp-action="Index" class="btn btn-outline-primary te-button">Open front desk</a>
+            }
+            else if (canUseManager)
+            {
+                <a asp-controller="Manager" asp-action="Index" class="btn btn-outline-primary te-button">Open manager dashboard</a>
+            }
         </div>
-
-        <div class="col-lg-5">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4 p-md-5">
-                    <h2 class="h4 mb-3">Find your next item</h2>
-
-                    <p class="text-muted">
-                        Search using a title, library code, author, artist,
-                        genre, toy type or manufacturer.
-                    </p>
-
-                    <form asp-controller="Catalogue"
-                          asp-action="Index"
-                          method="get">
-                        <label for="homeSearch"
-                               class="form-label">
-                            Catalogue search
-                        </label>
-
-                        <div class="input-group">
-                            <input id="homeSearch"
-                                   name="searchString"
-                                   type="search"
-                                   class="form-control"
-                                   placeholder="What are you looking for?" />
-
-                            <button type="submit"
-                                    class="btn btn-dark">
-                                Search
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    </div>
+    <div class="te-hero-art" aria-hidden="true">
+        <div class="te-art-label">READ. LISTEN. LEARN. PLAY.</div>
+        <div class="te-art-book">
+            <small>TOP END<br />COLLECTION</small>
+            <span>Stories<br />to take<br />home.</span>
+            <small>READ · RETURN · REPEAT</small>
         </div>
+        <div class="te-art-blocks"><span>A</span><span>B</span><span>C</span></div>
+        <div class="te-art-note"><strong>More ways to discover.</strong><br />Books, music and toys in one collection.</div>
     </div>
 </section>
 
-@if (isSignedIn)
+<section class="te-search-panel" aria-labelledby="quick-search-heading">
+    <h2 id="quick-search-heading">What would you like to borrow?</h2>
+    <form asp-controller="Catalogue" asp-action="Index" method="get" class="te-search-fields" role="search">
+        <div>
+            <label for="homeSearch" class="form-label">Title, keyword or library code</label>
+            <input id="homeSearch" name="searchString" type="search" class="form-control"
+                   placeholder="Try a title, author, artist or toy" maxlength="100" />
+        </div>
+        <div>
+            <label for="homeItemType" class="form-label">Collection</label>
+            <select id="homeItemType" name="itemType" class="form-select">
+                <option value="">All collections</option>
+                <option value="Book">Books</option>
+                <option value="Music">Music</option>
+                <option value="Toy">Toys</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary te-button">Find an item <span aria-hidden="true">→</span></button>
+    </form>
+</section>
+
+<section aria-labelledby="collections-heading">
+    <div class="te-section-heading">
+        <div>
+            <h2 id="collections-heading">Something for everyone</h2>
+            <p>Books to get lost in. Music to move to. Toys to learn with.</p>
+        </div>
+    </div>
+    <div class="te-collection-grid">
+        <a asp-controller="Catalogue" asp-action="Index" asp-route-itemType="Book" class="te-collection-card">
+            <span class="te-category-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                    <path d="M16 8c-4-3-8-3-12-2v20c4-1 8-1 12 2 4-3 8-3 12-2V6c-4-1-8-1-12 2Z" />
+                    <path d="M16 8v20M8 11l4 1M8 16l4 1M20 12l4-1M20 17l4-1" />
+                </svg>
+            </span>
+            <h3>Find your next chapter</h3>
+            <p>Explore books by title, author or genre and discover a story to take home.</p>
+            <span class="te-card-link">Browse books <span aria-hidden="true">↗</span></span>
+        </a>
+        <a asp-controller="Catalogue" asp-action="Index" asp-route-itemType="Music" class="te-collection-card">
+            <span class="te-category-icon te-music" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                    <path d="M13 23V7l14-3v16M13 12l14-3" />
+                    <ellipse cx="8.5" cy="24" rx="4.5" ry="3" />
+                    <ellipse cx="22.5" cy="21" rx="4.5" ry="3" />
+                </svg>
+            </span>
+            <h3>Make room for music</h3>
+            <p>Search artists, genres and formats to find something different to listen to.</p>
+            <span class="te-card-link">Browse music <span aria-hidden="true">↗</span></span>
+        </a>
+        <a asp-controller="Catalogue" asp-action="Index" asp-route-itemType="Toy" class="te-collection-card">
+            <span class="te-category-icon te-toys" aria-hidden="true">
+                <svg viewBox="0 0 32 32" focusable="false">
+                    <rect x="3" y="15" width="13" height="13" rx="2" />
+                    <rect x="17" y="15" width="12" height="13" rx="2" />
+                    <rect x="10" y="2" width="13" height="12" rx="2" />
+                    <path d="m7 24 2.5-5 2.5 5M8 22h3M21 19h4M23 19v6M14 6h5M16.5 6v4" />
+                </svg>
+            </span>
+            <h3>A little more play</h3>
+            <p>Explore toys by type, recommended age and manufacturer for your next activity.</p>
+            <span class="te-card-link">Browse toys <span aria-hidden="true">↗</span></span>
+        </a>
+    </div>
+</section>
+
+<section class="te-service-panel" aria-labelledby="availability-heading">
+    <div>
+        <h2 id="availability-heading">Check before you make the trip</h2>
+        <p>
+            See each item's current status in the catalogue. For borrowing
+            help or questions about an unavailable item, speak with reception
+            and quote its library code.
+        </p>
+    </div>
+    <a asp-controller="Catalogue" asp-action="Index" asp-route-status="Available" class="btn btn-outline-primary te-button">
+        View available items <span aria-hidden="true">→</span>
+    </a>
+</section>
+
+@if (canUseFrontDesk || canUseManager)
 {
-    <section class="mb-5">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-3">
+    <section aria-labelledby="workspace-heading">
+        <div class="te-section-heading">
             <div>
-                <h2 class="h3 mb-1">Staff workspace</h2>
-                <p class="text-muted mb-0">
-                    Continue to the tools available for your assigned role.
-                </p>
+                <span class="te-eyebrow">Staff workspace</span>
+                <h2 id="workspace-heading">Keep the collection moving.</h2>
+                <p>Continue to the tools available for your assigned role.</p>
             </div>
         </div>
-
         <div class="row g-3">
             @if (User.IsInRole("Admin"))
             {
-                <div class="col-md-6 col-xl-4">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body p-4">
-                            <span class="badge text-bg-dark mb-3">Admin</span>
-                            <h3 class="h5">Collection administration</h3>
-
-                            <p class="text-muted">
-                                Create and maintain books, music and toys
-                                across the complete library collection.
-                            </p>
-
-                            <a asp-controller="Admin"
-                               asp-action="Index"
-                               class="btn btn-outline-dark">
-                                Open administration
-                            </a>
-                        </div>
-                    </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                    <article class="te-workspace-card">
+                        <span class="te-eyebrow">Administration</span>
+                        <h3>Manage the collection</h3>
+                        <p>Maintain books, music and toys and keep item records up to date.</p>
+                        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-primary">Open administration</a>
+                    </article>
                 </div>
             }
-
-            @if (User.IsInRole("Reception") ||
-                 User.IsInRole("Admin"))
+            @if (canUseFrontDesk)
             {
-                <div class="col-md-6 col-xl-4">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body p-4">
-                            <span class="badge text-bg-primary mb-3">
-                                Front desk
-                            </span>
-
-                            <h3 class="h5">Borrowers and loans</h3>
-
-                            <p class="text-muted">
-                                Manage borrower records, issue items,
-                                process returns and record late fines.
-                            </p>
-
-                            <a asp-controller="Loans"
-                               asp-action="Index"
-                               class="btn btn-outline-primary">
-                                Open loan records
-                            </a>
-                        </div>
-                    </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                    <article class="te-workspace-card">
+                        <span class="te-eyebrow">Front desk</span>
+                        <h3>Borrowers and loans</h3>
+                        <p>Manage memberships, issue eligible items and receive returns.</p>
+                        <a asp-controller="Loans" asp-action="Index" class="btn btn-outline-primary">Open loan records</a>
+                    </article>
                 </div>
             }
-
-            @if (User.IsInRole("Manager") ||
-                 User.IsInRole("Admin"))
+            @if (canUseManager)
             {
-                <div class="col-md-6 col-xl-4">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body p-4">
-                            <span class="badge text-bg-success mb-3">
-                                Manager
-                            </span>
-
-                            <h3 class="h5">Performance insights</h3>
-
-                            <p class="text-muted">
-                                Review borrowing activity, item availability,
-                                popular items and fine statistics.
-                            </p>
-
-                            <a asp-controller="Manager"
-                               asp-action="Index"
-                               class="btn btn-outline-success">
-                                Open manager dashboard
-                            </a>
-                        </div>
-                    </div>
+                <div class="col-12 col-md-6 col-xl-3">
+                    <article class="te-workspace-card">
+                        <span class="te-eyebrow">Management</span>
+                        <h3>Collection insights</h3>
+                        <p>Review borrowing activity, inventory status and recorded fine totals.</p>
+                        <a asp-controller="Manager" asp-action="Index" class="btn btn-outline-primary">Open dashboard</a>
+                    </article>
+                </div>
+            }
+            @if (canUseNotifications)
+            {
+                <div class="col-12 col-md-6 col-xl-3">
+                    <article class="te-workspace-card">
+                        <span class="te-eyebrow">Notifications</span>
+                        <h3>Messages and reminders</h3>
+                        <p>Review simulated loan confirmations, reminders and accruing-fine messages.</p>
+                        <a asp-controller="Notifications" asp-action="Index" class="btn btn-outline-primary">Open notifications</a>
+                    </article>
                 </div>
             }
         </div>
     </section>
 }
-
-<section class="mb-5">
-    <div class="text-center mx-auto mb-4"
-         style="max-width: 700px;">
-        <h2 class="h2">Designed for the whole library</h2>
-
-        <p class="text-muted">
-            A single system supports public discovery and the daily work
-            performed by administrators, reception staff and managers.
-        </p>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <div class="fs-2 fw-semibold text-primary mb-3">01</div>
-
-                    <h3 class="h5">Explore</h3>
-
-                    <p class="text-muted mb-0">
-                        Browse the complete collection from a desktop,
-                        tablet or mobile device without signing in.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <div class="fs-2 fw-semibold text-primary mb-3">02</div>
-
-                    <h3 class="h5">Borrow and return</h3>
-
-                    <p class="text-muted mb-0">
-                        Reception staff can securely manage borrowers,
-                        active loans, returns and overdue fines.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <div class="fs-2 fw-semibold text-primary mb-3">03</div>
-
-                    <h3 class="h5">Review performance</h3>
-
-                    <p class="text-muted mb-0">
-                        Managers can monitor collection status, borrowing
-                        activity and financial information in one dashboard.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="bg-dark text-white rounded-4 p-4 p-md-5">
-    <div class="row align-items-center g-3">
-        <div class="col-lg-8">
-            <h2 class="h3 mb-2">Ready to explore?</h2>
-
-            <p class="text-white-50 mb-lg-0">
-                Check what is currently available in the Top End Library
-                collection.
-            </p>
-        </div>
-
-        <div class="col-lg-4 text-lg-end">
-            <a asp-controller="Catalogue"
-               asp-action="Index"
-               class="btn btn-light">
-                Browse all items
-            </a>
-        </div>
-    </div>
-</section>

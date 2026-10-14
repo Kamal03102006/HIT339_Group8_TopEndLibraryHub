@@ -10,7 +10,7 @@ namespace TopEndLibraryHub.Models
         [StringLength(20)]
         [Display(Name = "Membership Number")]
         [RegularExpression(
-            @"^MBR-\d{4}$",
+            @"^[Mm][Bb][Rr]-[0-9]{4}$",
             ErrorMessage = "Use the format MBR-0001.")]
         public string MembershipNumber { get; set; } = string.Empty;
 
