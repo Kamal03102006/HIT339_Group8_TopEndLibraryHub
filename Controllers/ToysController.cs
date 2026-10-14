@@ -1,3 +1,6 @@
+using System.Data;
+using Microsoft.Data.SqlClient;
+using TopEndLibraryHub.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +14,12 @@ namespace TopEndLibraryHub.Controllers
     public class ToysController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly HoldWorkflowService _holds;
 
-        public ToysController(ApplicationDbContext context)
+        public ToysController(ApplicationDbContext context, HoldWorkflowService holds)
         {
             _context = context;
+            _holds = holds;
         }
 
         public async Task<IActionResult> Index(
@@ -165,6 +170,19 @@ namespace TopEndLibraryHub.Controllers
                 "LibraryCode,Name,Description,Status")]
             Toy input)
         {
+            if (id <= 0) return NotFound();
+            await using var transaction = await _context.Database.BeginTransactionAsync(
+                IsolationLevel.Serializable);
+            try
+            {
+                await _holds.LockItemAsync(id);
+            }
+            catch (SqlException exception) when (exception.Number is 1205 or 1222 or 51001)
+            {
+                TempData["ErrorMessage"] = "This item is being updated. Refresh before editing it.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var toy = await _context.Toys
                 .Include(toy => toy.Branch)
                 .FirstOrDefaultAsync(toy => toy.Id == id);
@@ -237,6 +255,15 @@ namespace TopEndLibraryHub.Controllers
                     "to mark a toy as borrowed.");
             }
 
+            var allocatedHold = await _context.Holds.AnyAsync(hold =>
+                hold.ItemId == id && (hold.Status == HoldStatus.Allocated ||
+                    hold.Status == HoldStatus.ReadyForPickup));
+            if (allocatedHold && input.Status != ItemStatus.Available)
+            {
+                ModelState.AddModelError(nameof(Toy.Status),
+                    "Cancel the pickup allocation before withdrawing or changing the condition of this item.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(input);
@@ -256,6 +283,9 @@ namespace TopEndLibraryHub.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                var allocation = await _holds.RefreshLockedAsync(toy);
+                await transaction.CommitAsync();
+                await _holds.NotifyReadyAfterCommitAsync(allocation);
 
                 TempData["SuccessMessage"] =
                     $"Toy '{toy.Name}' was updated. " +
@@ -265,6 +295,8 @@ namespace TopEndLibraryHub.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
+                await transaction.DisposeAsync();
+                _context.ChangeTracker.Clear();
                 if (!await ToyExistsAsync(id))
                 {
                     return NotFound();
@@ -277,10 +309,20 @@ namespace TopEndLibraryHub.Controllers
             }
             catch (DbUpdateException)
             {
+                await transaction.DisposeAsync();
+                _context.ChangeTracker.Clear();
                 ModelState.AddModelError(
                     string.Empty,
                     "The toy could not be updated. " +
                     "Check that its library code is unique.");
+            }
+
+            catch (SqlException exception) when (exception.Number is 1205 or 1222 or 51001)
+            {
+                await transaction.DisposeAsync();
+                _context.ChangeTracker.Clear();
+                ModelState.AddModelError(string.Empty,
+                    "This item changed during the update. Reload the page before trying again.");
             }
 
             return View(input);

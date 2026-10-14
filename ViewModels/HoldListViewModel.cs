@@ -28,7 +28,7 @@ public class HoldListRow
     public DateTime CreatedAtDarwin { get; set; }
     public int? QueuePosition { get; set; }
 
-    public bool CanCancel => Status == HoldStatus.Waiting;
+    public bool CanCancel => Status is HoldStatus.Waiting or HoldStatus.Allocated or HoldStatus.ReadyForPickup;
 
     public string StatusLabel => Status switch
     {

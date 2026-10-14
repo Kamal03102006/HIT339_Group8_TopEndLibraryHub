@@ -1,7 +1,9 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using TopEndLibraryHub.Services;
 using TopEndLibraryHub.Data;
 using TopEndLibraryHub.Models;
 using TopEndLibraryHub.ViewModels;
@@ -10,19 +12,23 @@ using TopEndLibraryHub.ViewModels;
 public class LoansController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly CirculationService _circulation;
+    private readonly LibraryClock _clock;
 
     private const decimal DailyFineRate = 1.50m;
 
-    public LoansController(ApplicationDbContext context)
+    public LoansController(ApplicationDbContext context, CirculationService circulation, LibraryClock clock)
     {
         _context = context;
+        _circulation = circulation;
+        _clock = clock;
     }
 
     public async Task<IActionResult> Index(
         string? searchString,
         string? loanStatus)
     {
-        var today = DateTime.UtcNow.Date;
+        var today = _clock.Today;
 
         var loans = _context.Loans
             .AsNoTracking()
@@ -73,160 +79,57 @@ public class LoansController : Controller
     [HttpGet]
     public IActionResult Borrow()
     {
-        return View(new BorrowItemViewModel());
+        return View(new BorrowItemViewModel { DueDate = _clock.Today.AddDays(14) });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Borrow(
-        BorrowItemViewModel model)
+        BorrowItemViewModel model, CancellationToken cancellationToken = default)
     {
-        model.LibraryCode =
-            (model.LibraryCode ?? string.Empty)
-            .Trim()
-            .ToUpperInvariant();
-
-        model.MembershipNumber =
-            (model.MembershipNumber ?? string.Empty)
-            .Trim()
-            .ToUpperInvariant();
-
+        model.LibraryCode = (model.LibraryCode ?? string.Empty).Trim().ToUpperInvariant();
+        model.MembershipNumber = (model.MembershipNumber ?? string.Empty).Trim().ToUpperInvariant();
         ModelState.Clear();
         TryValidateModel(model);
+        if (!ModelState.IsValid) return View(model);
 
-        var today = DateTime.UtcNow.Date;
-
-        if (model.DueDate.Date <= today)
+        var desk = await GetWorkingDeskAsync(cancellationToken);
+        if (desk is null) return RequestWorkingLocation("borrowing");
+        var borrowerId = await _context.Borrowers.AsNoTracking()
+            .Where(member => member.MembershipNumber == model.MembershipNumber)
+            .Select(member => (int?)member.Id).SingleOrDefaultAsync(cancellationToken);
+        if (!borrowerId.HasValue)
         {
-            ModelState.AddModelError(
-                nameof(model.DueDate),
-                "The due date must be after today.");
-        }
-
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
-
-        var userId = User.FindFirstValue(
-            ClaimTypes.NameIdentifier);
-
-        var branchId = HttpContext.Session.GetInt32(
-            "StaffBranchId");
-
-        var deskId = HttpContext.Session.GetInt32(
-            "StaffDeskId");
-
-        var ownsLocation =
-            !string.IsNullOrEmpty(userId) &&
-            HttpContext.Session.GetString("StaffLocationUserId")
-                == userId;
-
-        var validLocation =
-            ownsLocation &&
-            branchId.HasValue &&
-            deskId.HasValue &&
-            await _context.ReceptionDesks.AnyAsync(d =>
-                d.Id == deskId.Value &&
-                d.BranchId == branchId.Value &&
-                d.IsActive &&
-                d.Branch != null &&
-                d.Branch.IsActive);
-
-        if (!validLocation)
-        {
-            TempData["LocationMessage"] =
-                "Select an active branch and reception desk before borrowing.";
-
-            return RedirectToAction("Index", "StaffLocation");
-        }
-
-        var item = await _context.Items.FirstOrDefaultAsync(
-            item => item.LibraryCode == model.LibraryCode);
-
-        var borrower = await _context.Borrowers.FirstOrDefaultAsync(
-            borrower =>
-                borrower.MembershipNumber == model.MembershipNumber);
-
-        if (item is null)
-        {
-            ModelState.AddModelError(
-                nameof(model.LibraryCode),
-                "No item was found with this library code.");
-        }
-        else
-        {
-            var alreadyOnLoan = await _context.Loans.AnyAsync(
-                loan => loan.ItemId == item.Id &&
-                        loan.ReturnedDate == null);
-
-            var inTransit = await _context.ItemTransfers.AnyAsync(
-                transfer => transfer.ItemId == item.Id &&
-                            transfer.Status == TransferStatus.InTransit);
-
-            if (item.BranchId != branchId!.Value)
-            {
-                ModelState.AddModelError(
-                    nameof(model.LibraryCode),
-                    "This item is at another branch. " +
-                    "Arrange a transfer before borrowing it here.");
-            }
-
-            if (item.Status == ItemStatus.InTransit || inTransit)
-            {
-                ModelState.AddModelError(
-                    nameof(model.LibraryCode),
-                    "This item is in transit. " +
-                    "The destination branch must receive it first.");
-            }
-            else if (
-                item.Status != ItemStatus.Available ||
-                alreadyOnLoan)
-            {
-                ModelState.AddModelError(
-                    nameof(model.LibraryCode),
-                    "This item is not currently available for borrowing.");
-            }
-        }
-
-        if (borrower is null)
-        {
-            ModelState.AddModelError(
-                nameof(model.MembershipNumber),
+            ModelState.AddModelError(nameof(model.MembershipNumber),
                 "No borrower was found with this membership number.");
-        }
-        else if (!borrower.IsActive)
-        {
-            ModelState.AddModelError(
-                nameof(model.MembershipNumber),
-                "This borrower's membership is inactive.");
-        }
-
-        if (!ModelState.IsValid)
-        {
             return View(model);
         }
 
-        var loan = new Loan
+        try
         {
-            ItemId = item!.Id,
-            BorrowerId = borrower!.Id,
-            BorrowedDate = DateTime.UtcNow,
-            DueDate = model.DueDate.Date,
-            FineAmount = 0,
-            FinePaid = false
-        };
-
-        item.Status = ItemStatus.Borrowed;
-
-        _context.Loans.Add(loan);
-        await _context.SaveChangesAsync();
-
-        TempData["SuccessMessage"] =
-            $"'{item.Name}' was borrowed by {borrower.FullName}. " +
-            $"It is due on {loan.DueDate:dd MMMM yyyy}.";
-
-        return RedirectToAction(nameof(Index));
+            var result = await _circulation.CheckoutAsync(model.LibraryCode,
+                borrowerId.Value, desk.BranchId, model.DueDate, desk.Id, cancellationToken);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(result.Field ?? string.Empty, result.Message);
+                return View(model);
+            }
+            TempData["SuccessMessage"] = result.Message;
+            return RedirectToAction(nameof(Index));
+        }
+        catch (DbUpdateException)
+        {
+            _context.ChangeTracker.Clear();
+            ModelState.AddModelError(string.Empty,
+                "Checkout could not be saved. Refresh the loan list before trying again.");
+        }
+        catch (SqlException exception) when (exception.Number is 1205 or 1222 or 51001)
+        {
+            _context.ChangeTracker.Clear();
+            ModelState.AddModelError(string.Empty,
+                "Another staff action is updating this item. Refresh and try again.");
+        }
+        return View(model);
     }
 
     [HttpGet]
@@ -237,95 +140,68 @@ public class LoansController : Controller
         return View(new ReturnItemViewModel
         {
             LibraryCode = libraryCode ?? string.Empty,
-            ReturnDate = DateTime.UtcNow.Date
+            ReturnDate = _clock.Today
         });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Return(
-        ReturnItemViewModel model)
+        ReturnItemViewModel model, CancellationToken cancellationToken = default)
     {
         ViewData["DailyFineRate"] = DailyFineRate;
-
-        model.LibraryCode =
-            (model.LibraryCode ?? string.Empty)
-            .Trim()
-            .ToUpperInvariant();
-
+        model.LibraryCode = (model.LibraryCode ?? string.Empty).Trim().ToUpperInvariant();
         ModelState.Clear();
         TryValidateModel(model);
+        if (!ModelState.IsValid) return View(model);
+        var desk = await GetWorkingDeskAsync(cancellationToken);
+        if (desk is null) return RequestWorkingLocation("receiving returns");
 
-        var today = DateTime.UtcNow.Date;
-
-        if (model.ReturnDate.Date > today)
+        try
         {
-            ModelState.AddModelError(
-                nameof(model.ReturnDate),
-                "The return date cannot be in the future.");
+            var result = await _circulation.ReturnAsync(model.LibraryCode,
+                model.ReturnDate, model.PayFineNow, model.NeedsRepair,
+                desk.BranchId, desk.Id, cancellationToken);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(result.Field ?? string.Empty, result.Message);
+                return View(model);
+            }
+            TempData["SuccessMessage"] = result.Message;
+            return RedirectToAction(nameof(Details), new { id = result.LoanId });
         }
-
-        if (!ModelState.IsValid)
+        catch (DbUpdateException)
         {
-            return View(model);
+            _context.ChangeTracker.Clear();
+            ModelState.AddModelError(string.Empty,
+                "The return could not be saved. Refresh the loan record before retrying.");
         }
-
-        var loan = await _context.Loans
-            .Include(existingLoan => existingLoan.Item)
-            .Include(existingLoan => existingLoan.Borrower)
-            .FirstOrDefaultAsync(existingLoan =>
-                existingLoan.Item.LibraryCode == model.LibraryCode &&
-                existingLoan.ReturnedDate == null);
-
-        if (loan is null)
+        catch (SqlException exception) when (exception.Number is 1205 or 1222 or 51001)
         {
-            ModelState.AddModelError(
-                nameof(model.LibraryCode),
-                "No active loan was found for this library code.");
-
-            return View(model);
+            _context.ChangeTracker.Clear();
+            ModelState.AddModelError(string.Empty,
+                "Another staff action is updating this item. Refresh and try again.");
         }
+        return View(model);
+    }
 
-        if (model.ReturnDate.Date < loan.BorrowedDate.Date)
-        {
-            ModelState.AddModelError(
-                nameof(model.ReturnDate),
-                "The return date cannot be before the borrowing date.");
+    private async Task<ReceptionDesk?> GetWorkingDeskAsync(CancellationToken cancellationToken)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId) ||
+            HttpContext.Session.GetString("StaffLocationUserId") != userId) return null;
+        var branchId = HttpContext.Session.GetInt32("StaffBranchId");
+        var deskId = HttpContext.Session.GetInt32("StaffDeskId");
+        return await _context.ReceptionDesks.AsNoTracking()
+            .SingleOrDefaultAsync(desk => desk.Id == deskId && desk.BranchId == branchId &&
+                desk.IsActive && desk.Branch != null && desk.Branch.IsActive,
+                cancellationToken);
+    }
 
-            return View(model);
-        }
-
-        var overdueDays = Math.Max(
-            0,
-            (model.ReturnDate.Date - loan.DueDate.Date).Days);
-
-        loan.FineAmount = overdueDays * DailyFineRate;
-
-        loan.ReturnedDate = model.ReturnDate.Date
-            .AddDays(1)
-            .AddTicks(-1);
-
-        loan.FinePaid =
-            loan.FineAmount == 0 || model.PayFineNow;
-
-        loan.FinePaidDate =
-            loan.FineAmount > 0 && model.PayFineNow
-                ? DateTime.UtcNow
-                : null;
-
-        loan.Item.Status = ItemStatus.Available;
-
-        await _context.SaveChangesAsync();
-
-        TempData["SuccessMessage"] =
-            loan.FineAmount > 0
-                ? $"'{loan.Item.Name}' was returned. " +
-                  $"A late fine of {loan.FineAmount:C} was applied."
-                : $"'{loan.Item.Name}' was returned with no late fine.";
-
-        return RedirectToAction(
-            nameof(Details),
-            new { id = loan.Id });
+    private IActionResult RequestWorkingLocation(string operation)
+    {
+        TempData["LocationMessage"] = $"Select an active branch and reception desk before {operation}.";
+        return RedirectToAction("Index", "StaffLocation");
     }
 
     public async Task<IActionResult> Details(int? id)
@@ -377,7 +253,7 @@ public class LoansController : Controller
         else
         {
             loan.FinePaid = true;
-            loan.FinePaidDate = DateTime.UtcNow;
+            loan.FinePaidDate = _clock.UtcNow;
 
             await _context.SaveChangesAsync();
 

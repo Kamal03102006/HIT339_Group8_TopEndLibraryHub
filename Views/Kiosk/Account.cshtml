@@ -1,0 +1,55 @@
+@model TopEndLibraryHub.ViewModels.KioskAccountViewModel
+@{
+    ViewData["Title"] = "My library account";
+    var aud = System.Globalization.CultureInfo.GetCultureInfo("en-AU");
+}
+<link rel="stylesheet" href="~/css/kiosk.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/kiosk-additions.css" asp-append-version="true" />
+<div class="kiosk kiosk-journey">
+    <header class="kiosk-hero"><h1>My library account</h1><p>Your loans, pickup requests and recorded fines.</p></header>
+    <section class="kiosk-search-section">
+        @if (TempData["KioskSuccess"] is string success) { <p class="alert alert-success" role="status">@success</p> }
+        @if (TempData["KioskError"] is string error) { <p class="kiosk-alert" role="alert">@error</p> }
+        @if (Model.Message is not null) { <p class="kiosk-alert" role="alert">@Model.Message</p> }
+        @if (Model.FullName is not null)
+        {
+            <h2>@Model.FullName</h2>
+            <p><strong>@Model.MembershipNumber</strong> · @(Model.IsActive ? "Active membership" : "Inactive membership")</p>
+            <p><strong>Recorded unpaid fines:</strong> @Model.OutstandingFines.ToString("C", aud)</p>
+            <p><strong>Estimated late charges on current loans:</strong> @Model.EstimatedLateFines.ToString("C", aud)</p>
+            <p class="small text-muted">Estimates use AUD $1.50 per overdue Darwin calendar day. Staff confirm the final amount when an item is returned.</p>
+            <h3>Active loans</h3>
+            @if (Model.Loans.Count == 0) { <p>No active loans.</p> }
+            else
+            {
+                <div class="table-responsive"><table class="table">
+                    <thead><tr><th scope="col">Item</th><th scope="col">Code</th><th scope="col">Due date</th><th scope="col">Estimated late fine</th></tr></thead>
+                    <tbody>@foreach (var loan in Model.Loans)
+                    {
+                        <tr><td>@loan.Name</td><td>@loan.LibraryCode</td><td>@loan.DueDate.ToString("dd MMM yyyy")</td><td>@loan.EstimatedLateFine.ToString("C", aud)</td></tr>
+                    }</tbody>
+                </table></div>
+            }
+            <h3 class="mt-4">My pickup requests</h3>
+            @if (Model.Holds.Count == 0) { <p>No active pickup requests. Staff can help you join a waiting list.</p> }
+            else
+            {
+                <div class="table-responsive"><table class="table">
+                    <thead><tr><th scope="col">Item</th><th scope="col">Progress</th><th scope="col">Waiting position</th><th scope="col">Pickup branch</th></tr></thead>
+                    <tbody>@foreach (var hold in Model.Holds)
+                    {
+                        <tr><td>@hold.Name <span class="d-block small">@hold.LibraryCode</span></td><td>@hold.StatusLabel</td><td>@(hold.QueuePosition?.ToString() ?? "—")</td><td>@hold.PickupBranch</td></tr>
+                    }</tbody>
+                </table></div>
+            }
+        }
+    </section>
+    <nav class="kiosk-actions" aria-label="Account actions">
+        <a asp-action="Scan" class="kiosk-button">Scan an item</a>
+        <form asp-action="Finish" method="post" data-kiosk-finish data-keepalive="@Url.Action("KeepAlive", "Kiosk")">
+            @Html.AntiForgeryToken()<button class="kiosk-button" type="submit">Finish and sign out</button>
+        </form>
+    </nav>
+    <p class="small text-muted">For privacy, this kiosk signs out after two minutes without activity. Select Finish before leaving.</p>
+</div>
+@section Scripts { <script src="~/js/kiosk-session.js" asp-append-version="true"></script> }

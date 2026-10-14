@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace TopEndLibraryHub.Models
 {
@@ -40,6 +40,8 @@ namespace TopEndLibraryHub.Models
 
         [Display(Name = "Active Member")]
         public bool IsActive { get; set; } = true;
+
+        public string? IdentityUserId { get; set; }
 
         public ICollection<Loan> Loans { get; set; } = new List<Loan>();
     }

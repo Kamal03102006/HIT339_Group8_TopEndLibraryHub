@@ -23,7 +23,7 @@ namespace TopEndLibraryHub.Services
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation(
-                "Simulated loan notification checks started with a one-minute interval.");
+                "Simulated loan and pickup notification checks started with a one-minute interval.");
 
             try
             {
@@ -45,7 +45,7 @@ namespace TopEndLibraryHub.Services
             }
             finally
             {
-                _logger.LogInformation("Simulated loan notification checks stopped.");
+                _logger.LogInformation("Simulated loan and pickup notification checks stopped.");
             }
         }
 
@@ -59,7 +59,10 @@ namespace TopEndLibraryHub.Services
                 var service = scope.ServiceProvider
                     .GetRequiredService<NotificationService>();
 
+                var holds = scope.ServiceProvider.GetRequiredService<HoldWorkflowService>();
+                await holds.ProcessAvailableItemsAsync(stoppingToken);
                 var created = await service.ProcessActiveLoansAsync(stoppingToken);
+                created += await service.ProcessReadyHoldsAsync(stoppingToken);
                 if (created > 0)
                 {
                     _logger.LogInformation(

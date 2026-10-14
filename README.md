@@ -1,36 +1,35 @@
 # Top End Library Hub
 
-HIT339 Distributed Development, Group 8. The Assignment 2 .NET 10 MVC application is being expanded into a fictional family lending service for books, music and toys at Darwin Hub, Palmerston Hub and Casuarina Hub.
+HIT339 Distributed Development, Group 8. Kamalpreet's Assignment 2 .NET 10 MVC application is being expanded into a fictional family lending service for books, music and toys at Darwin, Palmerston and Casuarina hubs.
 
-Group members: Kamalpreet, Harsimran Singh, Mehakpreet Kaur and Sandesh Bhattarai. Internal completion target: 15 October 2026. Official submission: 16 October 2026, 23:59 Darwin/ACST.
+Group: Kamalpreet (S389008), Harsimran Singh, Mehakpreet Kaur and Sandesh Bhattarai. Internal target: 15 October 2026. Submission: 16 October 2026, 23:59 Darwin/ACST.
 
-## Current revision and implementation status
+## Revision and verification
 
-The latest verified group integration commit is `74668e1` on `feature/holds-notifications`. A subsequent local batch adds the staff holds desk, green interface and generated pickup-branch migration. Kamalpreet reports completing its three guided hold checks and applying the membership capitalisation fix. The newer pushed revision and individual screenshot results have not yet been confirmed.
+Integration baseline: dbbc540 on feature/holds-notifications, with Mehakpreet's kiosk/API contribution from 3b925ee. The applied circulation integration includes shared checkout/returns, eligible FIFO allocation, protected transfers and simulated pickup messages. Kamalpreet's Windows build succeeded; the supplied Get-Migration output shows all seven migrations Applied=True.
 
-Harsimran's branch, reception desk, transfer and item-location work is integrated. Mehakpreet's kiosk/API source is on `feature/mehakpreet-kiosk-api` at `3b925ee`; it is not yet merged into this working branch. CSV import and expanded report exports await verified handoff. Automatic hold allocation and shared checkout/transfer/notification protection remain in progress.
+Five committed screenshots establish duplicate rejection, waiting order and cancellation. Later supplied images show Noah Ready at Darwin and damaged-copy borrowing rejection. The 14 October Windows reports cover reserved-member checkout, repeat checkout, repair allocation, protected Darwin-to-Palmerston transfer, collection and next-member handover. A damaged return preserved a new waiting request; the subsequent repair increased pickup-only history from four to six records, and the filtered count stayed 6 → 6 after restart. See the test records for exact inputs, results and evidence limits.
 
-## Group module navigation
+Kiosk/API/privacy and simultaneous-checkout acceptance, remaining fine/loan notification checks, clean-VM verification, importer/report handoff and the final portfolio are still outstanding. The final submission branch/tag will identify the completed seven-module version.
 
-| Module | Route | Role | Status |
+## Modules and routes
+
+| Module | Route | Access | Status |
 | --- | --- | --- | --- |
-| Collection search | `/Catalogue` | Public | Baseline catalogue; green home search links to it. |
-| Working location | `/StaffLocation` | Admin or Reception | Branch and reception-desk selection is integrated. |
-| Staff holds desk | `/Holds` and `/Holds/Create` | Admin or Reception | Included in the local desk batch; three tests reported completed. |
-| Transfers | `/Transfers` and `/Transfers/Create` | Admin or Reception | Dispatch and destination receipt integrated; hold handover pending. |
-| Loan records and lending | `/Loans`, `/Loans/Borrow`, `/Loans/Return` | Admin or Reception | Baseline lending with location/transit guards; reservation integration pending. |
-| Simulated notifications | `/Notifications` | Admin, Reception or Manager | Loan worker and logs implemented; pickup workflow integration pending. |
-| Manager statistics | `/Manager` | Admin or Manager | Baseline dashboard; group exports await verified delivery. |
-| Kiosk and read-only API | Mehakpreet's separate branch | Role/credential rules in that branch | Identity-linked account source exists; checkout remains blocked pending shared circulation. |
-| CSV import | Final route pending | Admin | Verified implementation and sample input files pending. |
+| Catalogue | /Catalogue | Public | Shared rule excludes loans, transit and reservations; final public/API runtime checks pending. |
+| Kiosk | /Kiosk, /Kiosk/Scan, /Kiosk/Account | Public browsing; authenticated private actions | Mehak contribution integrated locally; shared checkout/private hold progress and timeout need runtime checks. |
+| Catalogue API | /api/catalogue, /available, /categories, /status, /{code} | External X-API-Key over HTTPS | Read-only; key outside Git; health is system/database status. |
+| Working location | /StaffLocation | Admin/Reception | Active physical branch/desk selection. |
+| Holds | /Holds, /Holds/Create | Admin/Reception | Desk screenshots plus reported return/repair/transfer/collection results; detailed evidence in docs. |
+| Transfers | /Transfers, /Transfers/Create | Admin/Reception | Harsimran's dispatch/receipt with shared protected hold handover; main flow reported tested. |
+| Lending | /Loans, /Loans/Borrow, /Loans/Return | Admin/Reception | Shared service; usable and NeedsRepair returns reported tested. Kiosk/concurrency checks pending. |
+| Simulated messages | /Notifications | Admin/Reception/Manager | Automatic startup/minute checks for loans and ready holds; no real messages sent. |
+| Manager | /Manager | Admin/Manager | Baseline statistics; expanded revenue/health exports pending handoff. |
+| Import | Route not yet verified | Admin | Pending handoff and sample CSVs. |
 
-Do not treat a route from an unmerged member branch as present in the integrated application.
+## Install and run
 
-## Download and run the working source
-
-Use the .NET 10 SDK, Git, Visual Studio with ASP.NET and web development support, and SQL Server LocalDB. Open `TopEndLibraryHub.slnx`, choose TopEndLibraryHub as the startup project, restore packages, build and run with the HTTPS profile. The connection string is configured in the project's development settings. The startup initializer applies pending migrations and creates repeat-safe demonstration data. A clean VM run of the final installation guide is still required by the brief.
-
-For a separate checkout of the current working branch:
+Prerequisites: .NET 10 SDK, Git, Visual Studio with ASP.NET/web development support, and SQL Server LocalDB. Open TopEndLibraryHub.slnx, select the web project, restore, build and run with the HTTPS profile. The final clean-VM installation test remains outstanding.
 
 ```powershell
 git clone --branch feature/holds-notifications https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub.git
@@ -40,43 +39,51 @@ dotnet build
 dotnet run --launch-profile https
 ```
 
-Open the URL printed by the application. Sign in with a local demonstration staff account when testing a protected workflow. Existing baseline account information is retained below.
+Use the URL printed by the app. Startup applies missing EF migrations and repeat-safe fictional branch/stock/staff seeds. Review a migration failure; preserve existing loan/hold history. The new identity migration creates a unique active-loan index and will reject inconsistent duplicate active loans.
 
-## Physical branch and reception desk setup
+In Visual Studio's Package Manager Console, with TopEndLibraryHub selected as the default project, `Update-Database -Context ApplicationDbContext` applies the same pending migrations before launch. The circulation patch contains Mehak's identity migration; it does not require generating a new migration for these service/view changes.
 
-Startup seeding creates the following fictional locations and desks without adding duplicates on each restart:
+## Fictional locations
 
-| Branch code | Location | Desk code |
+| Code | Location | Reception desk |
 | --- | --- | --- |
 | DAR | Darwin Hub | DAR-D01 |
 | PAL | Palmerston Hub | PAL-D01 |
 | CAS | Casuarina Hub | CAS-D01 |
 
-As Admin or Reception, use **Front desk > Working location** to select an active branch and desk. A source-code Git branch chooses a revision; this working-location selection chooses a physical operating branch. New stock is assigned to the selected branch. A dispatch keeps the origin location until the destination receives it; items in transit cannot be checked out.
+Staff select **Front desk → Working location** before lending, returns, stock creation or dispatch/receipt. This is a physical branch, separate from a source-code Git branch. A usable return is received at the selected physical branch; a transfer keeps its origin until destination receipt.
 
-## Holds desk integration checks
+In Development only, the patch seeds a separate linked patron Sky Nguyen / MBR-8001 / patron@topendlibrary.local / Patron#2026! with no staff role. Existing memberships stay unlinked. Kiosk checkout's trusted branch defaults to DAR; configuration can select PAL/CAS for testing.
 
-Register two active fictional borrowers who do not already have the selected item on loan. Guided examples are `MBR-9001` (Asha Patel) and `MBR-9002` (Noah Wilson). Use an actual Borrowed or Damaged item with no active holds, such as `TY-0001` if its current state meets those conditions.
+Configure an API key outside committed source:
 
-1. Place the first member's hold and try the same member/item request again. The duplicate should be rejected.
-2. Add the second member's request. Their eligible waiting positions should be 1 then 2, even when newest requests display first.
-3. Cancel the first waiting request. Keep its cancelled history and move the second eligible request to position 1.
+```powershell
+dotnet user-secrets set "CatalogueApi:ApiKey" "<your-long-random-key>"
+dotnet user-secrets set "Kiosk:BranchCode" "DAR"
+```
 
-Kamalpreet reports completing these procedures. Their screenshots are still on the laptop; detailed outcomes will be matched to the images when available. This batch does not yet demonstrate automatic allocation after return or repair.
+Send X-API-Key; the unconfigured API returns 503, missing/wrong key 401. Private kiosk screens and nonstaff sign-in use a two-minute inactivity/expiry policy; Finish signs out and clears the session. Test privacy and Back behaviour on the actual browser.
 
-Membership validation now accepts uppercase, lowercase and mixed-case `MBR` prefixes; existing controller normalization stores uppercase. Kamalpreet reported applying this fix after discovering that visual capitalization had concealed invalid lowercase input. The specific lowercase registration retest is tracked separately.
+## Test the integrations
 
-## Documentation and evidence
+For a fresh installation, follow [the circulation demo guide](docs/CIRCULATION_DEMO_GUIDE.md). It supplies fictional borrower and toy fields, physical desks, workflow actions and pickup-only counts. It uses a new copy TY-9101 so the recorded TY-9001 history remains intact.
 
-- [Requirements](docs/HIT339_Group8_Requirements_Draft.docx): seven modules, acceptance checks and updated design decisions.
-- [Assessment checklist](docs/ASSESSMENT_CHECKLIST.md): all eleven rubric categories and submission deliverables.
-- [Group work record](docs/GROUP_WORK_RECORD.md): allocations, decisions, progress, governance and member inputs still needed.
-- [Hold test record](docs/HOLD_WORKFLOW_TEST_RECORD.md): guided inputs, reported completion and remaining checks.
-- [Notification test record](docs/NOTIFICATION_TEST_RECORD.md): earlier observed results and final checks still required.
-- [UX feedback record](docs/UX_FEEDBACK_RECORD.md): observed capitalisation problem, change and retest status.
-- [Screenshot evidence](docs/screenshots/README.md): where to copy the three images using their existing names.
+The [integration test record](docs/CIRCULATION_INTEGRATION_TEST_RECORD.md) preserves the actual 14 October run. Its existing queues have progressed: TY-0001 was collected by Noah, and TY-9001 has completed the two-family handover and a later repair cycle. Do not assume these records still have the starting states described in older test instructions.
 
-Written records are compiled from the lead's observations and member reports with AI assistance. Real outcomes, hours, meetings and individual contributions remain subject to group review. The final portfolio PDF, VM verification, final patron guide, diagrams and user journey maps are still being assembled.
+When comparing pickup messages, set the item code, Message type Ready for pickup and Channel All channels, then click Filter records. The immediate Check loans and pickups now button currently returns to an unfiltered page; reapply the filters before comparing counts. Historical pickup messages remain visible after collection. Loan-confirmation messages count separately when All types is selected.
+
+## Documentation
+
+- [Requirements](docs/HIT339_Group8_Requirements_Draft.docx)
+- [Assessment checklist](docs/ASSESSMENT_CHECKLIST.md): all 11 rubric categories, brief and final deliverables
+- [Group work record](docs/GROUP_WORK_RECORD.md): tasks, decisions, governance and missing genuine member inputs
+- [Hold evidence](docs/HOLD_WORKFLOW_TEST_RECORD.md) and [screenshot index](docs/screenshots/README.md)
+- [Notification observations](docs/NOTIFICATION_TEST_RECORD.md)
+- [UX issue, fix and retest](docs/UX_FEEDBACK_RECORD.md)
+- [Integration diagram and journeys](docs/ARCHITECTURE_AND_JOURNEYS.md)
+- [Patron guide](Documentation/PatronUserGuide.md) and [kiosk/API handoff](Documentation/Kiosk_Integration_Readme.md)
+
+Written records are compiled from actual reports/source/screenshots with AI assistance. Genuine hours, team-contract acceptance, meetings, individual reflections/value contributions, final VM run and member handoffs remain outstanding. Working documents and diagrams are inputs to the required final portfolio PDF; the PDF is not complete.
 
 ## Assignment 2 baseline reference
 

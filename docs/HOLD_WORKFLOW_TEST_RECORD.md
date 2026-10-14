@@ -1,61 +1,61 @@
 # Holds desk test and evidence record
 
-Updated 14 October 2026. Tester: Kamalpreet, using the Windows application. Dates and times are Darwin/ACST (UTC+09:30). The prepared source is based on merge `74668e1`; the tested desk, interface and pickup-branch migration have not yet been verified in a subsequent pushed commit.
+Updated 14 October 2026. Tester: Kamalpreet, Windows application. Times are Darwin/ACST (UTC+09:30). The tested desk, interface, membership regex and pickup-branch migration are pushed at `dbbc540` on `feature/holds-notifications`.
 
-Kamalpreet reported completing the three guided hold tests at 17:45 and confirmed at 17:51 that three screenshots are saved on the laptop. The individual outcomes have not yet been restated or checked against those images. The table therefore records completion as reported, with screenshot verification outstanding. Other acceptance checks remain pending.
+## Verified screenshot results
 
-## Implemented scope
+Five supplied repository screenshots cover three tests. The images were inspected after the push. These are observed UI results, not an independent SQL, concurrency or clean-installation test.
 
-The staff desk supports holds on borrowed or damaged physical items, active pickup branches, eligible waiting positions ordered by creation time then request ID, duplicate active-request protection, and cancellation of waiting requests with history retained. Admin and Reception can use the desk. The shared green interface includes navigation to holds, working location and transfers.
-
-Automatic allocation, ready-for-pickup notifications, patron self-service placement and the loan, repair and transfer handover are the next integration stage.
-
-## Migration review
-
-Kamalpreet generated and supplied `LinkHoldsToPickupBranches` on 14 October. Its `Up` method was reviewed: it creates `IX_Holds_PickupBranchId` and adds `FK_Holds_Branches_PickupBranchId` from `Holds.PickupBranchId` to `Branches.Id` with restricted deletion. Its `Down` method removes the foreign key and then the index. No unrelated schema change appears in the supplied migration. The Windows application was subsequently used for the reported test batch; a separate database-update transcript has not been supplied.
-
-## Guided sample data
-
-These are the supplied test inputs. The actual chosen item and pickup branch will be matched to the screenshots when they are copied into the project.
-
-| Record | Guided value |
-| --- | --- |
-| First fictional member | `MBR-9001`, Asha Patel |
-| Second fictional member | `MBR-9002`, Noah Wilson |
-| Item example | `TY-0001`, provided it is currently Borrowed or Damaged and has no existing active holds |
-| Pickup branch example | Darwin Hub |
-| Preparation | Register both members as active; neither should already have the selected item on loan |
-
-## Reported test batch
-
-| ID | Action | Expected outcome | Reported completion and evidence |
+| ID | Actual inputs and action | Observed outcome | Evidence |
 | --- | --- | --- | --- |
-| H01 | Place the first member's hold, then submit the same member/item request again. | Duplicate rejected; one active request for that member/item remains. | Procedure reported completed on 14 October. One of the three screenshots is held locally; filename and content verification are pending. |
-| H02 | Add the second eligible member's hold for the same item. | Original request has position 1 and the second position 2. Display order may be newest first. | Procedure reported completed on 14 October. One screenshot is held locally; the individual outcome and image are to be confirmed. |
-| H03 | Cancel the first member's waiting request. | Cancelled history remains; the second eligible member moves to position 1. | Procedure reported completed on 14 October. One screenshot is held locally; the individual outcome and image are to be confirmed. |
+| H01 | `TY-0001`, Build the Top End; `MBR-9001`, Asha Patel; Darwin Hub. Submit the same member/item hold again. | **Observed pass.** The form shows “This member already has an active request for this item.” | [Duplicate request](<screenshots/Duplicate-request error.png>) |
+| H02 | Asha's hold #1 created at 17:34, then `MBR-9002`, **Noah**, hold #2 at 17:41; same toy and pickup branch. | **Observed pass.** Asha has waiting position 1; Noah has position 2. Newest-first display order does not change the queue. Both cards show Awaiting return. | [Waiting order, first capture](<screenshots/position 1 and 2.png>), [second capture](<screenshots/p1 and p2.png>) |
+| H03 | Cancel Asha's waiting request. | **Observed pass.** Cancellation succeeds; Asha remains in history as Cancelled without a queue position. Noah becomes waiting position 1. | [Cancellation, first capture](<screenshots/cancellation.png>), [second capture](<screenshots/cancellation1.png>) |
 
-No screenshot has yet been copied into `docs/screenshots` or supplied for these three results. The tester's existing filenames and captions can be retained. The documentation will link the actual filenames after they are available; expected outcomes above are not substituted for observed results.
+The second member's actual saved name is Noah, rather than the earlier suggested Noah Wilson. The evidence demonstrates the borrowed-item case; the subsequent damaged/repair/transfer journey is documented below from user reports. Existing filenames are retained.
 
-## Issues found during testing
+## Migration and validation
 
-**Membership number capitalisation:** The borrower registration form displayed uppercase letters while its original validation required uppercase input. Kamalpreet reported that retyping the first membership number in uppercase allowed registration to complete. The model validation has now been changed to accept uppercase, lowercase and mixed-case prefixes; the controller still stores uppercase membership numbers. See [UX feedback record](UX_FEEDBACK_RECORD.md). The change was confirmed by the user at 17:50; the specific lowercase registration retest outcome remains to be confirmed.
+`20261014074832_LinkHoldsToPickupBranches` was generated by Kamalpreet and reviewed: the only Up operations are the pickup-branch index and restricted foreign key to Branches.Id. It is present in `dbbc540`.
 
-**Missing second borrower:** During the second-member procedure, the holds desk reported that the supplied membership number was not found. Registration of the second fictional borrower was identified as the required setup step. A holds form references an existing borrower; it does not register a new borrower. The later overall test-completion report does not independently establish the exact borrower record or entered code.
+The Borrower pattern `^[Mm][Bb][Rr]-[0-9]{4}$` is also verified in the pushed source. The specific lowercase registration, differently cased duplicate and malformed-input runtime retests remain pending; the three hold screenshots do not demonstrate those checks.
 
-## Remaining acceptance checks
+## Next integrated checks
+
+The applied circulation patch adds automatic allocation, shared reception/kiosk checkout, repair handling, protected transfer receipt and pickup simulations. Windows build and all seven applied migrations are confirmed separately. Actual runtime outcomes and their evidence limits are recorded here and in [circulation integration checks](CIRCULATION_INTEGRATION_TEST_RECORD.md).
 
 | Check | Expected outcome | Current status |
 | --- | --- | --- |
-| Both borrowed and damaged item cases | Requests work for each permitted status. | Separate evidence for both statuses is pending. |
-| Unknown, inactive or tampered inputs | Invalid item, borrower or pickup branch rejected without creating a hold. | Missing-member message reported; other cases pending. |
-| Item already borrowed by requester | Request rejected with an explanation. | Pending. |
-| Repeat cancellation | No second transition or timestamp rewrite. | Pending. |
-| Staff authorization and privacy | Unauthorized users cannot access private hold data or submit changes. | Pending runtime check. |
-| Inactive queue eligibility | Inactive member or pickup branch pauses eligibility while retaining the original timestamp. | Pending. |
-| Return and repair allocation | The next eligible request is allocated when the item becomes usable. | Blocked by the next integration stage. |
-| Pickup transfer and notification | Reservation remains protected in transit; only the correct member is notified after arrival. | Blocked by the next integration stage. |
-| Shared checkout restrictions | Reception, kiosk and API apply consistent hold, loan and transfer rules. | Blocked by shared circulation integration. |
+| Return TY-0001 at Darwin | Noah becomes Ready for pickup. | **Observed UI pass:** request #2, MBR-9002, TY-0001, Darwin Hub in [Ready to pickup.png](<screenshots/Ready to pickup.png>). Loan timestamp and pickup messages remain separate checks. |
+| Wrong member checkout | Asha cannot take Noah's reserved copy. | **Reported pass**, 14 October 20:40; screenshot pending. |
+| Right member checkout | Noah receives one active loan; his hold displays Collected. | **Reported pass**, 14 October 20:40; screenshot pending. Atomic SQL state is not independently inspected. |
+| Damaged return and repair | Item stays unavailable until repair; then the oldest eligible request is allocated. | Damaged-copy borrowing rejection is screenshot-observed; the earlier repair allocated Asha for Palmerston by report. A later NeedsRepair return left a new Asha request Waiting and the item Damaged by report at 22:45. The later recorded repair increased pickup history to six by report. |
+| Other-branch pickup | Reserved copy stays protected through dispatch; notice is produced only after destination receipt. | Correct dispatch and invalid-action guards are reported passes. First Palmerston receipt made Asha Ready with two pickup records by report; Asha Collected and then Noah Ready are also reported. Detailed images, repeated receipt and pickup-only recheck counts remain pending. |
+| Repeated actions | No second loan, return, receipt, fulfilment or identical event/channel. | Repeat checkout and Noah's pickup count stability are reported passes. Pickup restart count 6 → 6 is reported; repeated receipt/return and concurrency remain pending. |
+| Authorization and privacy | Staff hold data is protected; patron account exposes only its linked member. | Pending |
+| Inactive eligibility | Member/branch inactivity pauses eligibility without rewriting request order. | Pending |
+| Simultaneous checkout | Exactly one channel succeeds for the same copy. | Pending |
 
-## Record maintenance
+Kamalpreet reports results; written records and captions are maintained from those reports and supplied evidence. Actual working hours remain separate in the group work record.
 
-Written results are compiled from Kamalpreet's reported observations and supplied screenshots. Kamalpreet does not need to author the narrative or tables. Individual results, the tested pushed revision and image references will be added as they are reported. Real working hours are recorded separately in the group work record.
+### Repeat checkout report
+
+Kamalpreet confirmed the C06 result matched expectations at 20:40 Darwin: another checkout was rejected and the Active TY-0001 filter showed one loan belonging to Noah. This is a reported pass, not a simultaneous-channel test. The damaged-item/repair/transfer journey remains pending.
+
+### Damaged-item rejection — C07
+
+The 21:02 screenshot, 1000061793.jpg, shows borrowing TY-9001 for MBR-9001 due 28/10/2026 is rejected with This item is not currently available for borrowing. The damaged condition and two hold requests were reported as set up; the photograph itself verifies the correct borrowing page, submitted inputs and rejection. Later repair/dispatch/first-receipt results are reported in the circulation record.
+
+### Palmerston first receipt — C11, partial
+
+At 21:49 Darwin, Kamalpreet confirmed the guided TY-9001 receipt at Palmerston / PAL-D01 matched the expected Asha Ready for pickup and two pickup-record outcomes. No screenshot was taken. The current Ready card and pickup rows can be captured before checkout. Repeated receipt, Noah's remaining waiting state and the C12 collection/next-family return sequence remain pending.
+
+### Collection and next-member handover — C12, partial
+
+At 22:27 Darwin, the tester reported two local screenshots showing Asha Collected and Noah Ready after the guided collection/return sequence. These are reported UI outcomes pending image/filename inspection. Wrong-member rejection for Noah in this sequence and the exact loan/fine details were not separately restated. The six reported notification results contain both pickup and borrowing-confirmation types; pickup-only filtering/recheck is recorded separately in the circulation and notification records.
+
+### Return requiring repair — C13
+
+At 22:45 Darwin, the tester reported that the next guided batch matched expectations: Noah borrowed TY-9001, Asha placed a new hold, and a return with NeedsRepair selected left the item Damaged and Asha's request Waiting. The filtered pickup total remained four. These are reported passes pending detailed evidence inspection. The one local screenshot was explicitly described as showing Waiting only; it is not described as showing Damaged stock or the awaiting-repair explanation. The same-branch repair of this new request remains the next planned continuation.
+
+At 23:07 Darwin, after recording the completed repair through Manage toys, the tester reported six pickup-only records. At 23:15, after stop/start, the same filtered total remained six. These are reported repair-event/count and pickup-recovery results. The final Ready-card display and exact messages have not been separately image-inspected. The current test batch ends here; remaining kiosk/API/privacy, simultaneous checkout, inactive eligibility and repeat receipt are separate checks.

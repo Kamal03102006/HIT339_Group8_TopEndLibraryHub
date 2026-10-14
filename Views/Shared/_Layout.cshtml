@@ -48,6 +48,7 @@
                                aria-current="@(controllerName == "Catalogue" ? "page" : null)"
                                asp-area="" asp-controller="Catalogue" asp-action="Index">Collection</a>
                         </li>
+                        <li class="nav-item"><a class="nav-link @(controllerName == "Kiosk" ? "active" : string.Empty)" asp-controller="Kiosk" asp-action="Index">Self service</a></li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">

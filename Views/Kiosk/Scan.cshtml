@@ -1,0 +1,43 @@
+@model TopEndLibraryHub.ViewModels.KioskScanViewModel
+@{ ViewData["Title"] = "Scan an item"; }
+<link rel="stylesheet" href="~/css/kiosk.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/kiosk-additions.css" asp-append-version="true" />
+<div class="kiosk kiosk-journey">
+    <header class="kiosk-hero"><h1>Scan an item</h1><p>Scan a barcode or enter its library code. This kiosk operates at <strong>@Model.KioskBranch</strong>.</p></header>
+    <section class="kiosk-search-section">
+        <form asp-action="Scan" method="post">
+            @Html.AntiForgeryToken()
+            <label for="libraryCode">Library code</label>
+            <input type="text" id="libraryCode" name="libraryCode" value="@Model.LibraryCode" autocomplete="off" maxlength="20" placeholder="BK-0001" autofocus required />
+            <button class="kiosk-button" type="submit">Find item</button>
+        </form>
+        @if (TempData["KioskError"] is string error) { <p class="kiosk-alert" role="alert">@error</p> }
+        @if (Model.Message is not null) { <p class="kiosk-alert" role="alert">@Model.Message</p> }
+    </section>
+    @if (Model.Item is not null)
+    {
+        <section class="kiosk-search-section">
+            <h2>@Model.Item.Name</h2><p>@Model.Item.Description</p>
+            <p><strong>Code:</strong> @Model.Item.LibraryCode</p>
+            <p><strong>Location:</strong> @(Model.Item.Branch?.Name ?? "Ask staff")</p>
+            <p><strong>Availability:</strong> @Model.Availability</p>
+            @if (Model.CanCheckout)
+            {
+                <p>This loan will appear in your account and is due in 14 days.</p>
+                <form asp-action="Checkout" method="post">
+                    @Html.AntiForgeryToken()<input type="hidden" name="libraryCode" value="@Model.Item.LibraryCode" />
+                    <button class="kiosk-button" type="submit">Borrow this item</button>
+                </form>
+            }
+            else { <p class="kiosk-alert">Checkout is unavailable here. Staff can help with membership, pickup or transfers.</p> }
+        </section>
+    }
+    <nav class="kiosk-actions" aria-label="Scan actions">
+        <a asp-action="Account" class="kiosk-button">My account</a>
+        <form asp-action="Finish" method="post" data-kiosk-finish data-keepalive="@Url.Action("KeepAlive", "Kiosk")">
+            @Html.AntiForgeryToken()<button class="kiosk-button" type="submit">Finish and sign out</button>
+        </form>
+    </nav>
+    <p class="small text-muted">Select Finish before leaving. Inactive sessions end after two minutes.</p>
+</div>
+@section Scripts { <script src="~/js/kiosk-session.js" asp-append-version="true"></script> }

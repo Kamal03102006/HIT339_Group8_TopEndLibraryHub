@@ -67,21 +67,45 @@ namespace TopEndLibraryHub.Services
             var hold = await _context.Holds.AsNoTracking()
                 .Include(hold => hold.Borrower)
                 .Include(hold => hold.Item)
+                .Include(hold => hold.PickupBranch)
                 .FirstOrDefaultAsync(hold => hold.Id == holdId, cancellationToken);
 
             if (hold is null || hold.Status != HoldStatus.ReadyForPickup ||
-                !hold.ReadyForPickupAtUtc.HasValue || !hold.Borrower.IsActive)
+                !hold.ReadyForPickupAtUtc.HasValue || !hold.Borrower.IsActive ||
+                !hold.PickupBranch.IsActive || hold.Item.Status != ItemStatus.Available ||
+                hold.Item.BranchId != hold.PickupBranchId)
             {
                 return 0;
             }
 
             var message = $"'{hold.Item.Name}' ({hold.Item.LibraryCode}) is ready " +
-                $"for pickup at {pickupBranchName.Trim()}. " +
+                $"for pickup at {hold.PickupBranch.Name}. " +
                 "Please bring your library membership card.";
 
             return await WriteBothChannelsAsync(hold.Borrower, null, hold.Id, null,
-                NotificationKind.HoldReady, $"hold:{hold.Id}:ready", message,
-                _clock.UtcNow, cancellationToken);
+                NotificationKind.HoldReady,
+                $"hold:{hold.Id}:ready:{hold.ReadyForPickupAtUtc.Value.Ticks}", message,
+                _clock.UtcNow, cancellationToken, hold.ReadyForPickupAtUtc);
+        }
+
+        public async Task<int> ProcessReadyHoldsAsync(
+            CancellationToken cancellationToken = default)
+        {
+            var ready = await _context.Holds.AsNoTracking()
+                .Where(hold => hold.Status == HoldStatus.ReadyForPickup &&
+                    hold.ReadyForPickupAtUtc != null && hold.Borrower.IsActive &&
+                    hold.PickupBranch.IsActive && hold.Item.Status == ItemStatus.Available &&
+                    hold.Item.BranchId == hold.PickupBranchId)
+                .OrderBy(hold => hold.Id)
+                .Select(hold => new { hold.Id, BranchName = hold.PickupBranch.Name })
+                .ToListAsync(cancellationToken);
+            var created = 0;
+            foreach (var hold in ready)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                created += await RecordHoldReadyAsync(hold.Id, hold.BranchName, cancellationToken);
+            }
+            return created;
         }
 
         private Task<int> WriteBorrowedAsync(
@@ -141,21 +165,21 @@ namespace TopEndLibraryHub.Services
         private async Task<int> WriteBothChannelsAsync(
             Borrower borrower, int? loanId, int? holdId, DateTime? expectedDueDate,
             NotificationKind kind, string eventKey, string message, DateTime utcNow,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken, DateTime? expectedReadyAtUtc = null)
         {
             var created = 0;
             if (!string.IsNullOrWhiteSpace(borrower.Email))
             {
                 created += await WriteOnceAsync(borrower.Id, loanId, holdId, expectedDueDate,
                     NotificationChannel.Email, kind, eventKey, borrower.Email.Trim(),
-                    message, utcNow, cancellationToken);
+                    message, utcNow, cancellationToken, expectedReadyAtUtc);
             }
 
             if (!string.IsNullOrWhiteSpace(borrower.Phone))
             {
                 created += await WriteOnceAsync(borrower.Id, loanId, holdId, expectedDueDate,
                     NotificationChannel.Sms, kind, eventKey, borrower.Phone.Trim(),
-                    message, utcNow, cancellationToken);
+                    message, utcNow, cancellationToken, expectedReadyAtUtc);
             }
 
             return created;
@@ -165,7 +189,7 @@ namespace TopEndLibraryHub.Services
             int borrowerId, int? loanId, int? holdId, DateTime? expectedDueDate,
             NotificationChannel channel, NotificationKind kind, string eventKey,
             string recipient, string message, DateTime utcNow,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken, DateTime? expectedReadyAtUtc = null)
         {
             var channelValue = (int)channel;
             var kindValue = (int)kind;
@@ -197,9 +221,17 @@ namespace TopEndLibraryHub.Services
                           AND [DueDate] = {expectedDueDate} AND [ReturnedDate] IS NULL
                     )
                     OR EXISTS (
-                        SELECT 1 FROM [Holds] WITH (HOLDLOCK)
-                        WHERE [Id] = {holdId} AND [BorrowerId] = {borrowerId}
-                          AND [Status] = 2 AND [ReadyForPickupAtUtc] IS NOT NULL
+                        SELECT 1 FROM [Holds] AS h WITH (HOLDLOCK)
+                        INNER JOIN [Items] AS i WITH (HOLDLOCK) ON i.[Id] = h.[ItemId]
+                        INNER JOIN [Branches] AS b WITH (HOLDLOCK) ON b.[Id] = h.[PickupBranchId]
+                        WHERE h.[Id] = {holdId} AND h.[BorrowerId] = {borrowerId}
+                          AND h.[Status] = 2 AND h.[ReadyForPickupAtUtc] = {expectedReadyAtUtc}
+                          AND i.[Status] = 1 AND i.[BranchId] = h.[PickupBranchId]
+                          AND b.[IsActive] = 1
+                          AND NOT EXISTS (SELECT 1 FROM [Loans] WITH (HOLDLOCK)
+                              WHERE [ItemId] = h.[ItemId] AND [ReturnedDate] IS NULL)
+                          AND NOT EXISTS (SELECT 1 FROM [ItemTransfers] WITH (HOLDLOCK)
+                              WHERE [ItemId] = h.[ItemId] AND [Status] = 1)
                     )
                 );", cancellationToken);
         }

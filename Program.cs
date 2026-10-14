@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TopEndLibraryHub.Data;
 using TopEndLibraryHub.Services;
+using TopEndLibraryHub.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure the SQL Server database.
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException(
@@ -16,7 +16,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Configure authentication, secure passwords and staff roles.
 builder.Services
     .AddDefaultIdentity<IdentityUser>(options =>
     {
@@ -35,8 +34,31 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.SlidingExpiration = true;
+    options.LoginPath = "/Identity/Account/Login";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Events.OnSigningIn = context =>
+    {
+        var staff = context.Principal?.IsInRole("Admin") == true ||
+            context.Principal?.IsInRole("Reception") == true ||
+            context.Principal?.IsInRole("Manager") == true;
+        if (!staff)
+        {
+            context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(2);
+            context.Properties.IsPersistent = false;
+        }
+        return Task.CompletedTask;
+    };
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<HoldQueueService>();
+builder.Services.AddScoped<HoldWorkflowService>();
+builder.Services.AddScoped<CirculationService>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<LibraryClock>();
 builder.Services.AddScoped<NotificationService>();
@@ -52,7 +74,6 @@ builder.Services.AddSession(options =>
 });
 var app = builder.Build();
 
-// Apply migrations and create the demonstration staff accounts.
 try
 {
     await DbInitializer.InitialiseAsync(app.Services);
@@ -69,7 +90,6 @@ catch (Exception exception)
     throw;
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -85,7 +105,10 @@ app.UseRouting();
 app.UseSession();
 
 app.UseAuthentication();
+app.UseMiddleware<KioskSessionMiddleware>();
 app.UseAuthorization();
+
+app.UseMiddleware<CatalogueApiKeyMiddleware>();
 
 app.MapStaticAssets();
 

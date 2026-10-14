@@ -1,6 +1,15 @@
 # HIT339 Group 8 working governance record
+## Latest verified progress — 14 October evening
 
-Version 0.3, updated 14 October 2026. This contains proposed arrangements, verified progress and blank records for genuine team input. It is **not** an accepted contract, completed meeting minutes or a final portfolio.
+- Remote feature/holds-notifications push verified at dbbc540, following Kamalpreet's 18:41 Darwin report. The generated pickup FK migration, case-tolerant membership regex and five actual screenshot files are present.
+- Screenshots verify duplicate hold rejection, Asha/Noah FIFO positions and cancellation promoting Noah to position 1. These are three UI tests on borrowed TY-0001 at Darwin, not complete circulation acceptance.
+- Kamalpreet applied the 54-file circulation patch, including Mehakpreet's 3b925ee source and shared reception/kiosk/repair/transfer guards. Windows build succeeded; the supplied migration list shows all seven migrations Applied=True. This applied batch has not yet been verified as a new pushed integration commit.
+- A new screenshot verifies Noah Ready at Darwin after the usable return. User reports confirm pickup count stability (2 → 2), wrong-member rejection, rightful collection, repeat-checkout rejection, repair allocation without early pickup notices, correct transfer dispatch and rejection of wrong-destination dispatch, transit checkout and receipt at the origin. A photograph verifies the damaged-copy borrowing rejection. First receipt at Palmerston, Asha Ready and two pickup records are subsequently reported passes. Asha Collected and Noah Ready, a later damaged return preserving Waiting, recorded-repair pickup total six, and pickup restart count 6 → 6 are now reported. Detailed images, repeated receipt, kiosk/API and concurrency remain separate checks.
+- Detailed expected steps are maintained in CIRCULATION_INTEGRATION_TEST_RECORD.md. Kamalpreet supplies actual outcomes; documentation is maintained from those reports.
+- Import/report handoff, clean VM verification, actual hours, contract acceptance, genuine meeting minutes and individual reflections/value evidence remain outstanding. Earlier dated progress entries below are historical.
+
+
+Version 0.4, updated through 23:15 Darwin on 14 October 2026. This contains proposed arrangements, verified progress and blank records for genuine team input. It is **not** an accepted contract, completed meeting minutes or a final portfolio.
 
 ## Team contract: proposed terms for review
 
@@ -35,12 +44,12 @@ The [requirements draft](HIT339_Group8_Requirements_Draft.docx) contains accepta
 | Decision | Current proposal / question to resolve | Agreed answer, respondent and date |
 | --- | --- | --- |
 | D01 / Q1 | Confirm allocation, availability and the family-lending demonstration focus. | Pending |
-| D02 / Q2 | Proposed use of existing ASP.NET Core Identity with a unique optional link from each Borrower to its patron login; resolve private account access from the authenticated user ID. Scanner input and kiosk session reset/timeout need verification. | Mehakpreet requested coordination on 11 October. Her branch at `3b925ee` now includes the optional unique Identity link, its migration and an account action that resolves Borrower from the authenticated user ID. Checkout deliberately remains blocked until shared borrowing rules are integrated. Team acceptance and runtime integration checks remain to be recorded. |
+| D02 / Q2 | Proposed use of existing ASP.NET Core Identity with a unique optional link from each Borrower to its patron login; resolve private account access from the authenticated user ID. Scanner input and kiosk session reset/timeout need verification. | Mehakpreet requested coordination on 11 October. Her branch at `3b925ee` now includes the optional unique Identity link, its migration and an account action that resolves Borrower from the authenticated user ID. The applied circulation patch now uses shared checkout; kiosk ownership, checkout and privacy runtime checks remain pending. Team acceptance and runtime integration checks remain to be recorded. |
 | D03 / Q3 | Read-only API consumer and usage contract need confirmation. Mehakpreet has implemented configurable API-key middleware and available-items, categories and operating-status endpoints. Avoid patron personal data. | Source reviewed through `3b925ee` on 14 October. GET catalogue, available, categories and system/database status actions exist; final hold/transfer availability rules, authentication results and consumer contract remain to be verified. |
 | D04 / Q4 | Confirm loan period, $1.50 daily fine proposal, Darwin date rules and any restrictions for unpaid fines. | Pending |
 | D05 / Q5 | Confirm holds are for physical copies, FIFO policy, cancellation/expiry and transfer handover rules. | Pending |
 | D06 / Q6 | Confirm CSV error handling, required fields and whether both CSV and PDF report exports are required. | Pending |
-| D07 / integration | Connect Hold.PickupBranchId to Branch.Id. Item.BranchId records physical location; a transfer keeps the origin until destination receipt. Preserve hold allocation during and after transfer. | Harsimran supplied the branch contract on 12 October. Source verified on 14 October in `master` at `99aa527`: branches/desks, transfers and `ItemStatus.InTransit = 5` exist. Kamalpreet generated the restricted Hold pickup-branch foreign key and index on 14 October; the supplied migration was reviewed. Receipt/notification integration remains pending. Coordinate snapshot/migration order with Mehakpreet's patron-link change. |
+| D07 / integration | Connect Hold.PickupBranchId to Branch.Id. Item.BranchId records physical location; a transfer keeps the origin until destination receipt. Preserve hold allocation during and after transfer. | Harsimran supplied the branch contract on 12 October. Source verified on 14 October in `master` at `99aa527`: branches/desks, transfers and `ItemStatus.InTransit = 5` exist. Kamalpreet generated the restricted Hold pickup-branch foreign key and index on 14 October; the supplied migration was reviewed. The applied patch includes receipt/notification integration, all seven migrations show Applied=True, and the main handover is user-reported tested. Final kiosk/concurrency and VM checks remain pending. |
 
 For each changed decision, record the reason, affected requirement IDs, affected members and commit/test references. Keep the draft requirements consistent with the actual agreement.
 
@@ -54,8 +63,8 @@ Estimates below are **planning placeholders in person-hours**, to be revised and
 | Notification implementation and migration | Kamalpreet | 4 | Not recorded | Commits `a8a5dbe`, `1e052e7`, `26f1fbd`, `bcf6844`; implementation exists |
 | Complete notification acceptance evidence | Kamalpreet | 2 | Not recorded | Notification test record; several checks pending |
 | Hold foundation and queue constraints | Kamalpreet | 3 | Not recorded | Commits `683b508` through `24094c6`; foundation exists |
-| Hold creation, cancellation and fair allocation | Kamalpreet | 4 | Not recorded | Creation, eligible queue display and waiting cancellation are implemented in the desk batch; three guided tests were reported completed on 14 October. Automatic allocation remains pending. |
-| Hold return/repair/transfer integration and tests | Kamalpreet + Harsimran | 3 | Not recorded | Working branch/transfer model and callbacks required |
+| Hold creation, cancellation and fair allocation | Kamalpreet | 4 | Not recorded | Creation, eligible queue display and waiting cancellation are implemented in the desk batch; three guided tests were reported completed on 14 October. Return/repair allocation is implemented and reported tested in the circulation record. |
+| Hold return/repair/transfer integration and tests | Kamalpreet + Harsimran | 3 | Not recorded | Callbacks implemented; main flow reported tested; detailed capture matching and remaining shared checks pending |
 | Branch/desk model and repeat-safe seed | Harsimran | 3 | Not recorded | Shared schema agreement |
 | Transfer dispatch/receipt and invalid-action tests | Harsimran | 4 | Not recorded | Branches, item availability and holds |
 | Installation manual and clean VM verification | Harsimran | 3 | Not recorded | Final integrated version and branch selection |
@@ -187,3 +196,35 @@ Potential examples, only after implementation and verification: Kamalpreet's fai
 - The latest remote check showed `feature/holds-notifications` still at `74668e1`. The newer desk, UI, migration and documentation batch awaits a verified pushed revision.
 
 See [hold test record](HOLD_WORKFLOW_TEST_RECORD.md), [UX feedback record](UX_FEEDBACK_RECORD.md) and [screenshot guidance](screenshots/README.md).
+
+### Windows build/database update report — 14 October evening
+
+Kamalpreet reported the applied circulation patch build completed at 19:55 Darwin. The console transcript supplied at 20:02 shows Build succeeded and the latest database update completed with Done / already up to date. It includes earlier branch, transfer and pickup FK updates; the new LinkPatronIdentity application is not visible. Migration-list verification and all C01–C19 workflow outcomes remain pending. These are reported/received times, not invented working hours.
+
+At 20:06 Darwin, Kamalpreet supplied Get-Migration output showing Build succeeded and Applied=True for all seven migrations, including LinkPatronIdentity and LinkHoldsToPickupBranches. The migration-list verification is complete. Next: launch and run C01–C06 against the existing Noah/Asha queue. No workflow result or working hours are inferred from this setup check.
+
+At 20:30 Darwin, Kamalpreet confirmed the guided pickup-notification count stayed at two after rechecking. The C03 repeat-count result is recorded as reported pass, with detailed pickup-log screenshot verification pending. Next are the wrong-member rejection, rightful collection and repeated-checkout checks. No actual working hours are inferred.
+
+At 20:40 Darwin, Kamalpreet reported all three reservation/collection checks matched expectations: Asha was blocked, Noah borrowed and his hold displayed Collected, and a repeated checkout was blocked with one active loan. C04–C06 are recorded as reported passes pending screenshot verification. Next is a separate damaged-copy repair and Palmerston pickup journey. Actual working hours remain unreported.
+
+At 21:17 Darwin, Kamalpreet reported the repair-allocation check produced Asha Allocated and zero pickup records for TY-9001. The allocated screenshot is held locally; the filtered zero-result image is recommended for the subsequent transfer comparison. No transfer/receipt result or working hours are inferred.
+
+At 21:21 Darwin, the lead reported saving the recommended zero pickup-result evidence locally. Image inspection/linking remains pending until it is supplied or pushed. The transfer checks have not yet been run.
+
+In the subsequent evening update, Kamalpreet reported all results in the latest transfer batch matched expectations: dispatch to Casuarina was rejected, dispatch to Palmerston succeeded with In transit status, reception checkout during transit was rejected, and receipt while at Darwin was rejected without changing the transit state. These results are recorded as reported passes in the circulation test record. Destination receipt and the kiosk portion of the transit check remain pending. Two rejection screenshots are recommended for this batch; their filenames/images have not been supplied. Actual hours are still not inferred from message times.
+
+At 21:49 Darwin, Kamalpreet reported the guided Palmerston receipt step matched expectations: Asha Ready for pickup and two pickup simulations. No screenshot was taken. First receipt/displayed outcomes are recorded as reported passes, with current-screen captures and the Palmerston manual recheck requested. Repeated receipt, next-family collection/return and kiosk/API tests remain pending. This report supplies no actual working hours.
+
+At 22:27 Darwin, Kamalpreet reported local captures of Asha Collected and Noah Ready following the guided collection/return sequence. Those displayed outcomes are reported passes pending image inspection. Six mixed-type notification results were described: two Noah rows and four Asha rows including both Loan confirmed and pickup messages. The pickup-only filter/recheck remains pending and is not treated as six duplicate pickup records. Testing guidance was clarified after source review of the filters and unfiltered CheckNow redirect. Actual hours and the prior Noah rejection outcome were not restated.
+
+At 22:33 Darwin, the lead reported four results after the clarified pickup-only filter/recheck instructions, matching the expected pickup total for TY-9001. The next planned check uses a genuinely new Noah loan and Asha waiting request before returning the toy with NeedsRepair selected. No outcome or time spent on that next check has been inferred.
+
+At 22:45 Darwin, Kamalpreet reported the NeedsRepair-return batch matched expectations: Noah's new checkout succeeded, Asha joined the waiting list again, the return left the copy Damaged and her new request Waiting, and the filtered pickup total stayed four. One local screenshot shows Waiting only; no other visual claims are made from it. Next planned work is repair at the already-selected pickup branch and a pickup-history restart check. Neither those future outcomes nor actual hours are inferred.
+
+At 22:50 Darwin, the lead questioned repeated-looking test instructions. The approach was refined to explain the distinct conditions being checked and remove an extra reserved-member checkout attempt already covered by the earlier C04 report. The next batch now contains only same-branch repair allocation and pickup-history persistence/restart. The normal-return, damaged-return and cross-branch scenarios remain separate evidence; omitted or unreported historical checks are not marked passed. No additional working hours are inferred.
+
+At 23:02 Darwin, the lead reported Waiting and four pickup records after returning TY-9001. That is consistent with the NeedsRepair-return state. A completed/saved Available edit has not been confirmed; the repair continuation remains pending. Guidance was clarified to record the completed repair via Manage toys and verify the saved status before expecting Ready and six pickup records. No defect or actual working hours are inferred.
+
+At 23:07 Darwin, the lead reported six pickup records following the clarified completed-repair edit. The count increase is recorded as reported matching the repair expectation. The final check in this test batch is to stop/start the app and verify the same pickup-only total after startup. No restart result, exact Ready-card inspection or actual working hours is inferred from the six-record reply.
+
+At 23:15 Darwin, the lead reported six after the guided restart, compared with six before it. Pickup-history/count stability is recorded as a reported pass. The current hold/repair/transfer batch is closed for documentation packaging; the remaining module/edge-case checks and genuine member inputs remain outstanding. Message timestamps are evidence-received times, not actual working hours.

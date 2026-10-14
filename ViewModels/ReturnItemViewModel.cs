@@ -7,7 +7,7 @@ namespace TopEndLibraryHub.ViewModels
         [Required]
         [Display(Name = "Library Code")]
         [RegularExpression(
-            @"^[A-Z]{2,4}-\d{4}$",
+            @"^[A-Za-z]{2,4}-[0-9]{4}$",
             ErrorMessage = "Enter a valid code such as BK-0001.")]
         public string LibraryCode { get; set; } = string.Empty;
 
@@ -19,5 +19,8 @@ namespace TopEndLibraryHub.ViewModels
 
         [Display(Name = "Pay Fine Now")]
         public bool PayFineNow { get; set; }
+
+        [Display(Name = "Item needs repair")]
+        public bool NeedsRepair { get; set; }
     }
 }

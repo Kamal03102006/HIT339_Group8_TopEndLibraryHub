@@ -14,15 +14,18 @@ namespace TopEndLibraryHub.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly NotificationService _notifications;
+        private readonly HoldWorkflowService _holds;
         private readonly ILogger<NotificationsController> _logger;
 
         public NotificationsController(
             ApplicationDbContext context,
             NotificationService notifications,
+            HoldWorkflowService holds,
             ILogger<NotificationsController> logger)
         {
             _context = context;
             _notifications = notifications;
+            _holds = holds;
             _logger = logger;
         }
 
@@ -106,7 +109,9 @@ namespace TopEndLibraryHub.Controllers
         {
             try
             {
+                await _holds.ProcessAvailableItemsAsync(cancellationToken);
                 var created = await _notifications.ProcessActiveLoansAsync(cancellationToken);
+                created += await _notifications.ProcessReadyHoldsAsync(cancellationToken);
                 TempData["NotificationSuccess"] = created == 0
                     ? "Check complete. No new records were needed."
                     : $"Check complete. {created} new simulated records were created.";

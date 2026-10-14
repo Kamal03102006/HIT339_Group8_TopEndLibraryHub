@@ -18,11 +18,13 @@ public class HoldsController : Controller
     private const int PageSize = 25;
     private readonly ApplicationDbContext _context;
     private readonly LibraryClock _clock;
+    private readonly HoldWorkflowService _workflow;
 
-    public HoldsController(ApplicationDbContext context, LibraryClock clock)
+    public HoldsController(ApplicationDbContext context, LibraryClock clock, HoldWorkflowService workflow)
     {
         _context = context;
         _clock = clock;
+        _workflow = workflow;
     }
 
     [HttpGet]
@@ -139,13 +141,26 @@ public class HoldsController : Controller
             return View(model);
         }
 
+        var itemId = await _context.Items.AsNoTracking()
+            .Where(item => item.LibraryCode == model.LibraryCode)
+            .Select(item => (int?)item.Id).SingleOrDefaultAsync(cancellationToken);
+        if (!itemId.HasValue)
+        {
+            ModelState.AddModelError(nameof(model.LibraryCode),
+                "No item was found with this library code.");
+            await PopulateBranchesAsync(model, cancellationToken);
+            return View(model);
+        }
+
         await using var transaction = await _context.Database.BeginTransactionAsync(
             IsolationLevel.Serializable, cancellationToken);
 
         try
         {
+            await _workflow.LockItemAsync(itemId.Value, cancellationToken);
             var item = await _context.Items.AsNoTracking().SingleOrDefaultAsync(
-                item => item.LibraryCode == model.LibraryCode, cancellationToken);
+                item => item.Id == itemId.Value && item.LibraryCode == model.LibraryCode,
+                cancellationToken);
             var borrower = await _context.Borrowers.AsNoTracking().SingleOrDefaultAsync(
                 borrower => borrower.MembershipNumber == model.MembershipNumber,
                 cancellationToken);
@@ -240,7 +255,7 @@ public class HoldsController : Controller
             await PopulateBranchesAsync(model, cancellationToken);
             return View(model);
         }
-        catch (SqlException exception) when (exception.Number is 1205 or 1222)
+        catch (SqlException exception) when (exception.Number is 1205 or 1222 or 51001)
         {
             await transaction.DisposeAsync();
             _context.ChangeTracker.Clear();
@@ -257,39 +272,53 @@ public class HoldsController : Controller
     public async Task<IActionResult> Cancel(
         int id, CancellationToken cancellationToken = default)
     {
-        var hold = await _context.Holds.SingleOrDefaultAsync(
-            hold => hold.Id == id, cancellationToken);
-        if (hold is null)
-        {
-            return NotFound();
-        }
+        var itemId = await _context.Holds.AsNoTracking()
+            .Where(hold => hold.Id == id).Select(hold => (int?)hold.ItemId)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (!itemId.HasValue) return NotFound();
 
-        if (hold.Status != HoldStatus.Waiting)
-        {
-            TempData["HoldError"] =
-                "Only a waiting request can be cancelled from this desk. " +
-                "The request was not changed.";
-            return RedirectToAction(nameof(Index));
-        }
-
-        hold.Status = HoldStatus.Cancelled;
-        hold.CancelledAtUtc = _clock.UtcNow;
-
+        await using var transaction = await _context.Database.BeginTransactionAsync(
+            IsolationLevel.Serializable, cancellationToken);
         try
         {
+            await _workflow.LockItemAsync(itemId.Value, cancellationToken);
+            var hold = await _context.Holds.Include(hold => hold.Item)
+                .SingleOrDefaultAsync(hold => hold.Id == id, cancellationToken);
+            if (hold is null) return NotFound();
+            if (hold.Status is not (HoldStatus.Waiting or HoldStatus.Allocated or HoldStatus.ReadyForPickup))
+            {
+                TempData["HoldError"] = "This request is already cancelled or collected. No changes were made.";
+                return RedirectToAction(nameof(Index));
+            }
+            if (hold.Status != HoldStatus.Waiting &&
+                await _context.Loans.AnyAsync(loan => loan.ItemId == hold.ItemId &&
+                    loan.ReturnedDate == null, cancellationToken))
+            {
+                TempData["HoldError"] = "The item has an active loan. Ask staff to review the request first.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            hold.Status = HoldStatus.Cancelled;
+            hold.CancelledAtUtc = _clock.UtcNow;
             await _context.SaveChangesAsync(cancellationToken);
-            TempData["HoldSuccess"] = "Waiting request cancelled; its history is retained.";
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            TempData["HoldError"] =
-                "This request changed while you were cancelling it. Refresh the list.";
+            var allocation = await _workflow.RefreshLockedAsync(hold.Item, cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            await _workflow.NotifyReadyAfterCommitAsync(allocation, cancellationToken);
+            TempData["HoldSuccess"] = "Request cancelled; its history is retained.";
+            return RedirectToAction(nameof(Index), new { search = hold.Item.LibraryCode });
         }
         catch (DbUpdateException)
         {
-            TempData["HoldError"] = "The cancellation could not be saved. Refresh and try again.";
+            await transaction.DisposeAsync();
+            _context.ChangeTracker.Clear();
+            TempData["HoldError"] = "The request changed during cancellation. Refresh and check its status.";
         }
-
+        catch (SqlException exception) when (exception.Number is 1205 or 1222 or 51001)
+        {
+            await transaction.DisposeAsync();
+            _context.ChangeTracker.Clear();
+            TempData["HoldError"] = "Another staff action is updating this item. Refresh before trying again.";
+        }
         return RedirectToAction(nameof(Index));
     }
 
