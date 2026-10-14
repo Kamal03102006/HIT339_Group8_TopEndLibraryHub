@@ -22,13 +22,38 @@ namespace TopEndLibraryHub.Data
         public DbSet<Hold> Holds => Set<Hold>();
         public DbSet<NotificationLog> NotificationLogs => Set<NotificationLog>();
 
+        public DbSet<Branch> Branches => Set<Branch>();
+        public DbSet<ReceptionDesk> ReceptionDesks => Set<ReceptionDesk>();
+        public DbSet<ItemTransfer> ItemTransfers => Set<ItemTransfer>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            // Each physical branch has a unique code.
+            builder.Entity<Branch>()
+                .HasIndex(branch => branch.BranchCode)
+                .IsUnique();
 
             builder.ApplyConfiguration(new HoldConfiguration());
             builder.ApplyConfiguration(new NotificationLogConfiguration());
 
+            // Each reception desk has a unique code.
+            builder.Entity<ReceptionDesk>()
+                .HasIndex(desk => desk.DeskCode)
+                .IsUnique();
+
+            // Items belong to a physical branch.
+            builder.Entity<Item>()
+                .HasOne(item => item.Branch)
+                .WithMany()
+                .HasForeignKey(item => item.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Reception desks belong to a physical branch.
+            builder.Entity<ReceptionDesk>()
+                .HasOne(desk => desk.Branch)
+                .WithMany()
+                .HasForeignKey(desk => desk.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
             // Store all item types in one table while preserving inheritance.
             builder.Entity<Item>()
                 .HasDiscriminator<string>("ItemType")
@@ -64,6 +89,41 @@ namespace TopEndLibraryHub.Data
             builder.Entity<Loan>()
                 .Property(loan => loan.FineAmount)
                 .HasPrecision(10, 2);
+            builder.Entity<ItemTransfer>()
+    .HasOne(t => t.Item)
+    .WithMany()
+    .HasForeignKey(t => t.ItemId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.OriginBranch)
+                .WithMany()
+                .HasForeignKey(t => t.OriginBranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.DestinationBranch)
+                .WithMany()
+                .HasForeignKey(t => t.DestinationBranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.DispatchDesk)
+                .WithMany()
+                .HasForeignKey(t => t.DispatchDeskId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.ReceivingDesk)
+                .WithMany()
+                .HasForeignKey(t => t.ReceivingDeskId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // SQL Server: only one in-transit transfer per item.
+            builder.Entity<ItemTransfer>()
+                .HasIndex(t => t.ItemId)
+                .IsUnique()
+                .HasFilter("[Status] = 1");
         }
     }
 }

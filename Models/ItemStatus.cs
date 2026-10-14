@@ -14,6 +14,9 @@ namespace TopEndLibraryHub.Models
         Damaged = 3,
 
         [Display(Name = "Destroyed")]
-        Destroyed = 4
+        Destroyed = 4,
+
+        [Display(Name = "In transit")]
+        InTransit = 5
     }
 }

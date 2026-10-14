@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +17,13 @@ namespace TopEndLibraryHub.Controllers
             _context = context;
         }
 
-        // GET: Books
         public async Task<IActionResult> Index(
             string? searchTerm,
             ItemStatus? status)
         {
             var books = _context.Books
                 .AsNoTracking()
+                .Include(book => book.Branch)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -49,7 +50,6 @@ namespace TopEndLibraryHub.Controllers
                 .ToListAsync());
         }
 
-        // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
@@ -59,23 +59,28 @@ namespace TopEndLibraryHub.Controllers
 
             var book = await _context.Books
                 .AsNoTracking()
+                .Include(book => book.Branch)
                 .FirstOrDefaultAsync(book => book.Id == id);
 
-            if (book is null)
+            return book is null ? NotFound() : View(book);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var desk = await GetWorkingDeskAsync();
+
+            if (desk is null)
             {
-                return NotFound();
+                return RequestWorkingLocation();
             }
 
-            return View(book);
+            return View(new Book
+            {
+                BranchId = desk.BranchId
+            });
         }
 
-        // GET: Books/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
@@ -84,6 +89,18 @@ namespace TopEndLibraryHub.Controllers
                 "LibraryCode,Name,Description")]
             Book book)
         {
+            var desk = await GetWorkingDeskAsync();
+
+            if (desk is null)
+            {
+                return RequestWorkingLocation();
+            }
+
+            // Assign the branch from the validated staff location.
+            // Ignore any branch value submitted by the browser.
+            book.BranchId = desk.BranchId;
+            ModelState.Remove(nameof(Book.BranchId));
+
             if (await LibraryCodeExistsAsync(book.LibraryCode))
             {
                 ModelState.AddModelError(
@@ -105,21 +122,22 @@ namespace TopEndLibraryHub.Controllers
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] =
-                    $"Book '{book.Name}' was created successfully.";
+                    $"Book '{book.Name}' was created at {desk.Branch!.Name}.";
 
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(
-                    nameof(Book.LibraryCode),
-                    "The book could not be saved. Check that the library code is unique.");
+                    string.Empty,
+                    "The book could not be saved. Check that its " +
+                    "library code is unique and its branch still exists.");
 
                 return View(book);
             }
         }
 
-        // GET: Books/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
@@ -127,17 +145,14 @@ namespace TopEndLibraryHub.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.FindAsync(id);
+            var book = await _context.Books
+                .AsNoTracking()
+                .Include(book => book.Branch)
+                .FirstOrDefaultAsync(book => book.Id == id);
 
-            if (book is null)
-            {
-                return NotFound();
-            }
-
-            return View(book);
+            return book is null ? NotFound() : View(book);
         }
 
-        // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
@@ -147,12 +162,22 @@ namespace TopEndLibraryHub.Controllers
                 "LibraryCode,Name,Description,Status")]
             Book input)
         {
-            var book = await _context.Books.FindAsync(id);
+            var book = await _context.Books
+                .Include(book => book.Branch)
+                .FirstOrDefaultAsync(book => book.Id == id);
 
             if (book is null)
             {
                 return NotFound();
             }
+
+            // Ordinary edits cannot change the physical location.
+            input.BranchId = book.BranchId;
+            input.Branch = book.Branch;
+            input.Id = book.Id;
+            input.DateAdded = book.DateAdded;
+
+            ModelState.Remove(nameof(Book.BranchId));
 
             if (await LibraryCodeExistsAsync(input.LibraryCode, id))
             {
@@ -161,12 +186,44 @@ namespace TopEndLibraryHub.Controllers
                     "This library code is already being used.");
             }
 
-            if (book.Status == ItemStatus.Borrowed &&
+            if (!Enum.IsDefined(typeof(ItemStatus), input.Status))
+            {
+                ModelState.AddModelError(
+                    nameof(Book.Status),
+                    "Select a valid item status.");
+            }
+
+            var activeTransfer = await _context.ItemTransfers
+                .AnyAsync(t =>
+                    t.ItemId == id &&
+                    t.Status == TransferStatus.InTransit);
+
+            if (activeTransfer || book.Status == ItemStatus.InTransit)
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "This book is in transit. Receive the transfer " +
+                    "at its destination before editing it.");
+            }
+            else if (input.Status == ItemStatus.InTransit)
+            {
+                ModelState.AddModelError(
+                    nameof(Book.Status),
+                    "Use the transfer workflow to dispatch a book.");
+            }
+
+            var activeLoan = await _context.Loans
+                .AnyAsync(loan =>
+                    loan.ItemId == id &&
+                    loan.ReturnedDate == null);
+
+            if ((book.Status == ItemStatus.Borrowed || activeLoan) &&
                 input.Status != ItemStatus.Borrowed)
             {
                 ModelState.AddModelError(
                     nameof(Book.Status),
-                    "A borrowed book must be returned through Reception before its status can change.");
+                    "A borrowed book must be returned through Reception " +
+                    "before its status can change.");
             }
 
             if (book.Status != ItemStatus.Borrowed &&
@@ -174,13 +231,12 @@ namespace TopEndLibraryHub.Controllers
             {
                 ModelState.AddModelError(
                     nameof(Book.Status),
-                    "Use the Reception borrowing process to mark a book as borrowed.");
+                    "Use the Reception borrowing process " +
+                    "to mark a book as borrowed.");
             }
 
             if (!ModelState.IsValid)
             {
-                input.Id = book.Id;
-                input.DateAdded = book.DateAdded;
                 return View(input);
             }
 
@@ -194,12 +250,15 @@ namespace TopEndLibraryHub.Controllers
             book.Description = input.Description;
             book.Status = input.Status;
 
+            // Deliberately preserve book.BranchId.
+
             try
             {
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] =
-                    $"Book '{book.Name}' was updated successfully.";
+                    $"Book '{book.Name}' was updated. " +
+                    "Its branch location was preserved.";
 
                 return RedirectToAction(nameof(Index));
             }
@@ -212,21 +271,21 @@ namespace TopEndLibraryHub.Controllers
 
                 ModelState.AddModelError(
                     string.Empty,
-                    "The book was changed by another user. Reload the page and try again.");
+                    "The book was changed by another user. " +
+                    "Reload the page and try again.");
             }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(
-                    nameof(Book.LibraryCode),
-                    "The book could not be updated. Check that the library code is unique.");
+                    string.Empty,
+                    "The book could not be updated. " +
+                    "Check that its library code is unique.");
             }
 
-            input.Id = book.Id;
-            input.DateAdded = book.DateAdded;
             return View(input);
         }
 
-        // GET: Books/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
@@ -236,17 +295,12 @@ namespace TopEndLibraryHub.Controllers
 
             var book = await _context.Books
                 .AsNoTracking()
+                .Include(book => book.Branch)
                 .FirstOrDefaultAsync(book => book.Id == id);
 
-            if (book is null)
-            {
-                return NotFound();
-            }
-
-            return View(book);
+            return book is null ? NotFound() : View(book);
         }
 
-        // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -261,22 +315,77 @@ namespace TopEndLibraryHub.Controllers
             var hasLoanHistory = await _context.Loans
                 .AnyAsync(loan => loan.ItemId == id);
 
-            if (book.Status == ItemStatus.Borrowed || hasLoanHistory)
+            var hasTransferHistory = await _context.ItemTransfers
+                .AnyAsync(transfer => transfer.ItemId == id);
+
+            if (book.Status == ItemStatus.Borrowed ||
+                book.Status == ItemStatus.InTransit ||
+                hasLoanHistory ||
+                hasTransferHistory)
             {
                 TempData["ErrorMessage"] =
-                    "This book cannot be deleted because it is borrowed or has loan history. " +
-                    "Change its status to Damaged or Destroyed instead.";
+                    "This book cannot be deleted because it is borrowed, " +
+                    "in transit, or has loan or transfer history. " +
+                    "Keep the record for audit purposes.";
 
                 return RedirectToAction(nameof(Index));
             }
 
-            _context.Books.Remove(book);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Books.Remove(book);
+                await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] =
-                $"Book '{book.Name}' was deleted successfully.";
+                TempData["SuccessMessage"] =
+                    $"Book '{book.Name}' was deleted successfully.";
+            }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] =
+                    "This book could not be deleted. " +
+                    "It may be referenced by another record. " +
+                    "Keep the record and ask an administrator to review it.";
+            }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<ReceptionDesk?> GetWorkingDeskAsync()
+        {
+            var userId = User.FindFirstValue(
+                ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId) ||
+                HttpContext.Session.GetString("StaffLocationUserId")
+                    != userId)
+            {
+                return null;
+            }
+
+            var branchId =
+                HttpContext.Session.GetInt32("StaffBranchId");
+
+            var deskId =
+                HttpContext.Session.GetInt32("StaffDeskId");
+
+            return await _context.ReceptionDesks
+                .AsNoTracking()
+                .Include(d => d.Branch)
+                .SingleOrDefaultAsync(d =>
+                    d.Id == deskId &&
+                    d.BranchId == branchId &&
+                    d.IsActive &&
+                    d.Branch != null &&
+                    d.Branch.IsActive);
+        }
+
+        private IActionResult RequestWorkingLocation()
+        {
+            TempData["LocationMessage"] =
+                "Select an active branch and reception desk, " +
+                "then return to Manage books to create the book.";
+
+            return RedirectToAction("Index", "StaffLocation");
         }
 
         private async Task<bool> LibraryCodeExistsAsync(
