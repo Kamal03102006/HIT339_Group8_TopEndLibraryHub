@@ -1,0 +1,80 @@
+
+@using TopEndLibraryHub.Models
+
+@{
+    ViewData["Title"] = "Import Books";
+    var branches = ViewBag.Branches as
+        IEnumerable<Branch> ?? Enumerable.Empty<Branch>();
+}
+
+<h2>Import Books from CSV</h2>
+
+<p>Upload a CSV file to add books to the library.</p>
+
+<form asp-controller="CsvImport"
+      asp-action="Upload"
+      method="post"
+      enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label for="branchId" class="form-label">
+            Select Library Branch
+        </label>
+
+        <select id="branchId"
+                name="branchId"
+                class="form-select"
+                required>
+            <option value="">-- Select Branch --</option>
+
+            @foreach (var branch in branches)
+            {
+                <option value="@branch.Id">
+                    @branch.Name
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="file" class="form-label">
+            Select CSV File
+        </label>
+
+        <input type="file"
+               id="file"
+               name="file"
+               accept=".csv"
+               class="form-control"
+               required />
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary"
+            disabled="@(!branches.Any())">
+        Upload CSV
+    </button>
+</form>
+
+@if (!branches.Any())
+{
+    <div class="alert alert-warning mt-3">
+        No active library branches are available.
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}

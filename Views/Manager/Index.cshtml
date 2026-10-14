@@ -26,6 +26,19 @@
         </p>
     </div>
 
+     <div class="mt-3">
+        <a asp-controller="Manager"
+           asp-action="ExportCsv"
+           class="btn btn-success">
+            Download CSV Report
+        </a>
+         <a asp-controller="Manager"
+       asp-action="ExportPdf"
+       class="btn btn-danger">
+        Download PDF Report
+    </a>
+    </div>
+
     <span class="badge rounded-pill text-bg-light border px-3 py-2">
         Updated @DateTime.Now.ToString("dd MMMM yyyy, h:mm tt")
     </span>
