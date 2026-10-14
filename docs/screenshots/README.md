@@ -1,40 +1,82 @@
-# Application screenshot evidence
+# Screenshot index and captions
 
-Five screenshots are committed at `dbbc540`, covering three observed hold tests. Two captures for a result are acceptable when the whole list does not fit.
+This README.md is a text index, not a screenshot. It explains what each image demonstrates and links it to the test record.
 
-| File | What is visible |
+The audit verified the 21 images pushed in a1e8190. Fourteen were newly inspected; seven matched previously inspected files byte for byte. There were no exact duplicate files. All 21 are retained under descriptive names with their image bytes unchanged. Three historical 11 October notification photos were restored from existing uploads, giving 24 evidence images.
+
+## Current hold and circulation evidence
+
+| Test | Image | What is actually visible |
+| --- | --- | --- |
+| H01 | [h01_duplicate_hold_rejected.png](h01_duplicate_hold_rejected.png) | Duplicate Asha / MBR-9001 / TY-0001 request rejected. |
+| H02 | [h02_fifo_queue_overview.png](h02_fifo_queue_overview.png) | Initial borrowed-copy queue overview; use with the detail capture. |
+| H02 | [h02_fifo_queue_details.png](h02_fifo_queue_details.png) | Asha position 1 and Noah position 2 for TY-0001 at Darwin. |
+| H03 | [h03_cancelled_hold_queue_overview.png](h03_cancelled_hold_queue_overview.png) | Cancellation result and Noah promoted to waiting position 1. |
+| H03 | [h03_cancelled_hold_history.png](h03_cancelled_hold_history.png) | Complementary capture retaining Asha's Cancelled history. |
+| C01 | [c01_noah_ready_darwin.png](c01_noah_ready_darwin.png) | Noah request #2 / TY-0001 Ready for pickup at Darwin. |
+| C02 | [c02_noah_pickup_email_sms_darwin.png](c02_noah_pickup_email_sms_darwin.png) | Two Noah / TY-0001 pickup records, Email and SMS, naming Darwin; created 14 October 20:11:36. |
+| C05 | [c05_noah_collected_darwin.png](c05_noah_collected_darwin.png) | Noah request #2 / TY-0001 Collected at Darwin. Does not display an active-loan count. |
+| C07 | [c07_damaged_toy_checkout_rejected.jpg](c07_damaged_toy_checkout_rejected.jpg) | Borrow form rejects TY-9001 / MBR-9001 due 28 October. Damaged setup is documented separately. |
+| C07 | [c07_damaged_toy_fifo_waiting.png](c07_damaged_toy_fifo_waiting.png) | Initial damaged-copy queue: Asha #3 position 1, Noah #4 position 2, both Awaiting repair. |
+| C08 | [c08_asha_allocated_palmerston.png](c08_asha_allocated_palmerston.png) | Asha #3 Allocated for Palmerston; Noah #4 still Waiting at position 1. |
+| C08 | [c08_no_early_pickup_notifications.png](c08_no_early_pickup_notifications.png) | TY-9001 / Ready for pickup / All channels shows zero matching records before arrival. |
+| C09 | [c09_wrong_pickup_destination_rejected.png](c09_wrong_pickup_destination_rejected.png) | Dispatch to Casuarina rejected: reserved copy must travel to its selected pickup branch. Origin DAR-D01. |
+| C10 | [c10_origin_receipt_rejected_in_transit.png](c10_origin_receipt_rejected_in_transit.png) | Receipt attempted at DAR-D01 rejected; TY-9001 remains In transit from Darwin to Palmerston. |
+| C10 input only | [c10_checkout_form_before_submit.png](c10_checkout_form_before_submit.png) | Filled TY-9001 / MBR-9001 checkout form at Darwin, due 28 October. No rejection message is visible. |
+| C11 | [c11_transfer_received_palmerston.png](c11_transfer_received_palmerston.png) | PAL-D01 transfer row Received/Completed; dispatched 14 October 21:27, received 21:49. |
+| C11 | [c11_asha_ready_noah_waiting_palmerston.png](c11_asha_ready_noah_waiting_palmerston.png) | Asha #3 Ready at Palmerston while Noah #4 remains Waiting at position 1. |
+| C11 | [c11_asha_pickup_email_sms_palmerston.png](c11_asha_pickup_email_sms_palmerston.png) | Two Asha / TY-9001 pickup simulations, Email and SMS, naming Palmerston; created 14 October 21:49:02. |
+| C12 | [c12_asha_collected_noah_ready_palmerston.png](c12_asha_collected_noah_ready_palmerston.png) | Both cards: Asha #3 Collected and Noah #4 Ready at Palmerston after the guided usable return. |
+| C12 | [c12_noah_ready_palmerston.png](c12_noah_ready_palmerston.png) | Complementary capture of Noah #4 Ready at Palmerston. |
+| C13 setup | [c13_new_asha_hold_awaiting_return.png](c13_new_asha_hold_awaiting_return.png) | New Asha request #5, requested 14 October 22:41, Waiting position 1 and Awaiting return. This is before the damaged return. |
+
+## Historical notification evidence
+
+These three images show the earlier 11 October interface and data. They support the dated observations; they are not labelled as screenshots of the final integrated version.
+
+| Test | Image | What is actually visible |
+| --- | --- | --- |
+| N-OBS-01 | [n_obs01_historical_dashboard_11oct.jpg](n_obs01_historical_dashboard_11oct.jpg) | 11 October historical dashboard with Notifications link; baseline statistics, not expanded manager exports. |
+| N-OBS-02 | [n_obs02_historical_notification_recheck_11oct.jpg](n_obs02_historical_notification_recheck_11oct.jpg) | 11 October historical notification page: six records and Check complete / no new records needed. |
+| N-OBS-03 | [n_obs03_historical_borrow_due_soon_11oct.jpg](n_obs03_historical_borrow_due_soon_11oct.jpg) | 11 October BK-0001 / MBR-0001: loan-confirmation and due-soon messages through Email and SMS, due 12 October. |
+
+## Evidence gaps and agreed written results
+
+- The transit checkout image shows the input form, not an unavailable/rejection message. The C10 rejection remains a reported result.
+- The new Asha request #5 image says Awaiting return. It documents the next-cycle setup, not the later damaged-return outcome. The initial #3/#4 damaged queue image does show Awaiting repair.
+- Wrong-member rejection and repeat checkout with one active loan remain reported where no result image was supplied. The Collected image alone does not prove the active-loan count.
+- The later four/six pickup totals and 6 → 6 restart result remain written tester reports. No additional screenshots were requested for that repair/restart check; its absence is not a new screenshot task.
+- Kiosk/API/privacy, CSV import, expanded exports and clean-VM evidence belong to their remaining tests/member handoffs. The available rubric does not prescribe an image for every click or test.
+
+See [the screenshot audit](../SCREENSHOT_AUDIT.md), [circulation results](../CIRCULATION_INTEGRATION_TEST_RECORD.md), [hold results](../HOLD_WORKFLOW_TEST_RECORD.md) and [notification results](../NOTIFICATION_TEST_RECORD.md). Selected figures and these captions will be included in the final portfolio.
+
+## Original filename mapping
+
+This table preserves the identity of the originally named files after renaming.
+
+| Original filename | Current filename |
 | --- | --- |
-| [Duplicate-request error.png](<Duplicate-request error.png>) | Duplicate hold for Asha / MBR-9001 / TY-0001 rejected. |
-| [position 1 and 2.png](<position 1 and 2.png>) | First capture of the waiting-list test. |
-| [p1 and p2.png](<p1 and p2.png>) | Complementary capture; Asha position 1 and Noah position 2. |
-| [cancellation.png](cancellation.png) | Cancellation succeeds and Noah moves to position 1. |
-| [cancellation1.png](cancellation1.png) | Complementary capture showing cancelled Asha history. |
-
-[The hold test record](../HOLD_WORKFLOW_TEST_RECORD.md) supplies the inputs, outcomes and limits. Keep these existing filenames.
-
-The 11 October notification photos were observed in the conversation but are not retained as repository assets. Their historical observations remain documented. Capture the final integrated return, pickup and notification results as they are tested; the old photographs do not all need to be recreated.
-
-Relevant images and captions will be included in the final portfolio. This folder and README are evidence inputs, not the completed portfolio PDF.
-
-## New circulation evidence
-
-[Ready to pickup.png](<Ready to pickup.png>) was supplied after the guided usable return. It shows Noah MBR-9002 / TY-0001 / request #2 Ready for pickup at Darwin Hub. It verifies that displayed allocation result. Notification count stability and checkout outcomes were subsequently user-reported; detailed message/checkout images and remaining journey checks are still pending. This sixth image is retained under the tester's filename; it is not yet a verified pushed repository asset.
-
-[1000061793.jpg](1000061793.jpg): Borrow item rejects TY-9001 / MBR-9001 / due 28 October 2026 during the guided damaged-copy test. The image shows the general borrowing-unavailable validation, not the repair or queue list.
-
-## Repair and transfer captures awaiting filenames/images
-
-- Asha Allocated for TY-9001 / Palmerston: local capture reported.
-- TY-9001 / Ready for pickup / All channels showing zero records before transfer arrival: local capture reported.
-- For the subsequent transfer batch, retain two rejection captures: dispatch to the wrong pickup destination, and receipt attempted at the origin while the transfer remains In transit. The tester reported expected application results, but screenshot capture/filenames for this batch are not yet confirmed.
-- First Palmerston receipt, Asha Ready and two pickup records were reported at 21:49; the tester explicitly had not taken screenshots. Capture the current Ready card and filtered pickup rows before checkout. These images have not been supplied here.
-
-At 21:54 Darwin, Kamalpreet reported saving the notification and transfer/transit screenshots locally. Their filenames and images have not been supplied; the status visible in the transfer capture is not separately confirmed. The Asha Ready / Palmerston Holds-card capture is still awaiting confirmation. A clear capture of that relevant card is sufficient; a full-page image is unnecessary for this evidence selection. The Palmerston repeated-scan count has not yet been reported.
-
-At 21:57 Darwin, the tester replied Done to the remaining Holds capture and notification-recheck instructions. Record the requested Holds capture as locally completed; its filename/image is still unknown. The numeric recheck count was not restated, so do not mark the Palmerston 2 → 2 check passed from this acknowledgement alone.
-
-At 22:27 Darwin, two further local captures were reported: Asha Collected and Noah Ready after the guided collection/return. These are the selected screenshots for the C12 collection/handover result. Their filenames/images have not yet been supplied. The tester did not report another notification capture for this batch; the reported six mixed-type results and the pending pickup-only count are documented in the test records rather than presented as inspected image evidence.
-
-At 22:45 Darwin, one local screenshot was reported for C13, explicitly described as showing Waiting only. Its filename/image is still unknown. Caption it only as the new waiting request once inspected; do not claim it displays the damaged item, the repair explanation or the unchanged notification count. The expected damaged-return outcomes were separately confirmed by the tester's report. This existing capture can be retained without repeating the completed return solely for another screenshot.
-
-These are practical evidence selections for the test record; the available rubric does not prescribe a screenshot count for each test. Preserve the tester's chosen filenames and pair each result with its inputs, actual outcome and evidence status.
+| Duplicate-request error.png | [h01_duplicate_hold_rejected.png](h01_duplicate_hold_rejected.png) |
+| position 1 and 2.png | [h02_fifo_queue_overview.png](h02_fifo_queue_overview.png) |
+| p1 and p2.png | [h02_fifo_queue_details.png](h02_fifo_queue_details.png) |
+| cancellation.png | [h03_cancelled_hold_queue_overview.png](h03_cancelled_hold_queue_overview.png) |
+| cancellation1.png | [h03_cancelled_hold_history.png](h03_cancelled_hold_history.png) |
+| Ready to pickup.png | [c01_noah_ready_darwin.png](c01_noah_ready_darwin.png) |
+| notifications.png | [c02_noah_pickup_email_sms_darwin.png](c02_noah_pickup_email_sms_darwin.png) |
+| collected.png | [c05_noah_collected_darwin.png](c05_noah_collected_darwin.png) |
+| 1000061793.jpg | [c07_damaged_toy_checkout_rejected.jpg](c07_damaged_toy_checkout_rejected.jpg) |
+| TY-9001 Waiting.png | [c07_damaged_toy_fifo_waiting.png](c07_damaged_toy_fifo_waiting.png) |
+| ALLOCATED.png | [c08_asha_allocated_palmerston.png](c08_asha_allocated_palmerston.png) |
+| 0 RECORD.png | [c08_no_early_pickup_notifications.png](c08_no_early_pickup_notifications.png) |
+| DISPATCH.png | [c09_wrong_pickup_destination_rejected.png](c09_wrong_pickup_destination_rejected.png) |
+| INTERBRANCH TRANSFERS.png | [c10_origin_receipt_rejected_in_transit.png](c10_origin_receipt_rejected_in_transit.png) |
+| BRANCH RECEIVE BEFORE CHECKOUT.png | [c10_checkout_form_before_submit.png](c10_checkout_form_before_submit.png) |
+| TRANSIT COMPLETED.png | [c11_transfer_received_palmerston.png](c11_transfer_received_palmerston.png) |
+| HOLD.png | [c11_asha_ready_noah_waiting_palmerston.png](c11_asha_ready_noah_waiting_palmerston.png) |
+| NOTIFICATION TY-9001.png | [c11_asha_pickup_email_sms_palmerston.png](c11_asha_pickup_email_sms_palmerston.png) |
+| COLLECTED-ASHA.png | [c12_asha_collected_noah_ready_palmerston.png](c12_asha_collected_noah_ready_palmerston.png) |
+| READY-NOAH.png | [c12_noah_ready_palmerston.png](c12_noah_ready_palmerston.png) |
+| ASHA WAITING.png | [c13_new_asha_hold_awaiting_return.png](c13_new_asha_hold_awaiting_return.png) |
+| 01-image-1791688378936.jpg | [n_obs01_historical_dashboard_11oct.jpg](n_obs01_historical_dashboard_11oct.jpg) |
+| 01-image-1791688526957.jpg | [n_obs02_historical_notification_recheck_11oct.jpg](n_obs02_historical_notification_recheck_11oct.jpg) |
+| 01-image-1791688879276.jpg | [n_obs03_historical_borrow_due_soon_11oct.jpg](n_obs03_historical_borrow_due_soon_11oct.jpg) |

@@ -8,11 +8,11 @@ Five supplied repository screenshots cover three tests. The images were inspecte
 
 | ID | Actual inputs and action | Observed outcome | Evidence |
 | --- | --- | --- | --- |
-| H01 | `TY-0001`, Build the Top End; `MBR-9001`, Asha Patel; Darwin Hub. Submit the same member/item hold again. | **Observed pass.** The form shows “This member already has an active request for this item.” | [Duplicate request](<screenshots/Duplicate-request error.png>) |
-| H02 | Asha's hold #1 created at 17:34, then `MBR-9002`, **Noah**, hold #2 at 17:41; same toy and pickup branch. | **Observed pass.** Asha has waiting position 1; Noah has position 2. Newest-first display order does not change the queue. Both cards show Awaiting return. | [Waiting order, first capture](<screenshots/position 1 and 2.png>), [second capture](<screenshots/p1 and p2.png>) |
-| H03 | Cancel Asha's waiting request. | **Observed pass.** Cancellation succeeds; Asha remains in history as Cancelled without a queue position. Noah becomes waiting position 1. | [Cancellation, first capture](<screenshots/cancellation.png>), [second capture](<screenshots/cancellation1.png>) |
+| H01 | `TY-0001`, Build the Top End; `MBR-9001`, Asha Patel; Darwin Hub. Submit the same member/item hold again. | **Observed pass.** The form shows “This member already has an active request for this item.” | [Duplicate request](<screenshots/h01_duplicate_hold_rejected.png>) |
+| H02 | Asha's hold #1 created at 17:34, then `MBR-9002`, **Noah**, hold #2 at 17:41; same toy and pickup branch. | **Observed pass.** Asha has waiting position 1; Noah has position 2. Newest-first display order does not change the queue. Both cards show Awaiting return. | [Waiting order, first capture](<screenshots/h02_fifo_queue_overview.png>), [second capture](<screenshots/h02_fifo_queue_details.png>) |
+| H03 | Cancel Asha's waiting request. | **Observed pass.** Cancellation succeeds; Asha remains in history as Cancelled without a queue position. Noah becomes waiting position 1. | [Cancellation, first capture](<screenshots/h03_cancelled_hold_queue_overview.png>), [second capture](<screenshots/h03_cancelled_hold_history.png>) |
 
-The second member's actual saved name is Noah, rather than the earlier suggested Noah Wilson. The evidence demonstrates the borrowed-item case; the subsequent damaged/repair/transfer journey is documented below from user reports. Existing filenames are retained.
+The second member's actual saved name is Noah, rather than the earlier suggested Noah Wilson. Original names are retained in the screenshot index mapping; descriptive filenames are now used. The later damaged/repair/transfer evidence is summarised below, with reported outcomes kept separate from visible results.
 
 ## Migration and validation
 
@@ -26,11 +26,11 @@ The applied circulation patch adds automatic allocation, shared reception/kiosk 
 
 | Check | Expected outcome | Current status |
 | --- | --- | --- |
-| Return TY-0001 at Darwin | Noah becomes Ready for pickup. | **Observed UI pass:** request #2, MBR-9002, TY-0001, Darwin Hub in [Ready to pickup.png](<screenshots/Ready to pickup.png>). Loan timestamp and pickup messages remain separate checks. |
+| Return TY-0001 at Darwin | Noah becomes Ready for pickup. | **Observed UI pass:** request #2, MBR-9002, TY-0001, Darwin Hub in [c01_noah_ready_darwin.png](<screenshots/c01_noah_ready_darwin.png>). Loan timestamp and pickup messages remain separate checks. |
 | Wrong member checkout | Asha cannot take Noah's reserved copy. | **Reported pass**, 14 October 20:40; screenshot pending. |
-| Right member checkout | Noah receives one active loan; his hold displays Collected. | **Reported pass**, 14 October 20:40; screenshot pending. Atomic SQL state is not independently inspected. |
-| Damaged return and repair | Item stays unavailable until repair; then the oldest eligible request is allocated. | Damaged-copy borrowing rejection is screenshot-observed; the earlier repair allocated Asha for Palmerston by report. A later NeedsRepair return left a new Asha request Waiting and the item Damaged by report at 22:45. The later recorded repair increased pickup history to six by report. |
-| Other-branch pickup | Reserved copy stays protected through dispatch; notice is produced only after destination receipt. | Correct dispatch and invalid-action guards are reported passes. First Palmerston receipt made Asha Ready with two pickup records by report; Asha Collected and then Noah Ready are also reported. Detailed images, repeated receipt and pickup-only recheck counts remain pending. |
+| Right member checkout | Noah receives one active loan; his hold displays Collected. | Collected card inspected; the one-active-loan/repeat-rejection result is reported, not independently SQL-inspected. |
+| Damaged return and repair | Item stays unavailable until repair; then the oldest eligible request is allocated. | Initial damaged FIFO, rejection, Asha allocation and zero early messages inspected. Later NeedsRepair return/second repair totals remain reported; the Asha #5 image is before the return. |
+| Other-branch pickup | Reserved copy stays protected through dispatch; notice is produced only after destination receipt. | Wrong destination/origin receipt, successful transfer receipt, Asha Ready/pickup channels and Asha Collected/Noah Ready images inspected. Transit borrowing rejection and later counts remain reported; repeat receipt pending. |
 | Repeated actions | No second loan, return, receipt, fulfilment or identical event/channel. | Repeat checkout and Noah's pickup count stability are reported passes. Pickup restart count 6 → 6 is reported; repeated receipt/return and concurrency remain pending. |
 | Authorization and privacy | Staff hold data is protected; patron account exposes only its linked member. | Pending |
 | Inactive eligibility | Member/branch inactivity pauses eligibility without rewriting request order. | Pending |
@@ -44,7 +44,7 @@ Kamalpreet confirmed the C06 result matched expectations at 20:40 Darwin: anothe
 
 ### Damaged-item rejection — C07
 
-The 21:02 screenshot, 1000061793.jpg, shows borrowing TY-9001 for MBR-9001 due 28/10/2026 is rejected with This item is not currently available for borrowing. The damaged condition and two hold requests were reported as set up; the photograph itself verifies the correct borrowing page, submitted inputs and rejection. Later repair/dispatch/first-receipt results are reported in the circulation record.
+The 21:02 screenshot, c07_damaged_toy_checkout_rejected.jpg, shows borrowing TY-9001 for MBR-9001 due 28/10/2026 is rejected with This item is not currently available for borrowing. The damaged condition and two hold requests were reported as set up; the photograph itself verifies the correct borrowing page, submitted inputs and rejection. Later repair/dispatch/first-receipt results are reported in the circulation record.
 
 ### Palmerston first receipt — C11, partial
 
@@ -59,3 +59,12 @@ At 22:27 Darwin, the tester reported two local screenshots showing Asha Collecte
 At 22:45 Darwin, the tester reported that the next guided batch matched expectations: Noah borrowed TY-9001, Asha placed a new hold, and a return with NeedsRepair selected left the item Damaged and Asha's request Waiting. The filtered pickup total remained four. These are reported passes pending detailed evidence inspection. The one local screenshot was explicitly described as showing Waiting only; it is not described as showing Damaged stock or the awaiting-repair explanation. The same-branch repair of this new request remains the next planned continuation.
 
 At 23:07 Darwin, after recording the completed repair through Manage toys, the tester reported six pickup-only records. At 23:15, after stop/start, the same filtered total remained six. These are reported repair-event/count and pickup-recovery results. The final Ready-card display and exact messages have not been separately image-inspected. The current test batch ends here; remaining kiosk/API/privacy, simultaneous checkout, inactive eligibility and repeat receipt are separate checks.
+
+
+## Screenshot inspection after pushed checkpoint a1e8190
+
+All 21 pushed image files have now been inspected or matched to previously inspected bytes and are indexed in [screenshots/README.md](screenshots/README.md). Earlier dated notes that images were local or awaiting filenames are historical. The audit upgrades only outcomes actually visible: damaged FIFO, Asha allocation, zero early pickup records, wrong-destination/origin-receipt errors, first receipt, correct pickup channels and collection/next-member cards. The transit checkout form contains no visible rejection, and the new Asha #5 Waiting capture says Awaiting return. The later NeedsRepair-return and repaired/restart counts remain tester reports. See [the audit](SCREENSHOT_AUDIT.md) for scope and gaps.
+
+## Required placement scope still to close
+
+The brief says patrons can place holds. Current /Holds/Create is restricted to Admin/Reception and the kiosk displays hold progress only. Add secure patron placement derived from authenticated Identity ownership, reusing queue/location safeguards, or obtain explicit lecturer acceptance of a staff-assisted interpretation. This is separate from optional pickup expiry; see [the commit review](PROJECT_PROGRESS_REVIEW.md).

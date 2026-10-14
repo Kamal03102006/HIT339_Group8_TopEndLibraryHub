@@ -1,6 +1,6 @@
 # Circulation integration test record
 
-Updated through 23:15 Darwin on 14 October 2026. Tested working source is the applied circulation patch against `dbbc540`, including Mehakpreet's `3b925ee` contribution. Windows build and all seven applied migrations are confirmed. Screenshot-observed outcomes and user-reported outcomes are distinguished below. The assistant's source and patch checks are separate from Kamalpreet's Windows application tests.
+Updated with the screenshot audit and whole-commit review of pushed a1e8190. The application source matches the applied circulation patch against dbbc540, including Mehakpreet's 3b925ee contribution. Windows build and all seven applied migrations are confirmed. The current table below includes inspected images; dated narratives preserve the reports as received. Source/patch checks are separate from Kamalpreet's Windows tests.
 
 ## Current result summary
 
@@ -8,14 +8,14 @@ Updated through 23:15 Darwin on 14 October 2026. Tested working source is the ap
 | --- | --- | --- |
 | Setup | Build succeeded; all seven migrations Applied=True. | User report and supplied console output |
 | C01 | Noah Ready at Darwin after the guided usable return of TY-0001. | Supplied screenshot inspected |
-| C02/C03 | TY-0001 pickup count stayed 2 → 2 after rechecking. | Reported; detailed channel/message image pending |
-| C04–C06 | Asha blocked from Noah's reservation; Noah collected; repeat checkout rejected with one active loan. | Reported |
-| C07 | Damaged-copy TY-9001 checkout rejected. | Supplied rejection photograph; damaged setup reported |
-| C08 | Repair allocated Asha for Palmerston; no early pickup records. | Reported; local captures not yet supplied |
-| C09/C10 | Correct dispatch succeeded; wrong destination, transit checkout and origin receipt rejected. | Reported; kiosk transit/repeat receipt not covered |
-| C11 | First Palmerston receipt produced Asha Ready and two pickup records. | Reported; local captures not yet supplied |
-| C12 | Asha Collected, Noah Ready; pickup-only total four. | Reported; two local Holds captures not yet supplied |
-| C13 | A new damaged return left Asha Waiting and four pickup records; recorded repair increased pickup-only total to six. | Reported; local Waiting-only capture not yet supplied |
+| C02/C03 | TY-0001 pickup count stayed 2 → 2 after rechecking. | Count reported; inspected image now confirms Noah Email/SMS, Darwin and the pickup message. |
+| C04–C06 | Asha blocked from Noah's reservation; Noah collected; repeat checkout rejected with one active loan. | Guard/count results reported; Noah Collected card inspected. |
+| C07 | Damaged-copy TY-9001 checkout rejected; initial Asha/Noah queue awaits repair. | Rejection photograph and initial FIFO/Awaiting repair images inspected. |
+| C08 | Repair allocated Asha for Palmerston; no early pickup records. | Allocation/Noah Waiting card and zero filtered records inspected. |
+| C09/C10 | Correct dispatch succeeded; wrong destination, transit checkout and origin receipt rejected. | Dispatch/receipt error and transit row images inspected; transit borrowing rejection remains reported, with its form labelled input-only. |
+| C11 | First Palmerston receipt produced Asha Ready and two pickup records. | Received transfer row, Asha Ready/Noah Waiting and Asha Email/SMS naming Palmerston inspected. Repeat receipt pending. |
+| C12 | Asha Collected, Noah Ready; pickup-only total four. | Collection/next-family cards inspected; four pickup total reported. Exact loan/fine details remain separate. |
+| C13 | A new damaged return left Asha Waiting and four pickup records; recorded repair increased pickup-only total to six. | Later results reported; supplied Asha #5 image is setup/Awaiting return, not the after-damaged-return state. |
 | C19 pickup history | Pickup-only count stayed 6 → 6 across stop/start on the same Darwin date. | Reported; no new screenshot requested |
 
 Kiosk/API/private ownership, simultaneous checkout, remaining loan/fine notification cases, repeat receipt and inactive eligibility remain separate checks. The historical C12 wrong-member Noah attempt was not explicitly restated; the shared reservation guard has the earlier C04 report. A fresh-copy procedure is in [the circulation demo guide](CIRCULATION_DEMO_GUIDE.md). The narrative below preserves the received reports and their limits.
@@ -29,9 +29,9 @@ Kiosk/API/private ownership, simultaneous checkout, remaining loan/fine notifica
 
 ## Observed application result — C01 ready allocation
 
-The screenshot supplied at 20:15 Darwin, Ready to pickup.png, shows Noah / MBR-9002 / request #2 for TY-0001 / Build the Top End as **Ready for pickup**, pickup Darwin Hub. It was supplied after the guided usable-return procedure. This verifies the displayed allocation result compared with the earlier Waiting position 1 evidence. The screenshot does not show the return form, loan return timestamp, pickup notifications or the lower Asha card; those details are not independently inferred. Later count, checkout, repair and dispatch results are recorded separately below.
+The screenshot supplied at 20:15 Darwin, c01_noah_ready_darwin.png, shows Noah / MBR-9002 / request #2 for TY-0001 / Build the Top End as **Ready for pickup**, pickup Darwin Hub. It was supplied after the guided usable-return procedure. This verifies the displayed allocation result compared with the earlier Waiting position 1 evidence. The screenshot does not show the return form, loan return timestamp, pickup notifications or the lower Asha card; those details are not independently inferred. Later count, checkout, repair and dispatch results are recorded separately below.
 
-Evidence: [Ready to pickup.png](<screenshots/Ready to pickup.png>).
+Evidence: [c01_noah_ready_darwin.png](<screenshots/c01_noah_ready_darwin.png>).
 
 ## First check: the actual existing queue
 
@@ -84,7 +84,7 @@ Do not mark these checks passed from the expected-outcome column.
 
 At 20:58 Darwin, Kamalpreet reported completing the TY-9001 damaged-copy setup and asked about the general rejection message. The screenshot supplied at 21:02 resolves the wording/page check: it shows **Borrow item**, Library Code **TY-9001**, Membership **MBR-9001**, due **28/10/2026**, and **This item is not currently available for borrowing.** This is an **observed pass for the borrowing rejection UI** in the guided damaged-copy scenario. The photograph does not independently show the item condition, both waiting requests or a database loan count; those setup details are user-reported. Subsequent repair, dispatch and first destination-receipt reports are recorded below.
 
-Evidence filename: 1000061793.jpg. The current message is shared by non-Available stock and an existing active loan; it is not a damage-specific explanation.
+Evidence filename: c07_damaged_toy_checkout_rejected.jpg. The current message is shared by non-Available stock and an existing active loan; it is not a damage-specific explanation.
 
 ## Reported repair allocation and no early notice — C08
 
@@ -182,4 +182,9 @@ In Development, startup creates the separate fictional linked patron Sky Nguyen 
 
 The API's /status is **service/database health**, not branch opening hours. Branch opening-hour semantics remain a requirements question. The initial implementation uses staff-assisted hold placement and patron read-only hold progress; patron hold creation/cancellation and pickup expiry are not implemented.
 
-The zero-result and newly recommended transfer captures are held locally or awaiting capture; their filenames/images have not been supplied here. Retain the distinction between a reported application outcome, a reported screenshot capture and an image actually inspected or committed.
+The supplied zero-result and transfer captures are now matched in the screenshot index. Keep the distinction between reported outcomes and visible image evidence. [The whole-commit review](PROJECT_PROGRESS_REVIEW.md) also identifies secure patron hold placement as a remaining requirement gap; read-only kiosk hold progress is not a placement form.
+
+
+## Screenshot inspection after pushed checkpoint a1e8190
+
+All 21 pushed image files have now been inspected or matched to previously inspected bytes and are indexed in [screenshots/README.md](screenshots/README.md). Earlier dated notes that images were local or awaiting filenames are historical. The audit upgrades only outcomes actually visible: damaged FIFO, Asha allocation, zero early pickup records, wrong-destination/origin-receipt errors, first receipt, correct pickup channels and collection/next-member cards. The transit checkout form contains no visible rejection, and the new Asha #5 Waiting capture says Awaiting return. The later NeedsRepair-return and repaired/restart counts remain tester reports. See [the audit](SCREENSHOT_AUDIT.md) for scope and gaps.

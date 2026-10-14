@@ -28,7 +28,7 @@ Kamalpreet reports the observed behaviour; the written account, requirement link
 
 On 14 October at 20:58 Darwin, Kamalpreet questioned the general unavailable message during the guided damaged-copy checkout test because the guidance described rejection due to damage. Source review confirms the current checkout message is This item is not currently available for borrowing for non-Available stock. The user's last wording mentioned return, so the exact displayed message/page still needs confirmation. This is a reported clarity issue; no damage-specific wording change or retest has been claimed. The intended requirement is that damaged checkout is blocked until repair.
 
-At 21:02 Darwin, the supplied 1000061793.jpg screenshot resolves UX-02's page/wording ambiguity: the page is Borrow item and the message ends with borrowing. No code correction is needed to satisfy the rejection check. The generic wording may still be clarified in a later UX improvement, but no such change is claimed here.
+At 21:02 Darwin, the supplied c07_damaged_toy_checkout_rejected.jpg screenshot resolves UX-02's page/wording ambiguity: the page is Borrow item and the message ends with borrowing. No code correction is needed to satisfy the rejection check. The generic wording may still be clarified in a later UX improvement, but no such change is claimed here.
 
 ## UX-03: mixed notification counts during pickup verification
 

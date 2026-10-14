@@ -6,7 +6,7 @@ Group: Kamalpreet (S389008), Harsimran Singh, Mehakpreet Kaur and Sandesh Bhatta
 
 ## Revision and verification
 
-Integration baseline: dbbc540 on feature/holds-notifications, with Mehakpreet's kiosk/API contribution from 3b925ee. The applied circulation integration includes shared checkout/returns, eligible FIFO allocation, protected transfers and simulated pickup messages. Kamalpreet's Windows build succeeded; the supplied Get-Migration output shows all seven migrations Applied=True.
+Working checkpoint a1e8190 on feature/holds-notifications combines baseline dbbc540 with Mehakpreet's kiosk/API contribution from 3b925ee. The applied circulation integration includes shared checkout/returns, eligible FIFO allocation, protected transfers and simulated pickup messages. Kamalpreet's Windows build succeeded; the supplied Get-Migration output shows all seven migrations Applied=True.
 
 Five committed screenshots establish duplicate rejection, waiting order and cancellation. Later supplied images show Noah Ready at Darwin and damaged-copy borrowing rejection. The 14 October Windows reports cover reserved-member checkout, repeat checkout, repair allocation, protected Darwin-to-Palmerston transfer, collection and next-member handover. A damaged return preserved a new waiting request; the subsequent repair increased pickup-only history from four to six records, and the filtered count stayed 6 → 6 after restart. See the test records for exact inputs, results and evidence limits.
 
@@ -17,10 +17,10 @@ Kiosk/API/privacy and simultaneous-checkout acceptance, remaining fine/loan noti
 | Module | Route | Access | Status |
 | --- | --- | --- | --- |
 | Catalogue | /Catalogue | Public | Shared rule excludes loans, transit and reservations; final public/API runtime checks pending. |
-| Kiosk | /Kiosk, /Kiosk/Scan, /Kiosk/Account | Public browsing; authenticated private actions | Mehak contribution integrated locally; shared checkout/private hold progress and timeout need runtime checks. |
+| Kiosk | /Kiosk, /Kiosk/Scan, /Kiosk/Account | Public browsing; authenticated private actions | Mehak contribution pushed in the combined checkpoint; shared checkout/private hold progress and timeout need runtime checks. |
 | Catalogue API | /api/catalogue, /available, /categories, /status, /{code} | External X-API-Key over HTTPS | Read-only; key outside Git; health is system/database status. |
 | Working location | /StaffLocation | Admin/Reception | Active physical branch/desk selection. |
-| Holds | /Holds, /Holds/Create | Admin/Reception | Desk screenshots plus reported return/repair/transfer/collection results; detailed evidence in docs. |
+| Holds | /Holds, /Holds/Create | Admin/Reception | Staff repair/transfer/collection journey has inspected and reported evidence. Patron hold placement is still a requirement gap; kiosk currently shows progress only. |
 | Transfers | /Transfers, /Transfers/Create | Admin/Reception | Harsimran's dispatch/receipt with shared protected hold handover; main flow reported tested. |
 | Lending | /Loans, /Loans/Borrow, /Loans/Return | Admin/Reception | Shared service; usable and NeedsRepair returns reported tested. Kiosk/concurrency checks pending. |
 | Simulated messages | /Notifications | Admin/Reception/Manager | Automatic startup/minute checks for loans and ready holds; no real messages sent. |
@@ -78,6 +78,8 @@ When comparing pickup messages, set the item code, Message type Ready for pickup
 - [Assessment checklist](docs/ASSESSMENT_CHECKLIST.md): all 11 rubric categories, brief and final deliverables
 - [Group work record](docs/GROUP_WORK_RECORD.md): tasks, decisions, governance and missing genuine member inputs
 - [Hold evidence](docs/HOLD_WORKFLOW_TEST_RECORD.md) and [screenshot index](docs/screenshots/README.md)
+- [Screenshot audit and coverage](docs/SCREENSHOT_AUDIT.md)
+- [Whole-commit review and complete rubric progress](docs/PROJECT_PROGRESS_REVIEW.md)
 - [Notification observations](docs/NOTIFICATION_TEST_RECORD.md)
 - [UX issue, fix and retest](docs/UX_FEEDBACK_RECORD.md)
 - [Integration diagram and journeys](docs/ARCHITECTURE_AND_JOURNEYS.md)

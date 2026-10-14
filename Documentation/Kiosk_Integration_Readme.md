@@ -1,6 +1,6 @@
 # Kiosk and API integration handoff
 
-Updated 14 October 2026. Mehakpreet's source contribution at `3b925ee` is included in the prepared circulation patch against `dbbc540`; this combined revision still needs a Windows build, database update and runtime tests.
+Updated following review of pushed checkpoint a1e8190. Mehakpreet's 3b925ee source is integrated with the circulation work based on dbbc540. Kamalpreet's Windows build succeeded and all seven migrations show Applied=True. Final kiosk/private ownership/privacy/API and concurrent-checkout runtime results remain pending.
 
 ## Implemented in the prepared source
 
@@ -12,7 +12,7 @@ Updated 14 October 2026. Mehakpreet's source contribution at `3b925ee` is includ
 - Private kiosk screens use no-store, Finish/sign-out, a two-minute inactivity check and screen reset. Patron authentication tickets expire after two minutes; staff sessions retain their working-location duration.
 - GET API endpoints: /api/catalogue, /available, /categories, /status and /{code}. /status reports service/database health, not opening hours.
 
-The earlier SharedBorrowingRulesIntegrated switch and blocked checkout stub have been removed. Do not claim a runtime checkout pass until the combined application is built and tested.
+The earlier SharedBorrowingRulesIntegrated switch and blocked checkout stub have been removed. The combined application has been built, but a kiosk runtime checkout pass has not yet been supplied.
 
 ## Database update
 
@@ -46,3 +46,7 @@ Send the key in the X-API-Key header over HTTPS. Missing configuration returns 5
 See [the integration test record](../docs/CIRCULATION_INTEGRATION_TEST_RECORD.md), especially C14–C19. Earlier component reports remain member-reported historical tests and do not verify this combined patch. Confirm the participant-name inconsistency in the feedback report before using it in the final portfolio.
 
 Account summary fulfils the brief's checkout-or-summary option. The group proposes both, so shared checkout, privacy and API runtime checks remain required for the chosen scope.
+
+## Follow-up from the whole-commit review
+
+The brief's patron hold placement is not yet provided by this kiosk: current hold creation is staff-only. Coordinate a secure Identity-linked patron path. API branch/category-filter proposals are not current query parameters; resolve the contract. Verify the signed-in return to public kiosk browsing as part of Finish/Back/idle privacy testing, since the public index lacks the private views' Finish/idle controls. These are pending work, not claimed passes. See [the complete review](../docs/PROJECT_PROGRESS_REVIEW.md).

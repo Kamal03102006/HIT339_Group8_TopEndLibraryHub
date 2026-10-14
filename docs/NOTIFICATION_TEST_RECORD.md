@@ -2,7 +2,7 @@
 
 Observed run: 11 October 2026. Record updated: 14 October 2026. Tester: Kamalpreet, using the Windows project. Times below are Darwin/ACST (UTC+09:30). Data belongs to fictional demonstration patrons.
 
-Implementation inspected at commit `bcf6844` on `feature/holds-notifications`. Results below come from the user's guided local run and supplied screenshots. The assistant did not independently compile the project or run SQL Server. Source review is kept separate from runtime results.
+Historical 11 October implementation was inspected at bcf6844; the combined circulation source is now verified at a1e8190. Results below distinguish historical photos, current inspected pickup images and user reports. The assistant did not independently compile the project or run SQL Server. Source review is separate from Windows results.
 
 ## Observed results
 
@@ -12,7 +12,7 @@ Implementation inspected at commit `bcf6844` on `feature/holds-notifications`. R
 | N-OBS-02 / repeated notification scan | Open `/Notifications` and use the guided repeated “Check active loans now” procedure. | An unchanged scan should not add the same event/channel again. | **Observed:** six matching simulated records and “Check complete. No new records were needed.” | Photo supplied at approximately 12:45, `image-1791688526957.jpg`. It supports an unchanged scan; a complete before/after count sequence and concurrent scans were not captured. |
 | N-OBS-03 / N01 borrowing and N02 due soon | Guided procedure: borrow `BK-0001` for `MBR-0001`, due 12 October 2026; leave the app running for 60–90 seconds without a manual scan; filter by `bk-0001`. | Borrowed and due-soon messages use the correct borrower, item and date, with one record for each configured channel. | **Observed:** four matching rows: loan confirmed via Email and SMS; due soon via Email and SMS. Messages identify Discovering the Top End, `BK-0001`, due 12 October and “tomorrow.” All four show 11 October, 12:50:33 PM ACST. | Photo supplied at approximately 12:51, `image-1791688879276.jpg`. Message content and item filtering are visible. The guided procedure supports the automatic scan; the screenshot alone does not identify the triggering process. Capture a worker log or timed recording for direct scheduler evidence. |
 
-The original photos were supplied in the conversation and their observed content remains recorded here. Kamalpreet reports that the old photos are not retained among the five current hold-test screenshots now committed at dbbc540. They are **not attached repository assets**. The current screenshot collection can begin with the three hold checks. During the final integrated notification checks, capture only the evidence needed to demonstrate the final implementation; there is no need to recreate an old interface photograph merely to reproduce its historical filename.
+The original 11 October photos have now been restored from the existing uploads under descriptive historical filenames. They are linked in [the screenshot index](screenshots/README.md). The dated observations above remain distinct from the later integrated tests.
 
 ## Remaining runtime checks
 
@@ -28,7 +28,7 @@ No test in this table is marked passed until its actual result and evidence are 
 | N-P06 / access control | Visit the route signed out and with each available staff role. Allowed staff can review logs; unauthorized users cannot read recipients or messages. Verify the manual scan requires a valid authenticated form submission. | **Pending.** Source attributes alone are not a runtime pass. |
 | N-P07 / channels and contact details | Use fictional borrowers with email only, mobile only, both and neither. Check generated channel counts and absence of invalid recipient rows. | **Pending.** |
 | N-P08 / duplicate/concurrent scans | Trigger overlapping scans in a controlled test. Count records by event key and channel. There must be at most one of each and no unhandled error. | **Pending.** Database constraints are implemented but this scenario has not been run. |
-| N-P09 / holds and branch pickup | Using the applied circulation patch, make the first queued item ready at the chosen branch. Verify the correct patron receives the pickup notice, no later patron receives it early, and repeat actions do not duplicate it. | **Partial reported results.** Noah Ready at Darwin is screenshot-observed; his pickup count stayed 2 → 2 by report. TY-9001 had zero early records while Allocated, then two after guided Palmerston receipt by report. Exact messages and Palmerston repeat/recovery checks are pending. |
+| N-P09 / holds and branch pickup | Make the first queued copy ready at its chosen branch; verify the next patron's notice and absence of early/duplicate notifications. | **Observed and reported results.** Noah's Darwin pickup and Asha's Palmerston pickup each have inspected Email/SMS images; allocation with zero early messages is inspected. Recheck 2 → 2 and later repair/restart 6 → 6 remain reported. Repeat receipt, concurrent scans and exact-row recovery remain separate. |
 | N-P10 / filters and paging | Check member/item code, message type and channel separately and together; create enough test records for multiple pages. Verify totals, ordering, empty results and navigation. | **Partial.** Item-code filtering observed in N-OBS-03; remaining checks pending. |
 
 ## Source review observations
@@ -46,7 +46,7 @@ Kamalpreet runs the guided checks and reports the actual behaviour. Written resu
 
 ## Integrated pickup check — 14 October evening
 
-Noah MBR-9002 / TY-0001 / Darwin Hub is visibly Ready for pickup in the supplied Ready to pickup.png screenshot. Following the guided filtered notification check, Kamalpreet reported at 20:30 Darwin that the Ready for pickup count stayed at two after a repeated immediate scan. This verifies the reported stable count for that scenario. Exact pickup-message content and Email/SMS pairing still await the log screenshot. Concurrent scans, restart and different-date checks remain pending. See C02/C03 in CIRCULATION_INTEGRATION_TEST_RECORD.md.
+Noah MBR-9002 / TY-0001 / Darwin Hub is visibly Ready for pickup in the supplied c01_noah_ready_darwin.png screenshot. Following the guided filtered notification check, Kamalpreet reported at 20:30 Darwin that the Ready for pickup count stayed at two after a repeated immediate scan. This verifies the reported stable count for that scenario. Exact pickup-message content and Email/SMS pairing still await the log screenshot. Concurrent scans, restart and different-date checks remain pending. See C02/C03 in CIRCULATION_INTEGRATION_TEST_RECORD.md.
 
 At 21:17 Darwin, Kamalpreet reported zero Ready for pickup records for repaired TY-9001 while Asha's hold was Allocated for Palmerston. This is reported absence of an early pickup notice before destination receipt; capture was subsequently reported complete, but the image has not been supplied.
 
@@ -61,3 +61,10 @@ At 22:45 Darwin, Kamalpreet reported the return-requiring-repair batch matched e
 At 23:07 Darwin, after guidance to save the completed repair by editing TY-9001 to Available, the tester reported **six**. This records the expected pickup-only increase from four to six by report; exact messages/channels and the Ready-card display are not separately image-inspected. The next restart check should retain six without generating duplicates; its actual outcome is pending.
 
 At 23:15 Darwin, the tester reported **six after stop/start**, compared with six before restart. This is a **reported pickup-history/count stability pass, 6 → 6 on the same Darwin date**. No additional screenshot was requested. It does not mark the separate loan-reminder restart, different-date fine update, concurrent scan or exact event/channel checks passed.
+
+
+## Screenshot inspection after pushed checkpoint a1e8190
+
+All 21 pushed image files have now been inspected or matched to previously inspected bytes and are indexed in [screenshots/README.md](screenshots/README.md). Earlier dated notes that images were local or awaiting filenames are historical. The audit upgrades only outcomes actually visible: damaged FIFO, Asha allocation, zero early pickup records, wrong-destination/origin-receipt errors, first receipt, correct pickup channels and collection/next-member cards. The transit checkout form contains no visible rejection, and the new Asha #5 Waiting capture says Awaiting return. The later NeedsRepair-return and repaired/restart counts remain tester reports. See [the audit](SCREENSHOT_AUDIT.md) for scope and gaps.
+
+The new inspection observes two Noah TY-0001 pickup records (Email/SMS, Darwin, 20:11:36) and two Asha TY-9001 pickup records (Email/SMS, Palmerston, 21:49:02 on 14 October). These images now verify recipients, channel pairing and pickup-branch content for those generations. They do not supply the later four/six-record recheck sequence or concurrent scans.

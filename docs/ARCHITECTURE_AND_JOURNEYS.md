@@ -33,15 +33,15 @@ Cancelled/fulfilled requests remain history. Queue eligibility uses active membe
 | Stage | Person and goal | Action and feedback | Meaningful benefit | Evidence |
 | --- | --- | --- | --- | --- |
 | Find | Family wants a reusable toy | Search title/code, check condition and location. | Avoid a wasted visit for an unusable or reserved copy. | Final UI retest pending |
-| Request | Patron wants fair access | Staff create a hold with chosen pickup branch; show waiting position. | Order is visible and duplicate requests cannot jump the queue. | Borrowed-case H01–H02 observed; damaged-case C07 reported |
-| Repair | Admin restores the damaged copy | Edit repaired condition to Available; queue head becomes Allocated. | Repair releases the existing queue without a second request. | C07 rejection photo; C08 allocation/no early notice reported |
-| Move | Reception delivers to pickup location | Dispatch from Darwin; receive only at Palmerston. | Reservation survives transport; no premature pickup message. | C09–C11 dispatch/guards/first receipt reported |
-| Collect | Correct member wants the reserved toy | Linked kiosk or staff checkout fulfils the allocation. | Later members cannot take a reserved copy. | C12 staff collection reported; C15 kiosk pending |
+| Request | Patron wants fair access | Staff currently create a hold with chosen pickup branch; show waiting position. A patron placement path is still required or needs explicit lecturer clarification. | Order is visible and duplicate requests cannot jump the queue. | Borrowed H01–H02 and damaged FIFO images inspected; patron placement pending |
+| Repair | Admin restores the damaged copy | Edit repaired condition to Available; queue head becomes Allocated. | Repair releases the existing queue without a second request. | C07 rejection and C08 allocation/zero-notice images inspected |
+| Move | Reception delivers to pickup location | Dispatch from Darwin; receive only at Palmerston. | Reservation survives transport; no premature pickup message. | C09–C11 dispatch/receipt images inspected; transit borrowing rejection reported |
+| Collect | Correct member wants the reserved toy | Linked kiosk or staff checkout fulfils the allocation. | Later members cannot take a reserved copy. | C12 staff Collected/next-member cards inspected; C15 kiosk pending |
 | Reuse | Next waiting family wants access | Return in usable condition; next eligible request becomes Ready. | The queue continues fairly after borrowing. | C01 ready photo; C04–C06/C12 handover reported |
 
 ## Demonstrated lead journey
 
-Kamalpreet created Asha and Noah holds on borrowed TY-0001 at Darwin. The duplicate was rejected; positions were Asha 1 / Noah 2. Cancelling Asha retained her history and promoted Noah to 1. Five screenshots at dbbc540 support those three UI outcomes. Those five images cover the initial desk case. The subsequent TY-9001 run reports repair, protected transfer, staff collection, next-family handover and a return requiring repair. Pickup totals progressed 0 → 2 → 4 → 6, then stayed six after restart. The additional captures are still being matched to their filenames; kiosk/private ownership and other unrun cases remain pending.
+Kamalpreet created Asha and Noah holds on borrowed TY-0001 at Darwin. The duplicate was rejected; positions were Asha 1 / Noah 2. Cancelling Asha retained her history and promoted Noah to 1. Five screenshots at dbbc540 support those three UI outcomes. Those five images cover the initial desk case. The subsequent TY-9001 run reports repair, protected transfer, staff collection, next-family handover and a return requiring repair. Pickup totals progressed 0 → 2 → 4 → 6, then stayed six after restart. All 21 pushed captures are now indexed under descriptive names; later damaged-return/repair/restart counts remain reported. Kiosk/private ownership, patron hold placement and other unrun cases remain pending.
 
 ## Other breadth features
 
