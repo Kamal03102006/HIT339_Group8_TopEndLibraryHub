@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TopEndLibraryHub.Models;
 
@@ -43,6 +44,23 @@ namespace TopEndLibraryHub.Data
             builder.Entity<Borrower>()
                 .HasIndex(borrower => borrower.Email)
                 .IsUnique();
+
+            builder.Entity<Borrower>()
+                .HasOne<IdentityUser>()
+                .WithOne()
+                .HasForeignKey<Borrower>(b => b.IdentityUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Borrower>()
+                .HasIndex(b => b.IdentityUserId)
+                .IsUnique()
+                .HasFilter("[IdentityUserId] IS NOT NULL");
+
+            // Prevent a second active loan for the same physical item.
+            builder.Entity<Loan>()
+                .HasIndex(l => l.ItemId)
+                .IsUnique()
+                .HasFilter("[ReturnedDate] IS NULL");
 
             builder.Entity<Loan>()
                 .HasOne(loan => loan.Item)

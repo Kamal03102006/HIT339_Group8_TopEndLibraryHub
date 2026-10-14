@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TopEndLibraryHub.Data;
 using TopEndLibraryHub.Models;
@@ -58,7 +58,7 @@ namespace TopEndLibraryHub.Controllers
                     i.Name,
                     i.Description,
                     Status = i.Status.ToString(),
-                    Available = i.Status == ItemStatus.Available
+                    Available = i.Status == ItemStatus.Available && !_context.Loans.Any(l => l.ItemId == i.Id && l.ReturnedDate == null)
                 })
                 .ToListAsync();
 
@@ -78,7 +78,7 @@ namespace TopEndLibraryHub.Controllers
 
             var items = await _context.Items
                 .AsNoTracking()
-                .Where(i => i.Status == ItemStatus.Available)
+                .Where(i => i.Status == ItemStatus.Available && !_context.Loans.Any(l => l.ItemId == i.Id && l.ReturnedDate == null))
                 .OrderBy(i => i.Name)
                 .ThenBy(i => i.Id)
                 .Take(limit)
@@ -167,7 +167,7 @@ namespace TopEndLibraryHub.Controllers
                     i.Name,
                     i.Description,
                     Status = i.Status.ToString(),
-                    Available = i.Status == ItemStatus.Available
+                    Available = i.Status == ItemStatus.Available && !_context.Loans.Any(l => l.ItemId == i.Id && l.ReturnedDate == null)
                 })
                 .FirstOrDefaultAsync();
 
