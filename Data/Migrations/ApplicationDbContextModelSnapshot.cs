@@ -250,6 +250,9 @@ namespace TopEndLibraryHub.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -267,6 +270,10 @@ namespace TopEndLibraryHub.Data.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("IdentityUserId")
+                        .IsUnique()
+                        .HasFilter("[IdentityUserId] IS NOT NULL");
 
                     b.HasIndex("MembershipNumber")
                         .IsUnique();
@@ -306,6 +313,67 @@ namespace TopEndLibraryHub.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Branches");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.Hold", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("AllocatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("BorrowerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CancelledAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FulfilledAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PickupBranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReadyForPickupAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BorrowerId");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Holds_OneAllocationPerItem")
+                        .HasFilter("[Status] IN (1, 2)");
+
+                    b.HasIndex("ItemId", "BorrowerId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Holds_OneActiveRequestPerBorrower")
+                        .HasFilter("[Status] IN (0, 1, 2)");
+
+                    b.HasIndex("ItemId", "Status", "CreatedAtUtc", "Id")
+                        .HasDatabaseName("IX_Holds_QueueOrder");
+
+                    b.ToTable("Holds", (string)null);
                 });
 
             modelBuilder.Entity("TopEndLibraryHub.Models.Item", b =>
@@ -460,9 +528,68 @@ namespace TopEndLibraryHub.Data.Migrations
 
                     b.HasIndex("BorrowerId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("ItemId")
+                        .IsUnique()
+                        .HasFilter("[ReturnedDate] IS NULL");
 
                     b.ToTable("Loans");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.NotificationLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BorrowerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Channel")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EventKey")
+                        .IsRequired()
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
+
+                    b.Property<int?>("HoldId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LoanId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Recipient")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HoldId");
+
+                    b.HasIndex("LoanId");
+
+                    b.HasIndex("BorrowerId", "CreatedAtUtc")
+                        .HasDatabaseName("IX_NotificationLogs_BorrowerHistory");
+
+                    b.HasIndex("EventKey", "Channel")
+                        .IsUnique()
+                        .HasDatabaseName("IX_NotificationLogs_EventChannel");
+
+                    b.ToTable("NotificationLogs", (string)null);
                 });
 
             modelBuilder.Entity("TopEndLibraryHub.Models.ReceptionDesk", b =>
@@ -681,6 +808,86 @@ namespace TopEndLibraryHub.Data.Migrations
                     b.Navigation("ReceivingDesk");
                 });
 
+            modelBuilder.Entity("TopEndLibraryHub.Models.Borrower", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithOne()
+                        .HasForeignKey("TopEndLibraryHub.Models.Borrower", "IdentityUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.Hold", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Borrower", "Borrower")
+                        .WithMany()
+                        .HasForeignKey("BorrowerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Borrower");
+
+                    b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.Item", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.ItemTransfer", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "DestinationBranch")
+                        .WithMany()
+                        .HasForeignKey("DestinationBranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.ReceptionDesk", "DispatchDesk")
+                        .WithMany()
+                        .HasForeignKey("DispatchDeskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "OriginBranch")
+                        .WithMany()
+                        .HasForeignKey("OriginBranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.ReceptionDesk", "ReceivingDesk")
+                        .WithMany()
+                        .HasForeignKey("ReceivingDeskId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("DestinationBranch");
+
+                    b.Navigation("DispatchDesk");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("OriginBranch");
+
+                    b.Navigation("ReceivingDesk");
+                });
+
             modelBuilder.Entity("TopEndLibraryHub.Models.Loan", b =>
                 {
                     b.HasOne("TopEndLibraryHub.Models.Borrower", "Borrower")
@@ -698,6 +905,31 @@ namespace TopEndLibraryHub.Data.Migrations
                     b.Navigation("Borrower");
 
                     b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.NotificationLog", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Borrower", "Borrower")
+                        .WithMany()
+                        .HasForeignKey("BorrowerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.Hold", "Hold")
+                        .WithMany()
+                        .HasForeignKey("HoldId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TopEndLibraryHub.Models.Loan", "Loan")
+                        .WithMany()
+                        .HasForeignKey("LoanId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Borrower");
+
+                    b.Navigation("Hold");
+
+                    b.Navigation("Loan");
                 });
 
             modelBuilder.Entity("TopEndLibraryHub.Models.ReceptionDesk", b =>

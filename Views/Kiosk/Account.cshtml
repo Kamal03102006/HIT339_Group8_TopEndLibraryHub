@@ -1,0 +1,24 @@
+@model TopEndLibraryHub.ViewModels.KioskAccountViewModel
+@{ ViewData["Title"] = "My Library Account"; }
+<link rel="stylesheet" href="~/css/kiosk.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/kiosk-additions.css" asp-append-version="true" />
+<main class="kiosk kiosk-journey">
+<header class="kiosk-hero"><h1>My Library Account</h1><p>Private membership and borrowing information</p></header>
+<section class="kiosk-search-section">
+@if (TempData["KioskError"] != null) { <p role="alert" class="kiosk-alert">@TempData["KioskError"]</p> }
+@if (Model.Message != null) { <p role="alert" class="kiosk-alert">@Model.Message</p> }
+@if (Model.FullName != null) {
+<h2>@Model.FullName</h2>
+<p><strong>Membership:</strong> @(Model.IsActive ? "Active" : "Inactive")</p>
+<p><strong>Outstanding fines:</strong> @Model.OutstandingFines.ToString("C")</p>
+<h3>Active Loans</h3>
+@if (Model.Loans.Count == 0) { <p>No active loans.</p> }
+else { <table class="table"><thead><tr><th>Item</th><th>Code</th><th>Due date</th><th>Fine</th></tr></thead><tbody>
+@foreach (var loan in Model.Loans) { <tr><td>@loan.Name</td><td>@loan.LibraryCode</td><td>@loan.DueDate.ToString("dd MMM yyyy")</td><td>@loan.FineAmount.ToString("C")</td></tr> }
+</tbody></table> }
+}
+</section>
+<nav class="kiosk-actions"><a asp-controller="Kiosk" asp-action="Scan" class="kiosk-button">Scan Item</a>
+<form asp-controller="Kiosk" asp-action="Finish" method="post">@Html.AntiForgeryToken()<button class="kiosk-button" type="submit">Finish Session / Sign Out</button></form></nav>
+</main>
+@await Html.PartialAsync("_KioskIdle")

@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TopEndLibraryHub.Data;
+using TopEndLibraryHub.Middleware;
+using TopEndLibraryHub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure the SQL Server database.
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException(
@@ -15,7 +16,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Configure authentication, secure passwords and staff roles.
 builder.Services
     .AddDefaultIdentity<IdentityUser>(options =>
     {
@@ -34,8 +34,20 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    options.SlidingExpiration = false;
+    options.LoginPath = "/Identity/Account/Login";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
+
+// Register kiosk checkout service.
+builder.Services.AddScoped<KioskCheckoutService>();
 
 builder.Services.AddSession(options =>
 {
@@ -44,9 +56,11 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
+// Register kiosk checkout service.
+builder.Services.AddScoped<KioskCheckoutService>();
+
 var app = builder.Build();
 
-// Apply migrations and create the demonstration staff accounts.
 try
 {
     await DbInitializer.InitialiseAsync(app.Services);
@@ -63,7 +77,6 @@ catch (Exception exception)
     throw;
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -80,6 +93,9 @@ app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Protect catalogue API endpoints.
+app.UseMiddleware<CatalogueApiKeyMiddleware>();
 
 app.MapStaticAssets();
 

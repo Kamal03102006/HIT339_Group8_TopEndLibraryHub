@@ -1,10 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TopEndLibraryHub.Models
 {
     public class Borrower
     {
         public int Id { get; set; }
+
+        public string? IdentityUserId { get; set; }
 
         [Required]
         [StringLength(20)]
