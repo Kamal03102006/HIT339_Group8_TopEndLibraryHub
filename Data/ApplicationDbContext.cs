@@ -40,6 +40,22 @@ namespace TopEndLibraryHub.Data
             ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            // Each physical branch has a unique code.
+            builder.Entity<Branch>()
+                .HasIndex(branch => branch.BranchCode)
+                .IsUnique();
+
+            // Each reception desk has a unique code.
+            builder.Entity<ReceptionDesk>()
+                .HasIndex(desk => desk.DeskCode)
+                .IsUnique();
+
+            // Items belong to a physical branch.
+            builder.Entity<Item>()
+                .HasOne(item => item.Branch)
+                .WithMany()
+                .HasForeignKey(item => item.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Preserve teammate's Holds and Notifications
             builder.ApplyConfiguration(

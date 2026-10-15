@@ -132,7 +132,25 @@
                                 <ul class="dropdown-menu"
                                     aria-labelledby="receptionDropdown">
                                     <li>
-                                        <a class="dropdown-item"
+                                        <li>
+    <a class="dropdown-item"
+       asp-area=""
+       asp-controller="StaffLocation"
+       asp-action="Index">
+        Working location
+    </a>
+</li>
+<li>
+   
+  <li>
+    <a class="dropdown-item"
+       asp-area=""
+       asp-controller="Transfers"
+       asp-action="Index">
+        Interbranch transfers
+    </a>
+</li>
+                            <a class="dropdown-item"
                                            asp-controller="Borrowers"
                                            asp-action="Index">
                                             Manage borrowers
@@ -188,6 +206,7 @@
                 </div>
             </div>
         </nav>
+        @await Component.InvokeAsync("StaffLocation")
     </header>
 
     <div class="container">

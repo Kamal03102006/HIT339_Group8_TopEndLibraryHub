@@ -44,6 +44,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
 
 // Register kiosk checkout service.
 builder.Services.AddScoped<KioskCheckoutService>();
@@ -78,6 +79,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
