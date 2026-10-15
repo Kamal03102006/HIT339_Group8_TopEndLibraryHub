@@ -15,7 +15,6 @@ namespace TopEndLibraryHub.Models
         [Range(1, int.MaxValue,
             ErrorMessage = "Select a valid branch.")]
         [Display(Name = "Branch")]
-        public int BranchId { get; set; }
 
         public Branch? Branch { get; set; }
 
