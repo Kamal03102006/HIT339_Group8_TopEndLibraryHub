@@ -40,6 +40,10 @@ namespace TopEndLibraryHub.Data
             ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            // Each physical branch has a unique code.
+            builder.Entity<Branch>()
+                .HasIndex(branch => branch.BranchCode)
+                .IsUnique();
 
             // Preserve teammate's Holds and Notifications
             builder.ApplyConfiguration(

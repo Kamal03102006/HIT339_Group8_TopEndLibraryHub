@@ -1,0 +1,123 @@
+﻿@model IEnumerable<TopEndLibraryHub.Models.ItemTransfer>
+
+@{
+    ViewData["Title"] = "Interbranch transfers";
+
+    var darwinTimeZone =
+        TimeZoneInfo.FindSystemTimeZoneById("Australia/Darwin");
+
+    string LocalTime(DateTime value) =>
+        TimeZoneInfo.ConvertTimeFromUtc(
+            DateTime.SpecifyKind(value, DateTimeKind.Utc),
+            darwinTimeZone)
+        .ToString("dd MMM yyyy HH:mm");
+}
+
+<h1>Interbranch transfers</h1>
+
+<p>
+    <a asp-controller="Transfers"
+       asp-action="Create"
+       class="btn btn-primary">
+        Create and dispatch transfer
+    </a>
+</p>
+
+<p>
+    Review item movements between library branches.
+    Times are shown in Darwin time.
+</p>
+
+@if (TempData["SuccessMessage"] is string success)
+{
+    <div class="alert alert-success" role="status">
+        @success
+    </div>
+}
+
+@if (TempData["ErrorMessage"] is string error)
+{
+    <div class="alert alert-danger" role="alert">
+        @error
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <p>No transfers have been recorded yet.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Origin</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Dispatched</th>
+                    <th scope="col">Received</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var transfer in Model)
+                {
+                    <tr>
+                        <td>
+                            @transfer.Item?.LibraryCode
+                            — @transfer.Item?.Name
+                        </td>
+
+                        <td>@transfer.OriginBranch?.Name</td>
+
+                        <td>@transfer.DestinationBranch?.Name</td>
+
+                        <td>
+                            @(transfer.Status ==
+                                TopEndLibraryHub.Models.TransferStatus.InTransit
+                                ? "In transit"
+                                : "Received")
+                        </td>
+
+                        <td>
+                            @LocalTime(transfer.DispatchedAtUtc)
+                        </td>
+
+                        <td>
+                            @(transfer.ReceivedAtUtc.HasValue
+                                ? LocalTime(transfer.ReceivedAtUtc.Value)
+                                : "Not received")
+                        </td>
+
+                        <td>
+                            @if (transfer.Status ==
+                                TopEndLibraryHub.Models.TransferStatus.InTransit)
+                            {
+                                <form asp-controller="Transfers"
+                                      asp-action="Receive"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@transfer.Id" />
+
+                                    <button type="submit"
+                                            class="btn btn-success btn-sm">
+                                        Receive at destination
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span>Completed</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

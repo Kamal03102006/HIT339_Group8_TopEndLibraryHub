@@ -755,6 +755,59 @@ namespace TopEndLibraryHub.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TopEndLibraryHub.Models.Item", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
+            modelBuilder.Entity("TopEndLibraryHub.Models.ItemTransfer", b =>
+                {
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "DestinationBranch")
+                        .WithMany()
+                        .HasForeignKey("DestinationBranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.ReceptionDesk", "DispatchDesk")
+                        .WithMany()
+                        .HasForeignKey("DispatchDeskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.Branch", "OriginBranch")
+                        .WithMany()
+                        .HasForeignKey("OriginBranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TopEndLibraryHub.Models.ReceptionDesk", "ReceivingDesk")
+                        .WithMany()
+                        .HasForeignKey("ReceivingDeskId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("DestinationBranch");
+
+                    b.Navigation("DispatchDesk");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("OriginBranch");
+
+                    b.Navigation("ReceivingDesk");
+                });
+
             modelBuilder.Entity("TopEndLibraryHub.Models.Borrower", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)

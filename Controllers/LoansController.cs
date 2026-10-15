@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TopEndLibraryHub.Data;
@@ -17,7 +18,6 @@ public class LoansController : Controller
         _context = context;
     }
 
-    // Displays active, overdue and returned loans.
     public async Task<IActionResult> Index(
         string? searchString,
         string? loanStatus)
@@ -70,6 +70,7 @@ public class LoansController : Controller
         return View(results);
     }
 
+    [HttpGet]
     public IActionResult Borrow()
     {
         return View(new BorrowItemViewModel());
@@ -81,10 +82,14 @@ public class LoansController : Controller
         BorrowItemViewModel model)
     {
         model.LibraryCode =
-            model.LibraryCode.Trim().ToUpperInvariant();
+            (model.LibraryCode ?? string.Empty)
+            .Trim()
+            .ToUpperInvariant();
 
         model.MembershipNumber =
-            model.MembershipNumber.Trim().ToUpperInvariant();
+            (model.MembershipNumber ?? string.Empty)
+            .Trim()
+            .ToUpperInvariant();
 
         ModelState.Clear();
         TryValidateModel(model);
@@ -101,6 +106,39 @@ public class LoansController : Controller
         if (!ModelState.IsValid)
         {
             return View(model);
+        }
+
+        var userId = User.FindFirstValue(
+            ClaimTypes.NameIdentifier);
+
+        var branchId = HttpContext.Session.GetInt32(
+            "StaffBranchId");
+
+        var deskId = HttpContext.Session.GetInt32(
+            "StaffDeskId");
+
+        var ownsLocation =
+            !string.IsNullOrEmpty(userId) &&
+            HttpContext.Session.GetString("StaffLocationUserId")
+                == userId;
+
+        var validLocation =
+            ownsLocation &&
+            branchId.HasValue &&
+            deskId.HasValue &&
+            await _context.ReceptionDesks.AnyAsync(d =>
+                d.Id == deskId.Value &&
+                d.BranchId == branchId.Value &&
+                d.IsActive &&
+                d.Branch != null &&
+                d.Branch.IsActive);
+
+        if (!validLocation)
+        {
+            TempData["LocationMessage"] =
+                "Select an active branch and reception desk before borrowing.";
+
+            return RedirectToAction("Index", "StaffLocation");
         }
 
         var item = await _context.Items.FirstOrDefaultAsync(
@@ -122,7 +160,28 @@ public class LoansController : Controller
                 loan => loan.ItemId == item.Id &&
                         loan.ReturnedDate == null);
 
-            if (item.Status != ItemStatus.Available || alreadyOnLoan)
+            var inTransit = await _context.ItemTransfers.AnyAsync(
+                transfer => transfer.ItemId == item.Id &&
+                            transfer.Status == TransferStatus.InTransit);
+
+            if (item.BranchId != branchId!.Value)
+            {
+                ModelState.AddModelError(
+                    nameof(model.LibraryCode),
+                    "This item is at another branch. " +
+                    "Arrange a transfer before borrowing it here.");
+            }
+
+            if (item.Status == ItemStatus.InTransit || inTransit)
+            {
+                ModelState.AddModelError(
+                    nameof(model.LibraryCode),
+                    "This item is in transit. " +
+                    "The destination branch must receive it first.");
+            }
+            else if (
+                item.Status != ItemStatus.Available ||
+                alreadyOnLoan)
             {
                 ModelState.AddModelError(
                     nameof(model.LibraryCode),
@@ -140,7 +199,7 @@ public class LoansController : Controller
         {
             ModelState.AddModelError(
                 nameof(model.MembershipNumber),
-                "This borrower’s membership is inactive.");
+                "This borrower's membership is inactive.");
         }
 
         if (!ModelState.IsValid)
@@ -170,6 +229,7 @@ public class LoansController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpGet]
     public IActionResult Return(string? libraryCode)
     {
         ViewData["DailyFineRate"] = DailyFineRate;
@@ -189,7 +249,9 @@ public class LoansController : Controller
         ViewData["DailyFineRate"] = DailyFineRate;
 
         model.LibraryCode =
-            model.LibraryCode.Trim().ToUpperInvariant();
+            (model.LibraryCode ?? string.Empty)
+            .Trim()
+            .ToUpperInvariant();
 
         ModelState.Clear();
         TryValidateModel(model);

@@ -1,0 +1,20 @@
+﻿@model string
+
+<div class="container mb-3">
+    @if (string.IsNullOrEmpty(Model))
+    {
+        <span>No working location selected.</span>
+    }
+    else
+    {
+        <strong>Working location:</strong>
+        <span>@Model</span>
+    }
+
+    <a asp-area=""
+       asp-controller="StaffLocation"
+       asp-action="Index"
+       class="ms-2">
+        Select or change location
+    </a>
+</div>
