@@ -1,6 +1,6 @@
 # Kamalpreet — retrospective chat-session estimate
 
-HIT339 Distributed Development, Group 8 / TopEndLibraryHub. Prepared through **15 October 2026, 09:47 Darwin**. This record is compiled with AI assistance from recoverable project activity, using the session rule Kamalpreet selected in conversation.
+HIT339 Distributed Development, Group 8 / TopEndLibraryHub. Prepared through **15 October 2026, 09:47 Darwin**. The estimate uses the session rule selected by Kamalpreet and the available project-activity checkpoints. [AI acknowledgement](AI_ACKNOWLEDGEMENT.md).
 
 ## Result and coverage
 

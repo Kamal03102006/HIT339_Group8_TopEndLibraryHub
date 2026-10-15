@@ -65,4 +65,8 @@ Counts assume both fictional contacts above and no other prior history for the f
 
 ## Record actual outcomes
 
-Record the tested revision, actual date, desk, fields, result and available image/response references. Distinguish user-reported results from inspected screenshots. This guide covers the staff repair/transfer journey; kiosk ownership/privacy, API authentication, simultaneous checkout, CSV/reports and clean-VM installation require their own actual checks.
+Record the tested revision, actual date, desk, fields, result and available image/response references. Distinguish tester-reported results from inspected screenshots. This guide covers the staff repair/transfer journey; kiosk ownership/privacy, API authentication, simultaneous checkout, CSV/reports and clean-VM installation require their own actual checks.
+
+## Current completion actions
+
+This record preserves its tested checkpoint and stated evidence limits. The latest member handoffs and integration/VM actions are in [REMAINING_WORK.md](REMAINING_WORK.md). Documentation updates do not require repeating earlier tests solely to rename or index their evidence.

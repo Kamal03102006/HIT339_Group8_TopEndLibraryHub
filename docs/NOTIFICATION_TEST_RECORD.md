@@ -2,7 +2,7 @@
 
 Observed run: 11 October 2026. Record updated: 14 October 2026. Tester: Kamalpreet, using the Windows project. Times below are Darwin/ACST (UTC+09:30). Data belongs to fictional demonstration patrons.
 
-Historical 11 October implementation was inspected at bcf6844; the combined circulation source is now verified at a1e8190. Results below distinguish historical photos, current inspected pickup images and user reports. The assistant did not independently compile the project or run SQL Server. Source review is separate from Windows results.
+Historical 11 October implementation was inspected at bcf6844; the combined circulation source is now verified at a1e8190. Results below distinguish historical photos, current inspected pickup images and user reports. Build and runtime outcomes come from the recorded Windows tests. Source inspections are listed separately. [AI acknowledgement](AI_ACKNOWLEDGEMENT.md).
 
 ## Observed results
 
@@ -68,3 +68,7 @@ At 23:15 Darwin, the tester reported **six after stop/start**, compared with six
 All 21 pushed image files have now been inspected or matched to previously inspected bytes and are indexed in [screenshots/README.md](screenshots/README.md). Earlier dated notes that images were local or awaiting filenames are historical. The audit upgrades only outcomes actually visible: damaged FIFO, Asha allocation, zero early pickup records, wrong-destination/origin-receipt errors, first receipt, correct pickup channels and collection/next-member cards. The transit checkout form contains no visible rejection, and the new Asha #5 Waiting capture says Awaiting return. The later NeedsRepair-return and repaired/restart counts remain tester reports. See [the audit](SCREENSHOT_AUDIT.md) for scope and gaps.
 
 The new inspection observes two Noah TY-0001 pickup records (Email/SMS, Darwin, 20:11:36) and two Asha TY-9001 pickup records (Email/SMS, Palmerston, 21:49:02 on 14 October). These images now verify recipients, channel pairing and pickup-branch content for those generations. They do not supply the later four/six-record recheck sequence or concurrent scans.
+
+## Current completion actions
+
+This record preserves its tested checkpoint and stated evidence limits. The latest member handoffs and integration/VM actions are in [REMAINING_WORK.md](REMAINING_WORK.md). Documentation updates do not require repeating earlier tests solely to rename or index their evidence.

@@ -6,13 +6,13 @@ Group: Kamalpreet (S389008), Harsimran Singh, Mehakpreet Kaur and Sandesh Bhatta
 
 ## Revision and verification
 
-Current documentation checkpoint 107f643 on feature/holds-notifications retains the circulation source reviewed at a1e8190, combining baseline dbbc540 with Mehakpreet's kiosk/API contribution from 3b925ee. The applied circulation integration includes shared checkout/returns, eligible FIFO allocation, protected transfers and simulated pickup messages. Kamalpreet's Windows build succeeded; the supplied Get-Migration output shows all seven migrations Applied=True.
+Latest verified push: **6a69ade** on `feature/holds-notifications`, containing patron source/evidence commit **70db5b7** and the member-record update. It extends the circulation checkpoint a1e8190 and retains Mehakpreet's kiosk/API contribution from 3b925ee. The pushed application source matches the prepared patron release; project package references match the fixed Windows configuration. The applied circulation integration includes shared checkout/returns, eligible FIFO allocation, protected transfers and simulated pickup messages. Kamalpreet's Windows build succeeded; the supplied Get-Migration output shows all seven migrations Applied=True.
 
 Five committed screenshots establish duplicate rejection, waiting order and cancellation. Later supplied images show Noah Ready at Darwin and damaged-copy borrowing rejection. The 14 October Windows reports cover reserved-member checkout, repeat checkout, repair allocation, protected Darwin-to-Palmerston transfer, collection and next-member handover. A damaged return preserved a new waiting request; the subsequent repair increased pickup-only history from four to six records, and the filtered count stayed 6 → 6 after restart. See the test records for exact inputs, results and evidence limits.
 
-Remaining kiosk checkout/API/security and simultaneous-checkout acceptance, fine/loan notification checks, clean-VM verification, importer/report handoff and the final portfolio are outstanding. The final submission branch/tag will identify the completed seven-module version.
+Remaining kiosk checkout/API/security and simultaneous-checkout acceptance, fine/loan notification checks, clean-VM verification, importer/report corrections and integration, and the final portfolio are outstanding. The final submission branch/tag will identify the completed seven-module version.
 
-The subsequent patron hold patch adds Identity-linked `/Kiosk/Hold`, shared staff/patron queue validation and signed-in public-kiosk Finish/idle handling. On 15 October Kamalpreet supplied a clean Windows build after pinning System.Security.Cryptography.Pkcs to 9.0.21; the include-transitive audit reported no vulnerable packages given its current sources. She reported own-request/FIFO/duplicate/private-account and Finish/Back outcomes. Two inspected photographs show inactive and unlinked membership access blocked. JavaScript-disabled expiry, forged-input/antiforgery checks and the remaining module acceptance are pending. The tested working source still needs its pushed revision identified. See [the patron hold test record](docs/PATRON_HOLD_TEST_RECORD.md) for exact evidence and limitations.
+The subsequent patron hold patch adds Identity-linked `/Kiosk/Hold`, shared staff/patron queue validation and signed-in public-kiosk Finish/idle handling. On 15 October Kamalpreet supplied a clean Windows build after pinning System.Security.Cryptography.Pkcs to 9.0.21; the include-transitive audit reported no vulnerable packages given its current sources. She reported own-request/FIFO/duplicate/private-account and Finish/Back outcomes. Four inspected patron captures show Sky's successful TY-9901 request at Palmerston, Sky 1 / Asha 2 in the shared queue, and inactive/unlinked membership access blocked. JavaScript-disabled expiry, forged-input/antiforgery checks and the remaining module acceptance are pending. The tested source is now identified by 70db5b7 and verified within 6a69ade; all 28 lead evidence images are retained; eight Sandesh captures are added in the current documentation update. The earlier Windows build remains a supplied result, not a new independent runtime run. See [the patron hold test record](docs/PATRON_HOLD_TEST_RECORD.md) for exact evidence and limitations.
 
 ## Modules and routes
 
@@ -27,7 +27,7 @@ The subsequent patron hold patch adds Identity-linked `/Kiosk/Hold`, shared staf
 | Lending | /Loans, /Loans/Borrow, /Loans/Return | Admin/Reception | Shared service; usable and NeedsRepair returns reported tested. Kiosk/concurrency checks pending. |
 | Simulated messages | /Notifications | Admin/Reception/Manager | Automatic startup/minute checks for loans and ready holds; no real messages sent. |
 | Manager | /Manager | Admin/Manager | Baseline statistics; expanded revenue/health exports pending handoff. |
-| Import | Route not yet verified | Admin | Pending handoff and sample CSVs. |
+| Import | /CsvImport in Sandesh branch | Admin | Source and local evidence received; corrections, raw samples and final integration pending. |
 
 ## Install and run
 
@@ -78,7 +78,7 @@ When comparing pickup messages, set the item code, Message type Ready for pickup
 
 - [Requirements](docs/HIT339_Group8_Requirements_Draft.docx)
 - [Assessment checklist](docs/ASSESSMENT_CHECKLIST.md): all 11 rubric categories, brief and final deliverables
-- [Group work record](docs/GROUP_WORK_RECORD.md): populated task/evidence rows, time intake, reported original contract acceptance, written coordination notes, Kamalpreet's call-minutes intake and her draft individual reflection
+- [Group work record](docs/GROUP_WORK_RECORD.md): populated task/evidence rows, time intake, team agreement acceptance, written coordination notes, Kamalpreet's meeting record and individual reflection
 - [Hold evidence](docs/HOLD_WORKFLOW_TEST_RECORD.md) and [screenshot index](docs/screenshots/README.md)
 - [Screenshot audit and coverage](docs/SCREENSHOT_AUDIT.md)
 - [Whole-commit review and complete rubric progress](docs/PROJECT_PROGRESS_REVIEW.md)
@@ -87,7 +87,7 @@ When comparing pickup messages, set the item code, Message type Ready for pickup
 - [Integration diagram and journeys](docs/ARCHITECTURE_AND_JOURNEYS.md)
 - [Patron guide](Documentation/PatronUserGuide.md) and [kiosk/API handoff](Documentation/Kiosk_Integration_Readme.md)
 
-Written records are compiled from actual reports/source/screenshots with AI assistance. Genuine hours, team-contract acceptance, meetings, individual reflections/value contributions, final VM run and member handoffs remain outstanding. Working documents and diagrams are inputs to the required final portfolio PDF; the PDF is not complete.
+The documentation records requirements, implementation decisions, project governance and test evidence. All four members accepted the original agreement on the day it was created and shared; the calendar date is not recorded. Member hours and reflections, meeting details, final VM results and outstanding technical handoffs are being consolidated. The required submission is one Group Portfolio PDF plus the source repository link. Current member handoffs, release differences and finish actions are listed in [remaining work](docs/REMAINING_WORK.md). Sandesh's importer/report source and individual report are received; Harsimran's installation guide records an unpassed VM attempt. See [submission format and remaining inputs](docs/SUBMISSION_GUIDE.md) and [AI acknowledgement](docs/AI_ACKNOWLEDGEMENT.md).
 
 ## Assignment 2 baseline reference
 

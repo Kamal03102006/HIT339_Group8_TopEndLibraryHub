@@ -54,7 +54,7 @@ Kamalpreet confirmed at 20:30 Darwin that the filtered TY-0001 / Ready for picku
 
 ## Reported reservation and checkout results — C04–C06
 
-At 20:40 Darwin, Kamalpreet confirmed that all three results matched the guided expectations. These are **user-reported passes**, with screenshots for these outcomes not yet supplied.
+At 20:40 Darwin, Kamalpreet confirmed that all three results matched the guided expectations. These are **tester-reported passes**, with screenshots for these outcomes not yet supplied.
 
 | Check | Reported outcome | Evidence limit |
 | --- | --- | --- |
@@ -82,7 +82,7 @@ Do not mark these checks passed from the expected-outcome column.
 
 ## Damaged-copy checkout evidence — C07
 
-At 20:58 Darwin, Kamalpreet reported completing the TY-9001 damaged-copy setup and asked about the general rejection message. The screenshot supplied at 21:02 resolves the wording/page check: it shows **Borrow item**, Library Code **TY-9001**, Membership **MBR-9001**, due **28/10/2026**, and **This item is not currently available for borrowing.** This is an **observed pass for the borrowing rejection UI** in the guided damaged-copy scenario. The photograph does not independently show the item condition, both waiting requests or a database loan count; those setup details are user-reported. Subsequent repair, dispatch and first destination-receipt reports are recorded below.
+At 20:58 Darwin, Kamalpreet reported completing the TY-9001 damaged-copy setup and asked about the general rejection message. The screenshot supplied at 21:02 resolves the wording/page check: it shows **Borrow item**, Library Code **TY-9001**, Membership **MBR-9001**, due **28/10/2026**, and **This item is not currently available for borrowing.** This is an **observed pass for the borrowing rejection UI** in the guided damaged-copy scenario. The photograph does not independently show the item condition, both waiting requests or a database loan count; those setup details are tester-reported. Subsequent repair, dispatch and first destination-receipt reports are recorded below.
 
 Evidence filename: c07_damaged_toy_checkout_rejected.jpg. The current message is shared by non-Available stock and an existing active loan; it is not a damage-specific explanation.
 
@@ -188,3 +188,7 @@ The supplied zero-result and transfer captures are now matched in the screenshot
 ## Screenshot inspection after pushed checkpoint a1e8190
 
 All 21 pushed image files have now been inspected or matched to previously inspected bytes and are indexed in [screenshots/README.md](screenshots/README.md). Earlier dated notes that images were local or awaiting filenames are historical. The audit upgrades only outcomes actually visible: damaged FIFO, Asha allocation, zero early pickup records, wrong-destination/origin-receipt errors, first receipt, correct pickup channels and collection/next-member cards. The transit checkout form contains no visible rejection, and the new Asha #5 Waiting capture says Awaiting return. The later NeedsRepair-return and repaired/restart counts remain tester reports. See [the audit](SCREENSHOT_AUDIT.md) for scope and gaps.
+
+## Current completion actions
+
+This record preserves its tested checkpoint and stated evidence limits. The latest member handoffs and integration/VM actions are in [REMAINING_WORK.md](REMAINING_WORK.md). Documentation updates do not require repeating earlier tests solely to rename or index their evidence.

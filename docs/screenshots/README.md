@@ -84,10 +84,12 @@ This table preserves the identity of the originally named files after renaming.
 
 ## Patron membership access evidence — 15 October
 
-The two uploaded photographs below were inspected and added with their original bytes unchanged. These supplement the earlier 24-image checkpoint; the current prepared evidence tree has 26 images. PH01's account screenshot remains reported local, and PH02's requested queue image has not been supplied for inspection.
+The four patron captures below are present and inspected in pushed **6a69ade**. The PH03 photograph bytes remain unchanged; PH01 and PH02 were supplied in the patron push under the requested descriptive filenames. These supplement the earlier 24-image checkpoint, giving **28 repository evidence images**.
 
 | Test | Image | What is actually visible |
 | --- | --- | --- |
+| PH01 request | [ph01_sky_waiting_palmerston.png](ph01_sky_waiting_palmerston.png) | Success for MBR-8001 / TY-9901 / Palmerston; Sky Active with no active loans and one visible Waiting request, position 1. Taken before PH03; zero notices remain reported. |
+| PH02 queue | [ph02_shared_queue_sky_asha.png](ph02_shared_queue_sky_asha.png) | TY-9901 staff queue: Sky #6 at position 1, Asha #7 at position 2, both Waiting/Palmerston/awaiting repair. Does not picture the duplicate submissions or private-account check. |
 | PH03 inactive | [ph03_sky_inactive_hold_blocked.jpg](ph03_sky_inactive_hold_blocked.jpg) | /Kiosk/Account shows Sky Nguyen / MBR-8001 inactive, placement blocked, no active loans, and a paused Wet Season Story Kit request. The item code is below the captured portion. Does not show reactivation. |
 | PH03 unlinked | [ph03_unlinked_hold_blocked.jpg](ph03_unlinked_hold_blocked.jpg) | Placement requires an active linked membership; account is not linked. No personal member details or creation form is displayed. The signed-in identity/role is not visible. |
 
@@ -97,3 +99,16 @@ The two uploaded photographs below were inspected and added with their original 
 | 02-image-1792021518320.jpg | ph03_unlinked_hold_blocked.jpg |
 
 See [the patron hold acceptance record](../PATRON_HOLD_TEST_RECORD.md). Repeated waiting tests are not requested to replace existing timeout observations.
+
+## Sandesh component evidence received on 15 October
+
+Eight original component captures are added under screenshots/sandesh. The earlier 28 images are unchanged, giving 36 retained test captures in this update. [The member handoff](../SANDESH_MEMBER_HANDOFF.md) maps the results, original captions and evidence limits. The SQL output shows BranchId, not Branched; the catalogue image visibly retains Year 0. These captures do not close the outstanding integrated, access-control or non-zero-fine checks.
+
+- [sd_tc01_bulk_100_imported.png](sandesh/sd_tc01_bulk_100_imported.png)
+- [sd_tc02_duplicate_100_skipped.png](sandesh/sd_tc02_duplicate_100_skipped.png)
+- [sd_tc03_one_row_skipped.png](sandesh/sd_tc03_one_row_skipped.png)
+- [sd_tc04_missing_headers.png](sandesh/sd_tc04_missing_headers.png)
+- [sd_tc05_catalogue_bk0102_year_zero.png](sandesh/sd_tc05_catalogue_bk0102_year_zero.png)
+- [sd_tc06_csv_summary.png](sandesh/sd_tc06_csv_summary.png)
+- [sd_tc07_pdf_summary.png](sandesh/sd_tc07_pdf_summary.png)
+- [sd_tc08_branch_sql_result.png](sandesh/sd_tc08_branch_sql_result.png)

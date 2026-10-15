@@ -8,7 +8,7 @@ Reception and the authenticated kiosk call CirculationService. It validates memb
 
 Public catalogue, kiosk cards and API use CirculationRules for ordinary availability. Physical Available does not override an allocation. The API exposes catalogue projections only, behind an external API key. The notification worker catches up allocation and simulated messages every minute while the app runs, then source-state checks and a unique event/channel index protect its log.
 
-The subsequent patron hold patch adds `HoldPlacementService`: staff creation resolves a membership number; `/Kiosk/Hold` resolves only the authenticated Identity link. Both recheck eligibility, pickup branch, duplicate requests and the member's active loan under the same per-item transaction. New requests start Waiting without a pickup message. No schema change is introduced. The new placement path has a supplied clean Windows build, reported PH01/PH02 outcomes and inspected inactive/unlinked GET/UI evidence. [The acceptance supplement](PATRON_HOLD_TEST_RECORD.md) distinguishes these from pending POST security, JavaScript-disabled expiry and final module checks.
+The subsequent patron hold patch adds `HoldPlacementService`: staff creation resolves a membership number; `/Kiosk/Hold` resolves only the authenticated Identity link. Both recheck eligibility, pickup branch, duplicate requests and the member's active loan under the same per-item transaction. New requests start Waiting without a pickup message. No schema change is introduced. The new placement path has a supplied clean Windows build, inspected PH01 placement/private-progress and PH02 FIFO-position images, reported duplicate/private-data actions and inspected inactive/unlinked GET/UI evidence in pushed 6a69ade. [The acceptance supplement](PATRON_HOLD_TEST_RECORD.md) distinguishes these from pending POST security, JavaScript-disabled expiry and final module checks.
 
 ## Pickup state transitions
 
@@ -35,7 +35,7 @@ Cancelled/fulfilled requests remain history. Queue eligibility uses active membe
 | Stage | Person and goal | Action and feedback | Meaningful benefit | Evidence |
 | --- | --- | --- | --- | --- |
 | Find | Family wants a reusable toy | Search title/code, check condition and location. | Avoid a wasted visit for an unusable or reserved copy. | Final UI retest pending |
-| Request | Patron wants fair access | A linked active patron selects Join waiting list and an active pickup branch. Staff can create an assisted request through the same service. The private account shows the member's own waiting position. | Members can request independently; duplicate requests cannot jump the queue. | Earlier H01–H02/FIFO images inspected; PH01/PH02 placement, duplicates and private progress reported; PH03 membership-blocking images inspected |
+| Request | Patron wants fair access | A linked active patron selects Join waiting list and an active pickup branch. Staff can create an assisted request through the same service. The private account shows the member's own waiting position. | Members can request independently; duplicate requests cannot jump the queue. | Earlier H01–H02/FIFO images inspected; PH01 account/request and PH02 shared queue inspected; duplicate/private-data actions reported; PH03 membership-blocking images inspected |
 | Repair | Admin restores the damaged copy | Edit repaired condition to Available; queue head becomes Allocated. | Repair releases the existing queue without a second request. | C07 rejection and C08 allocation/zero-notice images inspected |
 | Move | Reception delivers to pickup location | Dispatch from Darwin; receive only at Palmerston. | Reservation survives transport; no premature pickup message. | C09–C11 dispatch/receipt images inspected; transit borrowing rejection reported |
 | Collect | Correct member wants the reserved toy | Linked kiosk or staff checkout fulfils the allocation. | Later members cannot take a reserved copy. | C12 staff Collected/next-member cards inspected; C15 kiosk pending |
@@ -48,3 +48,7 @@ Kamalpreet created Asha and Noah holds on borrowed TY-0001 at Darwin. The duplic
 ## Other breadth features
 
 Import and expanded management reports still await Sandesh's verified handoff. Their final integration diagram must identify actual routes, shared models, import validation and reporting reconciliation after the source is received. Do not present planned modules or draft PDF exports as implemented.
+
+## Current completion actions
+
+This record preserves its tested checkpoint and stated evidence limits. The latest member handoffs and integration/VM actions are in [REMAINING_WORK.md](REMAINING_WORK.md). Documentation updates do not require repeating earlier tests solely to rename or index their evidence.
