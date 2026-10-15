@@ -56,6 +56,9 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
+// Register kiosk checkout service.
+builder.Services.AddScoped<KioskCheckoutService>();
+
 var app = builder.Build();
 
 try
