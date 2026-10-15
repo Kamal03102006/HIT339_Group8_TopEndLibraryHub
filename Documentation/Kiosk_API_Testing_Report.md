@@ -84,25 +84,8 @@ No specific changes were requested during the informal review.
 
 Further details are recorded in Kiosk_User_Feedback.md.
 
-## 7. Testing Evidence
 
-Supporting evidence includes:
-- Kiosk homepage screenshot
-- Catalogue search results
-- Category and availability filters
-- API catalogue JSON response
-- API search response
-- Empty search response
-- HTTP 405 POST rejection
-- Valid library-code lookup
-- Invalid library-code response
-- Input validation responses
-- Valid result-limit response
-
-Screenshots should be retained alongside the final
-project documentation.
-
-## 8. Limitations
+## 7. Limitations
 
 Testing was performed in the local development environment.
 
@@ -112,7 +95,7 @@ The following activities require final verification:
 - Complete application security
 - Group demonstration workflow
 
-## 9. Conclusion
+## 8. Conclusion
 
 The self-service kiosk and catalogue API passed the recorded
 functional tests.

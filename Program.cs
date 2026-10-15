@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TopEndLibraryHub.Data;
 using TopEndLibraryHub.Middleware;
+using TopEndLibraryHub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddControllersWithViews();
 
+// Register kiosk checkout service.
+builder.Services.AddScoped<KioskCheckoutService>();
+
 var app = builder.Build();
 
 try
@@ -78,6 +82,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Protect catalogue API endpoints.
 app.UseMiddleware<CatalogueApiKeyMiddleware>();
 
 app.MapStaticAssets();

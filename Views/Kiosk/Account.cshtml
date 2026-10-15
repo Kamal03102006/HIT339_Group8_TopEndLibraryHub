@@ -21,3 +21,4 @@ else { <table class="table"><thead><tr><th>Item</th><th>Code</th><th>Due date</t
 <nav class="kiosk-actions"><a asp-controller="Kiosk" asp-action="Scan" class="kiosk-button">Scan Item</a>
 <form asp-controller="Kiosk" asp-action="Finish" method="post">@Html.AntiForgeryToken()<button class="kiosk-button" type="submit">Finish Session / Sign Out</button></form></nav>
 </main>
+@await Html.PartialAsync("_KioskIdle")

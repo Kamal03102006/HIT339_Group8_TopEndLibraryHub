@@ -7,40 +7,46 @@ namespace TopEndLibraryHub.Controllers
 {
     [ApiController]
     [Route("api/catalogue")]
-    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    [ResponseCache(
+        NoStore = true,
+        Location = ResponseCacheLocation.None)]
     public class CatalogueApiController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _db;
 
-        public CatalogueApiController(ApplicationDbContext context)
+        public CatalogueApiController(
+            ApplicationDbContext db)
         {
-            _context = context;
+            _db = db;
         }
 
         // GET /api/catalogue
-        // GET /api/catalogue?search=book&limit=20
         [HttpGet]
         public async Task<IActionResult> Search(
             [FromQuery] string? search,
             [FromQuery] int limit = 30)
         {
-            if (search != null && search.Length > 100)
+            if (search?.Length > 100)
+            {
                 return BadRequest(new
                 {
-                    error = "Search must be 100 characters or fewer."
+                    Error = "Search cannot exceed 100 characters."
                 });
+            }
 
             if (limit < 1 || limit > 100)
+            {
                 return BadRequest(new
                 {
-                    error = "Limit must be between 1 and 100."
+                    Error = "Limit must be between 1 and 100."
                 });
+            }
 
-            var query = _context.Items.AsNoTracking();
+            var query = _db.Items.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                string term = search.Trim();
+                var term = search.Trim();
 
                 query = query.Where(i =>
                     i.Name.Contains(term) ||
@@ -58,7 +64,24 @@ namespace TopEndLibraryHub.Controllers
                     i.Name,
                     i.Description,
                     Status = i.Status.ToString(),
-                    Available = i.Status == ItemStatus.Available && !_context.Loans.Any(l => l.ItemId == i.Id && l.ReturnedDate == null)
+                    Available =
+                        i.Status == ItemStatus.Available &&
+                        !_db.Loans.Any(l =>
+                            l.ItemId == i.Id &&
+                            l.ReturnedDate == null) &&
+                        !_db.ItemTransfers.Any(t =>
+                            t.ItemId == i.Id &&
+                            t.Status == TransferStatus.InTransit) &&
+                        !_db.Holds.Any(h =>
+                            h.ItemId == i.Id &&
+                            (
+                                h.Status == HoldStatus.Waiting ||
+                                h.Status == HoldStatus.Allocated ||
+                                h.Status == HoldStatus.ReadyForPickup
+                            )) &&
+                        _db.Branches.Any(b =>
+                            b.Id == i.BranchId &&
+                            b.IsActive)
                 })
                 .ToListAsync();
 
@@ -71,14 +94,33 @@ namespace TopEndLibraryHub.Controllers
             [FromQuery] int limit = 30)
         {
             if (limit < 1 || limit > 100)
+            {
                 return BadRequest(new
                 {
-                    error = "Limit must be between 1 and 100."
+                    Error = "Limit must be between 1 and 100."
                 });
+            }
 
-            var items = await _context.Items
+            var items = await _db.Items
                 .AsNoTracking()
-                .Where(i => i.Status == ItemStatus.Available && !_context.Loans.Any(l => l.ItemId == i.Id && l.ReturnedDate == null))
+                .Where(i =>
+                    i.Status == ItemStatus.Available &&
+                    !_db.Loans.Any(l =>
+                        l.ItemId == i.Id &&
+                        l.ReturnedDate == null) &&
+                    !_db.ItemTransfers.Any(t =>
+                        t.ItemId == i.Id &&
+                        t.Status == TransferStatus.InTransit) &&
+                    !_db.Holds.Any(h =>
+                        h.ItemId == i.Id &&
+                        (
+                            h.Status == HoldStatus.Waiting ||
+                            h.Status == HoldStatus.Allocated ||
+                            h.Status == HoldStatus.ReadyForPickup
+                        )) &&
+                    _db.Branches.Any(b =>
+                        b.Id == i.BranchId &&
+                        b.IsActive))
                 .OrderBy(i => i.Name)
                 .ThenBy(i => i.Id)
                 .Take(limit)
@@ -114,7 +156,7 @@ namespace TopEndLibraryHub.Controllers
             try
             {
                 bool connected =
-                    await _context.Database.CanConnectAsync();
+                    await _db.Database.CanConnectAsync();
 
                 if (!connected)
                 {
@@ -126,11 +168,25 @@ namespace TopEndLibraryHub.Controllers
                     });
                 }
 
+                var branches = await _db.Branches
+                    .AsNoTracking()
+                    .OrderBy(b => b.Name)
+                    .Select(b => new
+                    {
+                        b.BranchCode,
+                        b.Name,
+                        b.IsActive
+                    })
+                    .ToListAsync();
+
                 return Ok(new
                 {
                     Service = "TopEndLibraryHub Catalogue API",
                     Status = "Operational",
                     DatabaseConnected = true,
+                    Branches = branches,
+                    BranchOperatingHours =
+                        "Not configured in the current Branch model.",
                     CheckedAtUtc = DateTime.UtcNow
                 });
             }
@@ -147,18 +203,21 @@ namespace TopEndLibraryHub.Controllers
 
         // GET /api/catalogue/BK-0001
         [HttpGet("{code}")]
-        public async Task<IActionResult> GetByCode(string code)
+        public async Task<IActionResult> GetByCode(
+            string code)
         {
             if (string.IsNullOrWhiteSpace(code) ||
                 code.Length > 20)
             {
                 return BadRequest(new
                 {
-                    error = "Invalid library code."
+                    Error = "Invalid library code."
                 });
             }
 
-            var item = await _context.Items
+            code = code.Trim().ToUpperInvariant();
+
+            var item = await _db.Items
                 .AsNoTracking()
                 .Where(i => i.LibraryCode == code)
                 .Select(i => new
@@ -167,15 +226,34 @@ namespace TopEndLibraryHub.Controllers
                     i.Name,
                     i.Description,
                     Status = i.Status.ToString(),
-                    Available = i.Status == ItemStatus.Available && !_context.Loans.Any(l => l.ItemId == i.Id && l.ReturnedDate == null)
+                    Available =
+                        i.Status == ItemStatus.Available &&
+                        !_db.Loans.Any(l =>
+                            l.ItemId == i.Id &&
+                            l.ReturnedDate == null) &&
+                        !_db.ItemTransfers.Any(t =>
+                            t.ItemId == i.Id &&
+                            t.Status == TransferStatus.InTransit) &&
+                        !_db.Holds.Any(h =>
+                            h.ItemId == i.Id &&
+                            (
+                                h.Status == HoldStatus.Waiting ||
+                                h.Status == HoldStatus.Allocated ||
+                                h.Status == HoldStatus.ReadyForPickup
+                            )) &&
+                        _db.Branches.Any(b =>
+                            b.Id == i.BranchId &&
+                            b.IsActive)
                 })
                 .FirstOrDefaultAsync();
 
             if (item == null)
+            {
                 return NotFound(new
                 {
-                    error = "Item not found."
+                    Error = "Item not found."
                 });
+            }
 
             return Ok(item);
         }

@@ -28,12 +28,11 @@
         <h1>Welcome to Your Library</h1>
 
         <p>
-            Discover books, music and toys.
-            Search the catalogue and check availability.
+            Search the catalogue, scan library items,
+            and manage your borrowing account.
         </p>
 
-        <nav class="kiosk-actions"
-             aria-label="Self-service options">
+        <nav class="kiosk-actions">
 
             <a asp-controller="Kiosk"
                asp-action="Scan"
@@ -57,100 +56,71 @@
 
         <form method="get"
               asp-controller="Kiosk"
-              asp-action="Index"
-              class="kiosk-search"
-              role="search">
+              asp-action="Index">
 
             <div class="kiosk-field">
 
-                <label for="search">
-                    Search Items
-                </label>
+                <label for="search">Search Items</label>
 
                 <input type="search"
                        id="search"
                        name="search"
                        value="@search"
                        maxlength="100"
-                       placeholder="Search by title, code or keyword" />
+                       placeholder="Title, code or keyword" />
 
             </div>
 
             <div class="kiosk-field">
 
-                <label for="type">
-                    Item Category
-                </label>
+                <label for="type">Category</label>
 
                 <select id="type" name="type">
-
-                    <option value="">
-                        All Categories
-                    </option>
-
-                    <option value="Book"
-                            selected="@(type == "Book")">
+                    <option value="">All Categories</option>
+                    <option value="Book" selected="@(type == "Book")">
                         Books
                     </option>
-
-                    <option value="Toy"
-                            selected="@(type == "Toy")">
-                        Toys
-                    </option>
-
-                    <option value="Music"
-                            selected="@(type == "Music")">
+                    <option value="Music" selected="@(type == "Music")">
                         Music
                     </option>
-
+                    <option value="Toy" selected="@(type == "Toy")">
+                        Toys
+                    </option>
                 </select>
 
             </div>
 
             <div class="kiosk-field">
 
-                <label for="status">
-                    Availability
-                </label>
+                <label for="status">Item Status</label>
 
                 <select id="status" name="status">
-
-                    <option value="">
-                        All Statuses
-                    </option>
-
+                    <option value="">All Statuses</option>
                     <option value="Available"
                             selected="@(status == "Available")">
                         Available
                     </option>
-
                     <option value="Borrowed"
                             selected="@(status == "Borrowed")">
                         Borrowed
                     </option>
-
                     <option value="Damaged"
                             selected="@(status == "Damaged")">
                         Damaged
                     </option>
-
                     <option value="Destroyed"
                             selected="@(status == "Destroyed")">
                         Destroyed
                     </option>
-
                 </select>
 
             </div>
 
-            <button type="submit"
-                    class="kiosk-button">
+            <button type="submit" class="kiosk-button">
                 Search Catalogue
             </button>
 
-            <a asp-controller="Kiosk"
-               asp-action="Index"
-               class="kiosk-clear">
+            <a asp-action="Index" class="kiosk-clear">
                 Clear Filters
             </a>
 
@@ -158,33 +128,15 @@
 
     </section>
 
-    <section class="kiosk-results"
-             aria-labelledby="results-heading">
+    <section class="kiosk-results">
 
-        <div class="kiosk-results-heading">
+        <h2>Library Catalogue</h2>
 
-            <h2 id="results-heading">
-                Library Catalogue
-            </h2>
-
-            <p>
-                @Model.Count() items displayed
-                (maximum 100)
-            </p>
-
-        </div>
+        <p>@Model.Count() items displayed</p>
 
         @if (!Model.Any())
         {
-            <div class="kiosk-empty">
-
-                <h3>No Items Found</h3>
-
-                <p>
-                    Try another search or clear the filters.
-                </p>
-
-            </div>
+            <p>No items found. Try another search.</p>
         }
         else
         {
@@ -220,27 +172,24 @@
 
                         <p>@item.Description</p>
 
-                        <div class="kiosk-card-bottom">
+                        <p>
+                            <strong>Library Code:</strong>
+                            @item.LibraryCode
+                        </p>
 
-                            <p>
-                                <strong>Library Code:</strong>
-                                @item.LibraryCode
+                        @if (available)
+                        {
+                            <p class="available-message">
+                                Listed as available.
+                                Checkout eligibility is checked when borrowing.
                             </p>
-
-                            @if (available)
-                            {
-                                <p class="available-message">
-                                    Available in the catalogue.
-                                </p>
-                            }
-                            else
-                            {
-                                <p class="unavailable-message">
-                                    Not currently available to borrow.
-                                </p>
-                            }
-
-                        </div>
+                        }
+                        else
+                        {
+                            <p class="unavailable-message">
+                                Not currently available.
+                            </p>
+                        }
 
                     </article>
                 }
@@ -255,21 +204,21 @@
         <h2>Need Assistance?</h2>
 
         <p>
-            Use Scan Library Item to enter or scan
-            a library code.
+            Select Scan Library Item to enter
+            or scan an item code.
         </p>
 
         <p>
-            Our staff can assist with borrowing,
-            returns and account enquiries.
+            Sign in to access your membership
+            and request self-service checkout.
         </p>
 
         <p>
-            Self-service checkout will become available
-            after patron verification and borrowing-rule
-            integration are completed.
+            Some items may require staff assistance
+            because of reservations or transfers.
         </p>
 
     </aside>
 
 </main>
+@await Html.PartialAsync("_KioskIdle")

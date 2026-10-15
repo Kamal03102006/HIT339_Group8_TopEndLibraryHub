@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,86 +14,153 @@ namespace TopEndLibraryHub.Data
         {
         }
 
+        // Library catalogue
         public DbSet<Item> Items => Set<Item>();
         public DbSet<Book> Books => Set<Book>();
         public DbSet<Music> MusicItems => Set<Music>();
         public DbSet<Toy> Toys => Set<Toy>();
 
+        // Borrowing
         public DbSet<Borrower> Borrowers => Set<Borrower>();
         public DbSet<Loan> Loans => Set<Loan>();
 
+        // Holds and notifications
         public DbSet<Hold> Holds => Set<Hold>();
         public DbSet<NotificationLog> NotificationLogs
             => Set<NotificationLog>();
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        // Branch and transfer integration
+        public DbSet<Branch> Branches => Set<Branch>();
+        public DbSet<ReceptionDesk> ReceptionDesks
+            => Set<ReceptionDesk>();
+        public DbSet<ItemTransfer> ItemTransfers
+            => Set<ItemTransfer>();
+
+        protected override void OnModelCreating(
+            ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // Preserve the existing Holds and Notifications setup.
-            builder.ApplyConfiguration(new HoldConfiguration());
-            builder.ApplyConfiguration(new NotificationLogConfiguration());
+            // Preserve teammate's Holds and Notifications
+            builder.ApplyConfiguration(
+                new HoldConfiguration());
 
-            // Item inheritance.
+            builder.ApplyConfiguration(
+                new NotificationLogConfiguration());
+
+            // Item inheritance
             builder.Entity<Item>()
                 .HasDiscriminator<string>("ItemType")
                 .HasValue<Book>("Book")
                 .HasValue<Music>("Music")
                 .HasValue<Toy>("Toy");
 
-            // Unique library item code.
             builder.Entity<Item>()
-                .HasIndex(item => item.LibraryCode)
+                .HasIndex(i => i.LibraryCode)
                 .IsUnique();
 
-            // Unique borrower membership number.
+            // Borrower membership
             builder.Entity<Borrower>()
-                .HasIndex(borrower => borrower.MembershipNumber)
+                .HasIndex(b => b.MembershipNumber)
                 .IsUnique();
 
-            // Unique borrower email.
             builder.Entity<Borrower>()
-                .HasIndex(borrower => borrower.Email)
+                .HasIndex(b => b.Email)
                 .IsUnique();
 
-            // Connect a borrower to an authenticated Identity user.
+            // Kiosk Identity-to-Borrower relationship
             builder.Entity<Borrower>()
                 .HasOne<IdentityUser>()
                 .WithOne()
                 .HasForeignKey<Borrower>(
-                    borrower => borrower.IdentityUserId)
+                    b => b.IdentityUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // One Identity account cannot be linked
-            // to multiple borrowers.
             builder.Entity<Borrower>()
-                .HasIndex(borrower => borrower.IdentityUserId)
+                .HasIndex(b => b.IdentityUserId)
                 .IsUnique()
                 .HasFilter("[IdentityUserId] IS NOT NULL");
 
-            // Loan relationships.
+            // Loan relationships
             builder.Entity<Loan>()
-                .HasOne(loan => loan.Item)
+                .HasOne(l => l.Item)
                 .WithMany()
-                .HasForeignKey(loan => loan.ItemId)
+                .HasForeignKey(l => l.ItemId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Loan>()
-                .HasOne(loan => loan.Borrower)
-                .WithMany(borrower => borrower.Loans)
-                .HasForeignKey(loan => loan.BorrowerId)
+                .HasOne(l => l.Borrower)
+                .WithMany(b => b.Loans)
+                .HasForeignKey(l => l.BorrowerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Fine amount precision.
             builder.Entity<Loan>()
-                .Property(loan => loan.FineAmount)
+                .Property(l => l.FineAmount)
                 .HasPrecision(10, 2);
 
-            // Prevent two active loans for the same item.
+            // Prevent duplicate active loans
             builder.Entity<Loan>()
-                .HasIndex(loan => loan.ItemId)
+                .HasIndex(l => l.ItemId)
                 .IsUnique()
                 .HasFilter("[ReturnedDate] IS NULL");
+
+            // Branch configuration
+            builder.Entity<Branch>()
+                .HasIndex(b => b.BranchCode)
+                .IsUnique();
+
+            builder.Entity<ReceptionDesk>()
+                .HasIndex(d => d.DeskCode)
+                .IsUnique();
+
+            builder.Entity<Item>()
+                .HasOne(i => i.Branch)
+                .WithMany()
+                .HasForeignKey(i => i.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ReceptionDesk>()
+                .HasOne(d => d.Branch)
+                .WithMany()
+                .HasForeignKey(d => d.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Transfer relationships
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.Item)
+                .WithMany()
+                .HasForeignKey(t => t.ItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.OriginBranch)
+                .WithMany()
+                .HasForeignKey(t => t.OriginBranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.DestinationBranch)
+                .WithMany()
+                .HasForeignKey(t => t.DestinationBranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.DispatchDesk)
+                .WithMany()
+                .HasForeignKey(t => t.DispatchDeskId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ItemTransfer>()
+                .HasOne(t => t.ReceivingDesk)
+                .WithMany()
+                .HasForeignKey(t => t.ReceivingDeskId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // One in-transit transfer per item
+            builder.Entity<ItemTransfer>()
+                .HasIndex(t => t.ItemId)
+                .IsUnique()
+                .HasFilter("[Status] = 1");
         }
     }
 }
