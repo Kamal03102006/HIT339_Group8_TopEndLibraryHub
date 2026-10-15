@@ -21,5 +21,7 @@
     <PackageReference Include="QuestPDF" Version="2026.9.1" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Remove="TopEndLibraryHub.Tests\**\*.cs" />
+  </ItemGroup>
 </Project>
