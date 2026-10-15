@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -24,14 +24,15 @@ namespace TopEndLibraryHub.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var today = DateTime.UtcNow.Date;
+            var today = DarwinToday();
 
             var viewModel = new ManagerDashboardViewModel
             {
                 // Item statistics
                 TotalItems = await _context.Items.CountAsync(),
+                InTransitItems = await _context.Items.CountAsync(i => i.Status == ItemStatus.InTransit || _context.ItemTransfers.Any(t => t.ItemId == i.Id && t.Status == TransferStatus.InTransit)),
                 AvailableItems = await _context.Items.CountAsync(
-                    item => item.Status == ItemStatus.Available),
+                    item => item.Status == ItemStatus.Available && !_context.ItemTransfers.Any(t => t.ItemId == item.Id && t.Status == TransferStatus.InTransit)),
                 BorrowedItems = await _context.Items.CountAsync(
                     item => item.Status == ItemStatus.Borrowed),
                 DamagedItems = await _context.Items.CountAsync(
@@ -62,6 +63,8 @@ namespace TopEndLibraryHub.Controllers
                     .SumAsync(loan => (decimal?)loan.FineAmount) ?? 0m
             };
 
+            // Hold allocations require the hold model supplied by the other team member.
+            // This snapshot has no hold data; do not describe this rate as hold-adjusted.
             viewModel.AvailabilityRate = viewModel.TotalItems == 0
                 ? 0
                 : (double)viewModel.AvailableItems /
@@ -74,21 +77,21 @@ namespace TopEndLibraryHub.Controllers
                     ItemType = "Books",
                     TotalItems = await _context.Books.CountAsync(),
                     AvailableItems = await _context.Books.CountAsync(
-                        item => item.Status == ItemStatus.Available)
+                        item => item.Status == ItemStatus.Available && !_context.ItemTransfers.Any(t => t.ItemId == item.Id && t.Status == TransferStatus.InTransit))
                 },
                 new ItemTypeStatisticViewModel
                 {
                     ItemType = "Music",
                     TotalItems = await _context.MusicItems.CountAsync(),
                     AvailableItems = await _context.MusicItems.CountAsync(
-                        item => item.Status == ItemStatus.Available)
+                        item => item.Status == ItemStatus.Available && !_context.ItemTransfers.Any(t => t.ItemId == item.Id && t.Status == TransferStatus.InTransit))
                 },
                 new ItemTypeStatisticViewModel
                 {
                     ItemType = "Toys",
                     TotalItems = await _context.Toys.CountAsync(),
                     AvailableItems = await _context.Toys.CountAsync(
-                        item => item.Status == ItemStatus.Available)
+                        item => item.Status == ItemStatus.Available && !_context.ItemTransfers.Any(t => t.ItemId == item.Id && t.Status == TransferStatus.InTransit))
                 }
             ];
 
@@ -137,12 +140,12 @@ namespace TopEndLibraryHub.Controllers
 [HttpGet]
 public async Task<IActionResult> ExportCsv()
 {
-    var today = DateTime.UtcNow.Date;
+    var today = DarwinToday();
 
     var totalItems = await _context.Items.CountAsync();
 
     var availableItems = await _context.Items
-        .CountAsync(i => i.Status == ItemStatus.Available);
+        .CountAsync(i => i.Status == ItemStatus.Available && !_context.ItemTransfers.Any(t => t.ItemId == i.Id && t.Status == TransferStatus.InTransit));
 
     var borrowedItems = await _context.Items
         .CountAsync(i => i.Status == ItemStatus.Borrowed);
@@ -176,6 +179,16 @@ public async Task<IActionResult> ExportCsv()
         .Where(l => l.FineAmount > 0 && !l.FinePaid)
         .SumAsync(l => (decimal?)l.FineAmount) ?? 0m;
 
+    var inTransit = await _context.Items.CountAsync(i =>
+        i.Status == ItemStatus.InTransit ||
+        _context.ItemTransfers.Any(t => t.ItemId == i.Id && t.Status == TransferStatus.InTransit));
+    var fineLoans = await _context.Loans.AsNoTracking()
+        .Where(l => l.FineAmount > 0)
+        .OrderBy(l => l.Id)
+        .Select(l => new { l.Id, l.Item.LibraryCode, l.Borrower.MembershipNumber,
+            l.FineAmount, l.FinePaid, l.FinePaidDate })
+        .ToListAsync();
+
     var csv = new StringBuilder();
     csv.AppendLine("Report,Value");
 
@@ -187,6 +200,7 @@ public async Task<IActionResult> ExportCsv()
     }
 
     AddRow("Total Items", totalItems.ToString());
+    AddRow("Items In Transit", inTransit.ToString());
     AddRow("Available Items", availableItems.ToString());
     AddRow("Borrowed Items", borrowedItems.ToString());
     AddRow("Damaged Items", damagedItems.ToString());
@@ -203,6 +217,25 @@ public async Task<IActionResult> ExportCsv()
     AddRow("Outstanding Fines",
         outstandingFines.ToString(CultureInfo.InvariantCulture));
 
+    csv.AppendLine();
+    csv.AppendLine("Fine Loan ID,Item Library Code,Borrower Membership,Fine Amount,Paid,Fine Paid Date");
+    foreach (var loan in fineLoans)
+    {
+        // Identifiers are trusted database fields, but escape for Excel CSV safety.
+        string Safe(string value)
+        {
+            if (value.StartsWith('=') || value.StartsWith('+') || value.StartsWith('-') || value.StartsWith('@'))
+                value = "'" + value;
+            return "\"" + value.Replace("\"", "\"\"") + "\"";
+        }
+        csv.AppendLine(string.Join(",", new[] {
+            loan.Id.ToString(CultureInfo.InvariantCulture),
+            Safe(loan.LibraryCode), Safe(loan.MembershipNumber),
+            loan.FineAmount.ToString(CultureInfo.InvariantCulture),
+            loan.FinePaid ? "Yes" : "No",
+            loan.FinePaidDate?.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) ?? ""
+        }));
+    }
     var bytes = new UTF8Encoding(true)
         .GetBytes(csv.ToString());
 
@@ -218,7 +251,7 @@ public async Task<IActionResult> ExportPdf()
     // Use the same statistics as the manager dashboard.
     var totalItems = await _context.Items.CountAsync();
     var available = await _context.Items.CountAsync(
-        i => i.Status == ItemStatus.Available);
+        i => i.Status == ItemStatus.Available && !_context.ItemTransfers.Any(t => t.ItemId == i.Id && t.Status == TransferStatus.InTransit));
     var borrowed = await _context.Items.CountAsync(
         i => i.Status == ItemStatus.Borrowed);
     var damaged = await _context.Items.CountAsync(
@@ -226,7 +259,7 @@ public async Task<IActionResult> ExportPdf()
     var destroyed = await _context.Items.CountAsync(
         i => i.Status == ItemStatus.Destroyed);
 
-    var today = DateTime.UtcNow.Date;
+    var today = DarwinToday();
 
     var totalLoans = await _context.Loans.CountAsync();
     var activeLoans = await _context.Loans.CountAsync(
@@ -245,6 +278,15 @@ public async Task<IActionResult> ExportPdf()
         .Where(l => l.FineAmount > 0 && !l.FinePaid)
         .SumAsync(l => (decimal?)l.FineAmount) ?? 0m;
 
+    var transitCount = await _context.Items.CountAsync(i =>
+        i.Status == ItemStatus.InTransit ||
+        _context.ItemTransfers.Any(t => t.ItemId == i.Id && t.Status == TransferStatus.InTransit));
+    var fineLoansPdf = await _context.Loans.AsNoTracking()
+        .Where(l => l.FineAmount > 0)
+        .OrderBy(l => l.Id)
+        .Select(l => new { l.Id, l.Item.LibraryCode, l.FineAmount, l.FinePaid })
+        .ToListAsync();
+
     // Configure QuestPDF community licensing.
     // Confirm the project qualifies for this licence.
     QuestPDF.Settings.License = LicenseType.Community;
@@ -252,6 +294,7 @@ public async Task<IActionResult> ExportPdf()
     var rows = new (string Label, string Value)[]
     {
         ("Total Items", totalItems.ToString()),
+        ("Items In Transit", transitCount.ToString()),
         ("Available Items", available.ToString()),
         ("Borrowed Items", borrowed.ToString()),
         ("Damaged Items", damaged.ToString()),
@@ -286,7 +329,9 @@ public async Task<IActionResult> ExportPdf()
                     .FontSize(9);
             });
 
-            page.Content().PaddingVertical(20).Table(table =>
+            page.Content().PaddingVertical(20).Column(content =>
+            {
+            content.Item().Table(table =>
             {
                 table.ColumnsDefinition(columns =>
                 {
@@ -314,6 +359,24 @@ public async Task<IActionResult> ExportPdf()
                         .Padding(8).Text(row.Value);
                 }
             });
+            content.Item().PaddingTop(14).Text("Fine details by loan").Bold().FontSize(13);
+            content.Item().Table(table =>
+            {
+                table.ColumnsDefinition(columns => { columns.RelativeColumn(); columns.RelativeColumn(2); columns.RelativeColumn(); columns.RelativeColumn(); });
+                table.Header(header =>
+                {
+                    foreach (var heading in new[] { "Loan", "Item code", "Fine", "Paid" })
+                        header.Cell().Padding(3).Text(heading).Bold();
+                });
+                foreach (var loan in fineLoansPdf)
+                {
+                    table.Cell().Padding(3).Text(loan.Id.ToString());
+                    table.Cell().Padding(3).Text(loan.LibraryCode);
+                    table.Cell().Padding(3).Text(loan.FineAmount.ToString("C"));
+                    table.Cell().Padding(3).Text(loan.FinePaid ? "Yes" : "No");
+                }
+            });
+            });
 
             page.Footer().AlignCenter()
                 .Text("Top End Library Hub - Manager Report");
@@ -326,6 +389,14 @@ public async Task<IActionResult> ExportPdf()
         $"LibraryManagerReport_{DateTime.UtcNow:yyyyMMdd}.pdf");
 }
 
+
+        private static DateTime DarwinToday()
+        {
+            TimeZoneInfo zone;
+            try { zone = TimeZoneInfo.FindSystemTimeZoneById("Australia/Darwin"); }
+            catch (TimeZoneNotFoundException) { zone = TimeZoneInfo.FindSystemTimeZoneById("AUS Central Standard Time"); }
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zone).Date;
+        }
 
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace TopEndLibraryHub.ViewModels
@@ -8,6 +8,7 @@ namespace TopEndLibraryHub.ViewModels
         // Item statistics
         public int TotalItems { get; set; }
         public int AvailableItems { get; set; }
+        public int InTransitItems { get; set; }
         public int BorrowedItems { get; set; }
         public int DamagedItems { get; set; }
         public int DestroyedItems { get; set; }

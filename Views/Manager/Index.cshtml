@@ -1,4 +1,4 @@
-﻿@model TopEndLibraryHub.ViewModels.ManagerDashboardViewModel
+@model TopEndLibraryHub.ViewModels.ManagerDashboardViewModel
 
 @{
     ViewData["Title"] = "Manager dashboard";
@@ -107,6 +107,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white border-0 pt-4 px-4">
                 <h2 class="h4 mb-1">Item status overview</h2>
+                <p class="text-muted">In transit (excluded from availability): @Model.InTransitItems</p>
                 <p class="text-muted mb-0">
                     Current condition and circulation status of all items.
                 </p>

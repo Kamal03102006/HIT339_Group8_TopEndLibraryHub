@@ -1,12 +1,12 @@
-
+using System.Data;
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
-using TopEndLibraryHub.Data;
-using TopEndLibraryHub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TopEndLibraryHub.Data;
+using TopEndLibraryHub.Models;
 
 namespace TopEndLibraryHub.Controllers;
 
@@ -16,9 +16,7 @@ public class CsvImportController : Controller
     private readonly ApplicationDbContext _context;
     private readonly ILogger<CsvImportController> _logger;
 
-    public CsvImportController(
-        ApplicationDbContext context,
-        ILogger<CsvImportController> logger)
+    public CsvImportController(ApplicationDbContext context, ILogger<CsvImportController> logger)
     {
         _context = context;
         _logger = logger;
@@ -27,44 +25,29 @@ public class CsvImportController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        ViewBag.Branches = await _context.Branches
-            .AsNoTracking()
-            .Where(b => b.IsActive)
-            .OrderBy(b => b.Name)
-            .ToListAsync();
-
+        ViewBag.Branches = await _context.Branches.AsNoTracking()
+            .Where(b => b.IsActive).OrderBy(b => b.Name).ToListAsync();
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Upload(
-        IFormFile? file, int branchId)
+    public async Task<IActionResult> Upload(IFormFile? file, int branchId)
     {
-        if (file == null || file.Length == 0 ||
-            !Path.GetExtension(file.FileName)
-                .Equals(".csv",
-                    StringComparison.OrdinalIgnoreCase))
+        if (file is null || file.Length == 0 ||
+            !string.Equals(Path.GetExtension(file.FileName), ".csv", StringComparison.OrdinalIgnoreCase))
         {
-            TempData["ErrorMessage"] =
-                "Please select a valid CSV file.";
+            TempData["ErrorMessage"] = "Please choose a non-empty CSV file.";
             return RedirectToAction(nameof(Index));
         }
-
         if (file.Length > 5 * 1024 * 1024)
         {
-            TempData["ErrorMessage"] =
-                "CSV file must be smaller than 5 MB.";
+            TempData["ErrorMessage"] = "CSV file must be 5 MB or smaller.";
             return RedirectToAction(nameof(Index));
         }
-
-        var branchExists = await _context.Branches
-            .AnyAsync(b => b.Id == branchId && b.IsActive);
-
-        if (!branchExists)
+        if (!await _context.Branches.AnyAsync(b => b.Id == branchId && b.IsActive))
         {
-            TempData["ErrorMessage"] =
-                "Please select an active library branch.";
+            TempData["ErrorMessage"] = "Please select an active library branch.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -72,125 +55,92 @@ public class CsvImportController : Controller
         {
             using var stream = file.OpenReadStream();
             using var reader = new StreamReader(stream);
-
-            var config = new CsvConfiguration(
-                CultureInfo.InvariantCulture)
+            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 TrimOptions = TrimOptions.Trim,
                 HeaderValidated = null,
                 MissingFieldFound = null
-            };
-
-            using var csv = new CsvReader(reader, config);
-
+            });
             if (!await csv.ReadAsync())
             {
                 TempData["ErrorMessage"] = "CSV file is empty.";
                 return RedirectToAction(nameof(Index));
             }
-
             csv.ReadHeader();
-
-            var headers = csv.HeaderRecord
-                ?? Array.Empty<string>();
-
-            string[] required =
+            var headers = csv.HeaderRecord ?? Array.Empty<string>();
+            int Column(string header) => Array.FindIndex(headers, h =>
+                string.Equals(h.Trim().TrimStart('\uFEFF'), header, StringComparison.OrdinalIgnoreCase));
+            var required = new[] { "Title", "Author", "ISBN", "Category", "Quantity", "PublicationYear" };
+            if (required.Any(h => Column(h) < 0))
             {
-                "Title", "Author", "ISBN",
-                "Category", "Quantity"
-            };
-
-            if (required.Any(h => !headers.Any(
-                x => string.Equals(x, h,
-                    StringComparison.OrdinalIgnoreCase))))
-            {
-                TempData["ErrorMessage"] =
-                    "CSV requires Title, Author, ISBN, " +
-                    "Category and Quantity columns.";
+                TempData["ErrorMessage"] = "CSV requires Title, Author, ISBN, Category, Quantity and PublicationYear columns.";
                 return RedirectToAction(nameof(Index));
             }
 
-            int Column(string name) =>
-                Array.FindIndex(headers, h =>
-                    string.Equals(h, name,
-                        StringComparison.OrdinalIgnoreCase));
-
-            var existingCodes = (await _context.Items
-                .AsNoTracking()
-                .Select(i => i.LibraryCode)
-                .ToListAsync())
+            // Keep codes unique across all item types and imports. Use a transaction
+            // to prevent a partially saved upload when a database constraint fails.
+            await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+            var existingCodes = (await _context.Items.AsNoTracking()
+                .Select(i => i.LibraryCode).ToListAsync())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-            var existingIsbns = (await _context.Books
-                .AsNoTracking()
-                .Where(b => b.Isbn != null)
-                .Select(b => b.Isbn!)
-                .ToListAsync())
+            var existingIsbns = (await _context.Books.AsNoTracking()
+                .Where(b => b.Isbn != null).Select(b => b.Isbn!).ToListAsync())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
             var books = new List<Book>();
-            int skipped = 0;
-            int nextCode = 1;
+            var skippedRows = 0;
+            var importedRows = 0;
+            var nextCode = 1;
+            var currentYear = TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.UtcNow, DarwinTimeZone()).Year;
 
             while (await csv.ReadAsync())
             {
-                string title = csv.GetField(Column("Title"))?.Trim() ?? "";
-                string author = csv.GetField(Column("Author"))?.Trim() ?? "";
-                string isbn = csv.GetField(Column("ISBN"))?.Trim() ?? "";
-                string genre = csv.GetField(Column("Category"))?.Trim() ?? "";
-                string quantityText = csv.GetField(
-                    Column("Quantity"))?.Trim() ?? "";
-
-                bool validQuantity = int.TryParse(
-                    quantityText, out int quantity)
-                    && quantity > 0;
-
-                if (title.Length < 2 ||
-                    title.Length > 100 ||
-                    string.IsNullOrWhiteSpace(author) ||
-                    author.Length > 100 ||
-                    string.IsNullOrWhiteSpace(isbn) ||
-                    isbn.Length > 20 ||
-                    string.IsNullOrWhiteSpace(genre) ||
-                    genre.Length > 50 ||
-                    !validQuantity ||
-                    existingIsbns.Contains(isbn))
+                string Read(string name) => csv.GetField(Column(name))?.Trim() ?? string.Empty;
+                var title = Read("Title");
+                var author = Read("Author");
+                var isbn = Read("ISBN");
+                var genre = Read("Category");
+                var publisher = Column("Publisher") >= 0 ? Read("Publisher") : string.Empty;
+                var quantityOk = int.TryParse(Read("Quantity"), out var quantity)
+                                 && quantity >= 1 && quantity <= 100;
+                var yearOk = int.TryParse(Read("PublicationYear"), out var year)
+                             && year >= 1000 && year <= currentYear + 1;
+                if (title.Length is < 2 or > 100 || author.Length is < 1 or > 100 ||
+                    isbn.Length is < 1 or > 20 || genre.Length is < 1 or > 50 ||
+                    publisher.Length > 100 || !quantityOk || !yearOk || existingIsbns.Contains(isbn))
                 {
-                    skipped++;
+                    skippedRows++;
                     continue;
                 }
 
-                string libraryCode;
-
-                do
+                for (var copy = 0; copy < quantity; copy++)
                 {
-                    if (nextCode > 9999)
+                    string code;
+                    do
                     {
-                        throw new InvalidOperationException(
-                            "No available BK library codes remain.");
-                    }
+                        if (nextCode > 9999)
+                            throw new InvalidOperationException("All BK-0001 to BK-9999 library codes are used.");
+                        code = $"BK-{nextCode++:D4}";
+                    } while (existingCodes.Contains(code));
 
-                    libraryCode = $"BK-{nextCode:D4}";
-                    nextCode++;
+                    existingCodes.Add(code);
+                    books.Add(new Book
+                    {
+                        BranchId = branchId,
+                        LibraryCode = code,
+                        Name = title,
+                        Author = author,
+                        BookGenre = genre,
+                        Isbn = isbn, // Shared ISBN across physical copies is intentional.
+                        PublicationYear = year,
+                        Publisher = string.IsNullOrWhiteSpace(publisher) ? null : publisher,
+                        Description = $"Imported book: {title}",
+                        Status = ItemStatus.Available,
+                        DateAdded = DateTime.UtcNow
+                    });
                 }
-                while (existingCodes.Contains(libraryCode));
-
-                var book = new Book
-                {
-                    BranchId = branchId,
-                    LibraryCode = libraryCode,
-                    Name = title,
-                    Author = author,
-                    BookGenre = genre,
-                    Isbn = isbn,
-                    Description = $"Imported book: {title}",
-                    Status = ItemStatus.Available,
-                    DateAdded = DateTime.UtcNow
-                };
-
-                books.Add(book);
-                existingCodes.Add(libraryCode);
                 existingIsbns.Add(isbn);
+                importedRows++;
             }
 
             if (books.Count > 0)
@@ -198,21 +148,20 @@ public class CsvImportController : Controller
                 _context.Books.AddRange(books);
                 await _context.SaveChangesAsync();
             }
-
-            TempData["SuccessMessage"] =
-                $"{books.Count} books imported successfully. " +
-                $"{skipped} rows skipped.";
+            await transaction.CommitAsync();
+            TempData["SuccessMessage"] = $"{books.Count} physical copies imported from {importedRows} CSV rows; {skippedRows} rows skipped.";
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "CSV book import failed");
-
-            TempData["ErrorMessage"] =
-                "Import failed. Check the application terminal " +
-                "for error details.";
+            TempData["ErrorMessage"] = "Import failed; no new copies were saved. See server logs.";
         }
-
         return RedirectToAction(nameof(Index));
     }
-}
 
+    private static TimeZoneInfo DarwinTimeZone()
+    {
+        try { return TimeZoneInfo.FindSystemTimeZoneById("Australia/Darwin"); }
+        catch (TimeZoneNotFoundException) { return TimeZoneInfo.FindSystemTimeZoneById("AUS Central Standard Time"); }
+    }
+}

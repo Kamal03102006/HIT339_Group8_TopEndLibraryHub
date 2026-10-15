@@ -9,7 +9,7 @@
 
 <h2>Import Books from CSV</h2>
 
-<p>Upload a CSV file to add books to the library.</p>
+<p>Upload a CSV with Title, Author, ISBN, Category, Quantity, PublicationYear and optional Publisher. Each quantity creates a separate physical copy; re-uploading an existing ISBN skips that row.</p>
 
 <form asp-controller="CsvImport"
       asp-action="Upload"
