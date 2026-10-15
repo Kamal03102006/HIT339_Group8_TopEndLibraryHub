@@ -31,7 +31,11 @@
                 </table></div>
             }
             <h3 class="mt-4">My pickup requests</h3>
-            @if (Model.Holds.Count == 0) { <p>No active pickup requests. Staff can help you join a waiting list.</p> }
+            @if (Model.IsActive)
+            {
+                <p><a asp-action="Hold" class="kiosk-button d-inline-block">Join a waiting list</a></p>
+            }
+            @if (Model.Holds.Count == 0) { <p>No active pickup requests. You can request an item that is on loan or awaiting repair.</p> }
             else
             {
                 <div class="table-responsive"><table class="table">

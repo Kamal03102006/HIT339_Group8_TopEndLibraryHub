@@ -269,6 +269,11 @@ else
                                     </dd>
                                 </dl>
                             }
+                            @if (item.Status is ItemStatus.Borrowed or ItemStatus.Damaged)
+                            {
+                                <a asp-controller="Kiosk" asp-action="Hold" asp-route-libraryCode="@item.LibraryCode"
+                                   class="btn btn-primary mt-3">Join waiting list</a>
+                            }
                         </div>
                     </div>
                 </article>

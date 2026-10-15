@@ -47,6 +47,13 @@
                 My Library Account
             </a>
 
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <form asp-action="Finish" method="post" data-kiosk-finish data-keepalive="@Url.Action("KeepAlive", "Kiosk")">
+                    @Html.AntiForgeryToken()<button class="kiosk-button" type="submit">Finish and sign out</button>
+                </form>
+            }
+
         </nav>
 
     </header>
@@ -245,6 +252,13 @@
                                 </p>
                             }
 
+                            @if (item.Status is ItemStatus.Borrowed or ItemStatus.Damaged)
+                            {
+                                <a asp-action="Hold" asp-route-libraryCode="@item.LibraryCode" class="kiosk-button d-inline-block">
+                                    Join waiting list
+                                </a>
+                            }
+
                         </div>
 
                     </article>
@@ -277,3 +291,10 @@
     </aside>
 
 </div>
+
+@section Scripts {
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/js/kiosk-session.js" asp-append-version="true"></script>
+    }
+}

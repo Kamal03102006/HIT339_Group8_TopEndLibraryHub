@@ -80,3 +80,20 @@ This table preserves the identity of the originally named files after renaming.
 | 01-image-1791688378936.jpg | [n_obs01_historical_dashboard_11oct.jpg](n_obs01_historical_dashboard_11oct.jpg) |
 | 01-image-1791688526957.jpg | [n_obs02_historical_notification_recheck_11oct.jpg](n_obs02_historical_notification_recheck_11oct.jpg) |
 | 01-image-1791688879276.jpg | [n_obs03_historical_borrow_due_soon_11oct.jpg](n_obs03_historical_borrow_due_soon_11oct.jpg) |
+
+
+## Patron membership access evidence — 15 October
+
+The two uploaded photographs below were inspected and added with their original bytes unchanged. These supplement the earlier 24-image checkpoint; the current prepared evidence tree has 26 images. PH01's account screenshot remains reported local, and PH02's requested queue image has not been supplied for inspection.
+
+| Test | Image | What is actually visible |
+| --- | --- | --- |
+| PH03 inactive | [ph03_sky_inactive_hold_blocked.jpg](ph03_sky_inactive_hold_blocked.jpg) | /Kiosk/Account shows Sky Nguyen / MBR-8001 inactive, placement blocked, no active loans, and a paused Wet Season Story Kit request. The item code is below the captured portion. Does not show reactivation. |
+| PH03 unlinked | [ph03_unlinked_hold_blocked.jpg](ph03_unlinked_hold_blocked.jpg) | Placement requires an active linked membership; account is not linked. No personal member details or creation form is displayed. The signed-in identity/role is not visible. |
+
+| Original upload | Prepared evidence filename |
+| --- | --- |
+| 01-image-1792021443704.jpg | ph03_sky_inactive_hold_blocked.jpg |
+| 02-image-1792021518320.jpg | ph03_unlinked_hold_blocked.jpg |
+
+See [the patron hold acceptance record](../PATRON_HOLD_TEST_RECORD.md). Repeated waiting tests are not requested to replace existing timeout observations.

@@ -30,6 +30,10 @@
                 </form>
             }
             else { <p class="kiosk-alert">Checkout is unavailable here. Staff can help with membership, pickup or transfers.</p> }
+            @if (Model.Item.Status is TopEndLibraryHub.Models.ItemStatus.Borrowed or TopEndLibraryHub.Models.ItemStatus.Damaged)
+            {
+                <p><a asp-action="Hold" asp-route-libraryCode="@Model.Item.LibraryCode" class="kiosk-button d-inline-block">Join waiting list for this item</a></p>
+            }
         </section>
     }
     <nav class="kiosk-actions" aria-label="Scan actions">

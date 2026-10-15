@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TopEndLibraryHub.Data;
@@ -20,13 +21,14 @@ public class KioskController : Controller
     private readonly IConfiguration _configuration;
     private readonly CirculationService _circulation;
     private readonly LibraryClock _clock;
+    private readonly HoldPlacementService _placement;
 
     public KioskController(ApplicationDbContext db, UserManager<IdentityUser> users,
         SignInManager<IdentityUser> signIn, IConfiguration configuration,
-        CirculationService circulation, LibraryClock clock)
+        CirculationService circulation, LibraryClock clock, HoldPlacementService placement)
     {
         _db = db; _users = users; _signIn = signIn; _configuration = configuration;
-        _circulation = circulation; _clock = clock;
+        _circulation = circulation; _clock = clock; _placement = placement;
     }
 
     [HttpGet, AllowAnonymous]
@@ -99,7 +101,7 @@ public class KioskController : Controller
         vm.FullName = borrower.FullName;
         vm.MembershipNumber = borrower.MembershipNumber;
         vm.IsActive = borrower.IsActive;
-        if (!borrower.IsActive) vm.Message = "Your membership is inactive. Checkout is unavailable.";
+        if (!borrower.IsActive) vm.Message = "Your membership is inactive. Borrowing and new pickup requests are unavailable.";
         vm.Loans = await _db.Loans.AsNoTracking()
             .Where(loan => loan.BorrowerId == borrower.Id && loan.ReturnedDate == null)
             .OrderBy(loan => loan.DueDate).Select(loan => new KioskLoanRow
@@ -131,6 +133,67 @@ public class KioskController : Controller
                          (earlier.CreatedAtUtc == hold.CreatedAtUtc && earlier.Id <= hold.Id))) : (int?)null
             }).ToListAsync();
         return View(vm);
+    }
+
+    [HttpGet, Authorize]
+    public async Task<IActionResult> Hold(string? libraryCode,
+        CancellationToken cancellationToken = default)
+    {
+        var userId = _users.GetUserId(User);
+        if (userId is null) return Challenge();
+        var borrower = await _db.Borrowers.AsNoTracking().SingleOrDefaultAsync(
+            member => member.IdentityUserId == userId, cancellationToken);
+        if (borrower is null || !borrower.IsActive)
+        {
+            TempData["KioskError"] = "An active membership linked to your login is required to place a hold.";
+            return RedirectToAction(nameof(Account));
+        }
+        var model = new KioskHoldViewModel
+        {
+            LibraryCode = (libraryCode ?? string.Empty).Trim().ToUpperInvariant()
+        };
+        if (model.LibraryCode.Length > 0 && !ValidCode(model.LibraryCode))
+        {
+            model.LibraryCode = string.Empty;
+            ModelState.AddModelError(nameof(model.LibraryCode), "Enter a valid item code, such as BK-0001.");
+        }
+        await PopulateHoldFormAsync(model, borrower, cancellationToken);
+        return View(model);
+    }
+
+    [HttpPost, Authorize, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Hold([FromForm] KioskHoldViewModel model,
+        CancellationToken cancellationToken = default)
+    {
+        var userId = _users.GetUserId(User);
+        if (userId is null) return Challenge();
+        var borrower = await _db.Borrowers.AsNoTracking().SingleOrDefaultAsync(
+            member => member.IdentityUserId == userId, cancellationToken);
+        if (borrower is null || !borrower.IsActive)
+        {
+            TempData["KioskError"] = "An active membership linked to your login is required to place a hold.";
+            return RedirectToAction(nameof(Account));
+        }
+
+        model.LibraryCode = (model.LibraryCode ?? string.Empty).Trim().ToUpperInvariant();
+        ModelState.Clear();
+        TryValidateModel(model);
+        if (ModelState.IsValid)
+        {
+            // The service rechecks this Identity link and eligibility inside the
+            // item transaction. No posted membership or borrower ID is used.
+            var result = await _placement.PlaceForPatronAsync(model.LibraryCode,
+                userId, model.PickupBranchId!.Value, cancellationToken);
+            if (result.Succeeded)
+            {
+                TempData["KioskSuccess"] = result.Message;
+                return RedirectToAction(nameof(Account));
+            }
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(error.Field, error.Message);
+        }
+        await PopulateHoldFormAsync(model, borrower, cancellationToken);
+        return View(model);
     }
 
     [HttpPost, Authorize, ValidateAntiForgeryToken]
@@ -187,6 +250,24 @@ public class KioskController : Controller
         Response.Headers.CacheControl = "no-store, no-cache, must-revalidate";
         Response.Headers.Pragma = "no-cache";
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task PopulateHoldFormAsync(KioskHoldViewModel model, Borrower borrower,
+        CancellationToken cancellationToken)
+    {
+        model.MemberName = borrower.FullName;
+        model.MembershipNumber = borrower.MembershipNumber;
+        model.PickupBranches = await _db.Branches.AsNoTracking()
+            .Where(branch => branch.IsActive).OrderBy(branch => branch.Name)
+            .Select(branch => new SelectListItem
+            {
+                Value = branch.Id.ToString(), Text = branch.Name
+            }).ToListAsync(cancellationToken);
+        var item = ValidCode(model.LibraryCode)
+            ? await _db.Items.AsNoTracking().SingleOrDefaultAsync(
+                item => item.LibraryCode == model.LibraryCode, cancellationToken) : null;
+        model.ItemName = item?.Name;
+        model.ItemStatus = item?.Status;
     }
 
     private Task<Branch?> KioskBranchAsync()

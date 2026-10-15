@@ -10,17 +10,19 @@ Working checkpoint a1e8190 on feature/holds-notifications combines baseline dbbc
 
 Five committed screenshots establish duplicate rejection, waiting order and cancellation. Later supplied images show Noah Ready at Darwin and damaged-copy borrowing rejection. The 14 October Windows reports cover reserved-member checkout, repeat checkout, repair allocation, protected Darwin-to-Palmerston transfer, collection and next-member handover. A damaged return preserved a new waiting request; the subsequent repair increased pickup-only history from four to six records, and the filtered count stayed 6 → 6 after restart. See the test records for exact inputs, results and evidence limits.
 
-Kiosk/API/privacy and simultaneous-checkout acceptance, remaining fine/loan notification checks, clean-VM verification, importer/report handoff and the final portfolio are still outstanding. The final submission branch/tag will identify the completed seven-module version.
+Remaining kiosk checkout/API/security and simultaneous-checkout acceptance, fine/loan notification checks, clean-VM verification, importer/report handoff and the final portfolio are outstanding. The final submission branch/tag will identify the completed seven-module version.
+
+The subsequent patron hold patch adds Identity-linked `/Kiosk/Hold`, shared staff/patron queue validation and signed-in public-kiosk Finish/idle handling. On 15 October Kamalpreet supplied a clean Windows build after pinning System.Security.Cryptography.Pkcs to 9.0.21; the include-transitive audit reported no vulnerable packages given its current sources. She reported own-request/FIFO/duplicate/private-account and Finish/Back outcomes. Two inspected photographs show inactive and unlinked membership access blocked. JavaScript-disabled expiry, forged-input/antiforgery checks and the remaining module acceptance are pending. The tested working source still needs its pushed revision identified. See [the patron hold test record](docs/PATRON_HOLD_TEST_RECORD.md) for exact evidence and limitations.
 
 ## Modules and routes
 
 | Module | Route | Access | Status |
 | --- | --- | --- | --- |
 | Catalogue | /Catalogue | Public | Shared rule excludes loans, transit and reservations; final public/API runtime checks pending. |
-| Kiosk | /Kiosk, /Kiosk/Scan, /Kiosk/Account | Public browsing; authenticated private actions | Mehak contribution pushed in the combined checkpoint; shared checkout/private hold progress and timeout need runtime checks. |
+| Kiosk | /Kiosk, /Kiosk/Scan, /Kiosk/Account | Public browsing; authenticated private actions | Private hold progress, idle and Finish/Back reported checked; inactive/unlinked access images inspected. Shared checkout, remaining security and browser coverage pending. |
 | Catalogue API | /api/catalogue, /available, /categories, /status, /{code} | External X-API-Key over HTTPS | Read-only; key outside Git; health is system/database status. |
 | Working location | /StaffLocation | Admin/Reception | Active physical branch/desk selection. |
-| Holds | /Holds, /Holds/Create | Admin/Reception | Staff repair/transfer/collection journey has inspected and reported evidence. Patron hold placement is still a requirement gap; kiosk currently shows progress only. |
+| Holds | /Holds, /Holds/Create; /Kiosk/Hold | Staff desk: Admin/Reception; patron form: authenticated active linked member | Staff repair/transfer/collection journey has inspected and reported evidence. New patron creation, shared duplicates/FIFO and private progress reported checked; PH03 access images inspected. POST security checks pending. |
 | Transfers | /Transfers, /Transfers/Create | Admin/Reception | Harsimran's dispatch/receipt with shared protected hold handover; main flow reported tested. |
 | Lending | /Loans, /Loans/Borrow, /Loans/Return | Admin/Reception | Shared service; usable and NeedsRepair returns reported tested. Kiosk/concurrency checks pending. |
 | Simulated messages | /Notifications | Admin/Reception/Manager | Automatic startup/minute checks for loans and ready holds; no real messages sent. |

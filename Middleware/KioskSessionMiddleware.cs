@@ -15,7 +15,7 @@ public class KioskSessionMiddleware
     {
         var action = context.GetEndpoint()?.Metadata.GetMetadata<ControllerActionDescriptor>();
         var isPrivateKiosk = action?.ControllerName == "Kiosk" &&
-            action.ActionName is "Account" or "Scan" or "Checkout" or "KeepAlive";
+            action.ActionName is "Account" or "Scan" or "Checkout" or "KeepAlive" or "Hold" or "Index";
         if (!isPrivateKiosk || context.User.Identity?.IsAuthenticated != true)
         {
             await _next(context);

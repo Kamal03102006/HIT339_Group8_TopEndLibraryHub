@@ -58,6 +58,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<HoldQueueService>();
 builder.Services.AddScoped<HoldWorkflowService>();
+builder.Services.AddScoped<HoldPlacementService>();
 builder.Services.AddScoped<CirculationService>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<LibraryClock>();

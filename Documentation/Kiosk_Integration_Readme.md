@@ -1,11 +1,12 @@
 # Kiosk and API integration handoff
 
-Updated following review of pushed checkpoint a1e8190. Mehakpreet's 3b925ee source is integrated with the circulation work based on dbbc540. Kamalpreet's Windows build succeeded and all seven migrations show Applied=True. Final kiosk/private ownership/privacy/API and concurrent-checkout runtime results remain pending.
+Updated through the patron-hold acceptance reports of 15 October, 09:30 Darwin, following pushed checkpoint 107f643. Mehakpreet's 3b925ee source is integrated with the circulation work based on dbbc540. All seven migrations were reported Applied=True. The subsequent patron source has a supplied clean Windows build and package audit; its own-request, duplicate/FIFO/private-progress and Finish/Back checks are reported, with two inspected inactive/unlinked access photographs. Final kiosk checkout/API/security and concurrent-checkout acceptance remain pending; the current tested source still needs its pushed revision identified.
 
 ## Implemented in the prepared source
 
 - Optional unique IdentityUserId ↔ Borrower link with restricted deletion; existing memberships remain unlinked.
 - Account and checkout derive member ownership from the signed-in Identity user, with active/unlinked handling.
+- GET/POST `/Kiosk/Hold` now allows an active linked patron to place their own waiting request. The form binds item code and pickup branch only; membership display fields are not trusted inputs. Staff and patron creation both use `HoldPlacementService` and the existing transaction-owned item lock, active-request index and UTC FIFO order. No new migration is required.
 - Staff and kiosk checkout use CirculationService for location, active loan, transit and pickup-allocation checks within an item transaction.
 - Public catalogue, kiosk and secure read-only API share general availability; a reserved physical Available copy is shown On hold and excluded from ordinary availability.
 - Account shows only the patron's loans, recorded unpaid fines, separately labelled current-loan estimates and active hold progress.
@@ -43,10 +44,10 @@ Send the key in the X-API-Key header over HTTPS. Missing configuration returns 5
 
 ## Verification
 
-See [the integration test record](../docs/CIRCULATION_INTEGRATION_TEST_RECORD.md), especially C14–C19. Earlier component reports remain member-reported historical tests and do not verify this combined patch. Confirm the participant-name inconsistency in the feedback report before using it in the final portfolio.
+See [the integration test record](../docs/CIRCULATION_INTEGRATION_TEST_RECORD.md), especially C14–C19, and [the new patron hold checks](../docs/PATRON_HOLD_TEST_RECORD.md). Earlier component reports remain member-reported historical tests and do not verify this combined patch. Confirm the participant-name inconsistency in the feedback report before using it in the final portfolio.
 
 Account summary fulfils the brief's checkout-or-summary option. The group proposes both, so shared checkout, privacy and API runtime checks remain required for the chosen scope.
 
 ## Follow-up from the whole-commit review
 
-The brief's patron hold placement is not yet provided by this kiosk: current hold creation is staff-only. Coordinate a secure Identity-linked patron path. API branch/category-filter proposals are not current query parameters; resolve the contract. Verify the signed-in return to public kiosk browsing as part of Finish/Back/idle privacy testing, since the public index lacks the private views' Finish/idle controls. These are pending work, not claimed passes. See [the complete review](../docs/PROJECT_PROGRESS_REVIEW.md).
+The patron hold patch addresses the earlier source gap with an Identity-linked placement form and shared staff/patron validation. The signed-in public kiosk index now includes Finish and the idle script, and the server inactivity check covers Index/Hold as well as the earlier private actions. The 15 October build transcript reports success without warnings after System.Security.Cryptography.Pkcs 9.0.21 was installed, and its include-transitive audit found no vulnerable packages given current sources. PH01/PH02 own-request, pickup, shared duplicates, FIFO and private-account checks are reported; PH03 photographs show GET/UI blocking for inactive/unlinked memberships; PH04 Finish/Back and idle behaviour are reported. JavaScript-disabled server expiry, forged identity input and missing-token checks remain pending for the final walkthrough. None of these results establishes full kiosk checkout or API acceptance. API branch/category-filter proposals are not current query parameters; resolve the contract. See [the earlier checkpoint review](../docs/PROJECT_PROGRESS_REVIEW.md) and [the current patch test record](../docs/PATRON_HOLD_TEST_RECORD.md).
