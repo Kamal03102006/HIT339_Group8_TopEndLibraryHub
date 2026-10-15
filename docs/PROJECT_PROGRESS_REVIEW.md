@@ -59,13 +59,13 @@ The supplied rubric titles/maximums total 60: **37 group and 23 individual marks
 | Criterion | Marks | Current status | Remaining concrete evidence |
 | --- | ---: | --- | --- |
 | Installation and Running instructions | 5 group | Partial | Final clone/prerequisite/database/seed/location instructions followed successfully on a VM, with results and corrections. |
-| Team contracts | 2 group | Draft | Each member's actual acceptance, responsibilities, availability and communication/review arrangements. |
+| Team contracts | 2 group | Acceptance reported by the leader | Kamalpreet states all four accepted the original draft; original date/time and reply references are unconfirmed. Retain that distinction and complete real availability/changes. |
 | Requirements | 4 group | Draft with implemented/tested links | Resolve the open decisions and patron-placement/API scope gaps; map final requirements to actual outcomes. |
 | Team Approach | 4 group | Draft with real integration examples | Describe the actual branch/model/migration/review/testing approach and record team agreement or changes. |
 | Project Plan Overview | 5 group | Working plan/board | Final milestones, dependencies, updated progress/hours, management links and tested marker access. |
 | Project Task Allocations | 10 individual | Allocations/evidence partly recorded | Each member's tasks, estimated/actual hours, delivered work, dependencies and commit/issue/test references. |
-| Meeting Minutes | 2 group | Template only | Genuine dated discussions, attendees, decisions, actions, owners/deadlines and attendee corrections. |
-| Strengths and Weaknesses | 8 individual | Prompts; personal entries pending | Each member's own concrete strength/limitation, example, action taken and result. |
+| Meeting Minutes | 2 group | Written coordination notes; call details pending | Supply actual call dates/participants/decisions/actions to complete genuine minutes. No call recordings are specified in the brief. |
+| Strengths and Weaknesses | 8 individual | Kamalpreet draft prepared; other member accounts pending | Review the lead's draft; each other member supplies their own strength/limitation, concrete example, action and result. |
 | Software meets requirements | 10 group | Five areas integrated; partial acceptance | All seven expansions working together, including the remaining scope gaps and actual integration results. |
 | Quality of Source Code | 5 group | Source review/build/migrations supported | Final combined build and appropriate runtime/privacy/repeat/concurrency checks after remaining integration. |
 | Value Adding | 5 individual | Real repair/transfer journey and UX defect evidence | Each member identifies their own implemented improvement, beneficiary, reasoning and actual validation/feedback. |
@@ -80,7 +80,7 @@ The first eight planning/installation/reflection criteria account for **40/60 ma
 | Mehakpreet | Final linked/unlinked kiosk, checkout, privacy and API results; clarify proposed API filters/status; correct the participant-name inconsistency; confirm the patron guide and real UX results. Supply own hours/reflection/value contribution. |
 | Harsimran | Repeat receipt/setup results; final installation instructions tested on a clean VM; any final transfer fixes with branch/commit. Supply own hours/reflection/value contribution. |
 | Sandesh | Importer plus samples and tests; expanded reports/exports with reconciled payment/stock data; a branch/commit handoff. Assemble the portfolio from verified artifacts and supplied team inputs. Supply own hours/reflection/value contribution. |
-| All members | Actual contract acceptance, availability, meeting details, task/time records and personal strengths/weaknesses/value examples. Confirm who accepts any reassigned work. |
+| All members | Supply own actual/retrospective task hours, availability and personal reflection/value examples. Existing original contract acceptance is reported by Kamalpreet; confirm any reassigned work. Kamalpreet will provide actual meeting minutes. |
 
 A useful handoff states **branch/commit, route, setup or migration needs, what was personally changed, actual test inputs/results, sample files/screenshots and known limitations**. Message times and commit counts are not billable hours. Retrospective time estimates must be labelled honestly.
 
@@ -95,3 +95,7 @@ A useful handoff states **branch/commit, route, setup or migration needs, what w
 Internal target: **15 October 2026**. Official deadline: **16 October 2026, 23:59 Darwin**. If a trial service is used for assessment access, keep it available for two weeks after submission; none is currently confirmed.
 
 Source records: [assessment checklist](ASSESSMENT_CHECKLIST.md), [group work](GROUP_WORK_RECORD.md), [circulation tests](CIRCULATION_INTEGRATION_TEST_RECORD.md), [notification tests](NOTIFICATION_TEST_RECORD.md), [screenshot audit](SCREENSHOT_AUDIT.md), [requirements](HIT339_Group8_Requirements_Draft.docx), supplied Group Project brief and Blackboard rubric images. AI assistance compiled this review from source and the supplied observations; genuine member experiences and unrun test outcomes have not been invented.
+
+## Documentation checkpoint after this review
+
+The review/evidence package was pushed at **107f643**, 15 October 00:59 Darwin. All 235 tracked files match the prepared package; all 24 images are present and application source is unchanged from a1e8190. The next documentation update populates known task/evidence rows, records the two supplied written coordination messages and drafts Kamalpreet's reflection in GROUP_WORK_RECORD.md. Phone-call facts, task-level durations and the other members' hours still require member input; the final portfolio remains incomplete. A later [partial retrospective session record](KAMALPREET_TIME_RECONSTRUCTION.md) gives Kamalpreet a reconstructed subtotal of 19.75 hours through 15 October 09:47 Darwin, using her two-hour cutoff. It does not close the complete-hours or final individual-evidence requirements.

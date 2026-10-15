@@ -1,19 +1,21 @@
 # HIT339 Group 8 working governance record
 ## Latest verified progress — 14 October evening
 
-- Current combined push is verified at a1e8190. Earlier dbbc540 established the pickup FK, case-tolerant membership regex and five initial hold screenshots; those are retained in the current checkpoint.
+- Latest documentation push is verified at 107f643: all 235 tracked files match the prepared package and all 24 indexed images are present. Its application source is unchanged from a1e8190. Earlier dbbc540 established the pickup FK, case-tolerant membership regex and five initial hold screenshots; those are retained.
 - Screenshots verify duplicate hold rejection, Asha/Noah FIFO positions and cancellation promoting Noah to position 1. These are three UI tests on borrowed TY-0001 at Darwin, not complete circulation acceptance.
 - Kamalpreet applied the 54-file circulation patch, including Mehakpreet's 3b925ee source and shared reception/kiosk/repair/transfer guards. Windows build succeeded; the supplied migration list shows all seven migrations Applied=True. The combined source/documentation checkpoint is now verified pushed at a1e8190.
 - All 21 pushed images are matched and indexed. Observed results include Noah Ready/Collected, damaged FIFO, Asha allocation and zero early messages, protected transfer errors, destination receipt, correct pickup channels and collection/next-family cards. Later damaged-return/repair and pickup restart 6 → 6 remain tester reports. In-transit checkout rejection and one-active-loan/repeated-checkout checks remain reported where their exact result is not pictured. Kiosk/API/privacy, concurrency, inactive eligibility and repeat receipt remain distinct checks.
 - Detailed expected steps are maintained in CIRCULATION_INTEGRATION_TEST_RECORD.md. Kamalpreet supplies actual outcomes; documentation is maintained from those reports.
-- Import/report handoff, clean VM verification, actual hours, contract acceptance, genuine meeting minutes and individual reflections/value evidence remain outstanding. Earlier dated progress entries below are historical.
+- Import/report handoff, clean VM verification, actual hours, original contract dates/references, genuine meeting minutes and individual reflections/value evidence remain outstanding. Earlier dated progress entries below are historical.
 
 
-Version 0.5, including the pushed a1e8190 screenshot and whole-commit review. Earlier timestamped entries are historical. This contains proposed arrangements, verified progress and blank records for genuine team input. It is **not** an accepted contract, completed meeting minutes or a final portfolio.
+Version 0.8, updated 15 October 2026 through the lead's 09:47 Darwin session-rule request; source baseline remains 107f643. Includes the earlier contract report, Kamalpreet's draft reflection, known task/evidence rows and a partial retrospective chat-session estimate. Individual task splits and other members' hours remain unrecorded. The circulation source reviewed at a1e8190 is unchanged. Earlier timestamped entries are historical. This contains working arrangements, the lead's report of earlier contract acceptance, verified progress and blank records for genuine team input. It is not completed meeting minutes or the final portfolio.
 
-## Team contract: proposed terms for review
+## Team contract: earlier acceptance reported by the leader
 
 Group members: Kamalpreet, Harsimran Singh, Mehakpreet Kaur and Sandesh Bhattarai.
+
+**Acceptance record:** On 15 October 2026 at 08:01 Darwin time, Kamalpreet reported that she had shared the original ChatGPT-prepared team contract draft and all four members agreed with yes replies at that time. The original sharing and reply date/time is **unconfirmed**; the actual reply messages and accepted draft version have not been retrieved. This is the date of the lead's report, not a backdated acceptance date. The working terms below are retained; individual availability and any later changes still need their real details.
 
 1. Confirm each member's responsibilities and available working times before treating the allocation as agreed.
 2. Keep development in named Git feature branches; include meaningful commits and a short description of how to run and verify the change.
@@ -26,10 +28,10 @@ Group members: Kamalpreet, Harsimran Singh, Mehakpreet Kaur and Sandesh Bhattara
 
 | Member | Proposed responsibility | Accepted? Date/reference | Actual availability |
 | --- | --- | --- | --- |
-| Kamalpreet | Lead coordination; requirements; holds; simulated notifications; integration evidence | Lead role stated by user. Final group allocation still to be recorded. | To enter |
-| Harsimran Singh | Branches, reception desks, transfers; installation manual and VM test | To confirm | To enter |
-| Mehakpreet Kaur | Kiosk and read-only API; patron guide and UX evidence | To confirm | To enter |
-| Sandesh Bhattarai | CSV import and expanded reports/exports; portfolio assembly | To confirm | To enter |
+| Kamalpreet | Lead coordination; requirements; holds; simulated notifications; integration evidence | Original draft accepted, as reported by Kamalpreet on 15 October; original reply date/time unconfirmed. | To enter |
+| Harsimran Singh | Branches, reception desks, transfers; installation manual and VM test | Original draft accepted, as reported by Kamalpreet on 15 October; original reply date/time unconfirmed. | To enter |
+| Mehakpreet Kaur | Kiosk and read-only API; patron guide and UX evidence | Original draft accepted, as reported by Kamalpreet on 15 October; original reply date/time unconfirmed. | To enter |
+| Sandesh Bhattarai | CSV import and expanded reports/exports; portfolio assembly | Original draft accepted, as reported by Kamalpreet on 15 October; original reply date/time unconfirmed. | To enter |
 
 ## Proposed approach to completing the project
 
@@ -79,11 +81,27 @@ Estimates below are **planning placeholders in person-hours**, to be revised and
 
 Adjust the breakdown if work is reassigned or an estimate changes. For shared tasks, the estimate is combined person-hours; record each person's actual contribution separately. Completed coding still needs its actual hours entered by the person who did it.
 
-### Actual time entry template
+### Actual time record — partial lead-session estimate and missing task durations
 
-| Date | Member | Task | Actual hours | Work performed | Commit or evidence |
+Known task dates and delivery evidence are entered below. At 09:47 Darwin on 15 October, Kamalpreet selected a retrospective method: retain chat-session gaps of two hours or less and exclude gaps longer than two hours. Recoverable messages and dated activity checkpoints produce a **partial subtotal of approximately 19.75 hours**; see [the reconstruction and coverage limits](KAMALPREET_TIME_RECONSTRUCTION.md). This is elapsed-session evidence, not a complete active-time or billable timesheet. No numeric actual task hours are inferred from commit counts or the planning estimates, and no arbitrary split of the session subtotal between tasks is made.
+
+| Date / evidence checkpoint | Member | Task | Actual hours / retrospective estimate | Work performed | Commit or evidence |
 | --- | --- | --- | --- | --- | --- |
-| To enter | To enter | To enter | To enter from actual record | To enter | To enter |
+| 4 October | Kamalpreet | Requirements and proposed allocation | Awaiting duration | Added the group requirements draft for review. | f6c75b9 |
+| By 11 October; actual work dates to confirm | Kamalpreet | Holds/notification foundation | Awaiting duration | Applied foundation/migration work; demonstrated the notification page, loan-confirmation and due-soon simulations. | bcf6844; N-OBS-01–03 |
+| 14 October | Kamalpreet | Branch/transfer integration and merge resolution | Awaiting duration | Integrated the branch/transfer contribution and resolved shared-file merge issues. | 74668e1 |
+| 14 October | Kamalpreet | Hold desk, pickup FK and membership validation | Awaiting duration | Applied the desk/interface changes, generated the pickup relationship migration, changed the case-sensitive membership pattern and ran the initial hold checks. | dbbc540; H01–H03; UX-01 |
+| 14 October | Kamalpreet | Shared circulation integration | Awaiting duration | Applied the combined circulation/kiosk/API source, built on Windows and checked all seven applied migrations. | a1e8190; setup transcript |
+| 14 October | Kamalpreet | Return/repair/transfer/collection acceptance | Awaiting duration | Ran guided staff journeys, reported guard/count results and captured the supplied screenshots. | C01–C13; reported pickup C19 6 → 6 |
+| 14–15 October | Kamalpreet | Evidence organisation and documentation update | Awaiting duration | Supplied/pushed screenshots, applied the review patch, checked image count/progress-file existence and committed the organised records. | 107f643; 24 indexed images |
+| Dates to confirm | Kamalpreet | Team coordination | Awaiting duration | Requested progress and coordinated shared Identity/branch/hold interfaces with the module owners. | Supplied messages; D02/D07; written notes below |
+| To enter | Harsimran Singh | Own assigned/delivered tasks | Member supplies duration | Record actual work and contribution, including any installation/VM work. | Member supplies references |
+| To enter | Mehakpreet Kaur | Own assigned/delivered tasks | Member supplies duration | Record actual kiosk/API/guide work and final results. | Member supplies references |
+| To enter | Sandesh Bhattarai | Own assigned/delivered tasks | Member supplies duration | Record actual importer/report/portfolio work and handoff. | Member supplies references |
+
+Avoid counting one work period twice when coding, testing and documenting overlapped. Exclude breaks, unrelated activities and Assignment 2 baseline work. For shared activities, each person records their own time. Active time reading, applying and checking assisted instructions is part of the member's work; an elapsed chat window is not a reliable total.
+
+The lead-session subtotal is recorded once; it must not be repeated against every task above. Its earliest recovered checkpoint is 3 October at 07:44 Darwin and its cutoff is 15 October at 09:47. Short breaks and time waiting within the retained windows may be included by the selected rule. Missing or offline sessions remain unrecorded, not zero. Other members provide their own durations. Exact task-level splits and any corrections can be entered from member recollection or fuller records without counting overlapping periods twice.
 
 If an estimate of past time is necessary, label it a retrospective estimate and explain its basis; do not present it as a contemporaneous timesheet.
 
@@ -112,9 +130,22 @@ If an estimate of past time is necessary, label it a retrospective estimate and 
 - Marker read access: **not yet tested**. Check the final links in a signed-out/private session; document the result and provide read access details if necessary.
 - Trial service used: **none confirmed**. If used, record expiry and ensure access for two weeks after submission.
 
-## Meeting minutes template — no meeting recorded yet
+## Meeting and discussion records — actual call details awaited
 
-Fill this after an actual discussion; do not label the template as a held meeting.
+On 15 October Kamalpreet referred to phone discussions without recordings. Their dates, participants, decisions and actions have not yet been supplied here. The provided brief asks for meeting minutes and does not specify call recordings. A genuine call can be written up retrospectively from the participants' recollection; identify that basis and retain the actual facts.
+
+The following notes summarise the two member messages supplied in this workflow. They are **written coordination records**, not invented telephone meetings or proof that all four members attended a discussion. Dates below identify when the messages were provided in the project discussion; original sent times were not preserved.
+
+| Record | Date context / channel | People evidenced | Topic and requested action | Subsequent source/evidence |
+| --- | --- | --- | --- | --- |
+| CO-01 / D02 | Supplied 11 October; written message | Mehakpreet's message to the lead | Asked to confirm ASP.NET Identity sign-in and verified Borrower linkage; stated she would coordinate shared-model changes and respect hold/transfer restrictions. | Identity link and shared checkout present in combined source. A complete reply/agreement or a phone-call record is not inferred. |
+| CO-02 / D07 | Supplied 12 October; written message | Harsimran's message to Kamalpreet | Reported branch/desk/item-location foundation; proposed InTransit=5 while preserving 1–4; requested transit exclusion and PickupBranchId → Branch.Id coordination before the next migration. | Those contracts appear in the integrated source; all seven migrations were later reported applied. This does not establish a call, attendance or billable duration. |
+
+### Phone-call minutes intake
+
+Kamalpreet confirmed on 15 October that she will supply the actual meeting minutes. The member request is therefore for task hours and individual reflection/value evidence; no call is invented from a written chat.
+
+For each genuine call, Kamalpreet can give the date (approximate if necessary), who participated, what was discussed/agreed and who was to do what. The coordinator will turn those facts into the record below. Unremembered details stay unspecified; do not copy written-message topics into a call record unless they were actually discussed on that call.
 
 - Meeting date/time and channel: to enter.
 - Attendees and apologies: to enter.
@@ -136,6 +167,24 @@ The rubric allocates **8 individual marks** to Strengths and Weaknesses. Each me
 | Sandesh Bhattarai | To enter | To enter | To enter |
 
 Use concrete examples such as a tested workflow, database review, guide written or issue resolved. Choose actions that respond to actual limitations, such as a paired review or an earlier integration checkpoint.
+
+### Kamalpreet — draft individual reflection
+
+Member: Kamalpreet, S389008. Prepared from the reported work and inspected evidence; Kamalpreet must review it for accuracy before it is used in the portfolio. It reflects the current checkpoint, not completion of the remaining assignment.
+
+My role has been to coordinate Group 8 and develop and integrate the holds and simulated-notification work using AI-assisted guidance. We selected my Assignment 2 application as the starting point. I helped coordinate the feature allocation and shared-model dependencies, applied changes in Visual Studio, resolved merge issues with guidance, checked the build and migrations, and ran the staff circulation tests. Mehakpreet contributed the kiosk/API source and Harsimran contributed the branch/transfer foundation; my integration work does not replace their individual contributions.
+
+A strength I demonstrated was persistence in checking what the application actually did. In the initial hold tests, Asha was first and Noah second; rejecting a duplicate and cancelling Asha's request preserved history while promoting Noah. The later TY-9001 journey tested a different situation: a damaged toy at Darwin with pickup at Palmerston. After repair, Asha was allocated but no pickup message existed until destination receipt. I then tested collection, the next family's readiness and a later return requiring repair. Reporting the actual states and counts helped keep those different cases separate.
+
+My main difficulty was working independently with unfamiliar Git/EF integration and translating observations into clear evidence. I needed step-by-step support and initially found similar-looking test instructions confusing. I also needed to distinguish six mixed notification rows from four pickup-only rows, rather than treating the total as a duplicate-message defect. I responded by reporting the displayed results, checking the correct filters and preserving earlier history instead of resetting it. Some captures showed only inputs or an earlier waiting state, so their captions now describe that limited evidence accurately.
+
+I identified a practical registration problem: a membership number appeared uppercase on screen but lowercase underlying input failed the original validation pattern. I applied the case-tolerant pattern while retaining uppercase storage. The specific lowercase/duplicate/malformed registration retests still need confirmation; applying a change is not the same as proving every acceptance case.
+
+The value of my contribution is a fair repair-to-pickup workflow. A family's place in the queue survives repair and a branch transfer, and staff notify them when the copy is actually at the chosen pickup location. It gives staff a clear sequence for handling repaired stock and helps families plan collection at their requested branch. The reported pickup total stayed six after restart, while the source and records still identify unrun concurrency, kiosk and notification cases. My next improvement is to use smaller integration batches, agree shared interfaces earlier and capture the result immediately after the relevant action. I also need to close patron-facing hold placement and finish the remaining evidence before claiming final completion.
+
+I used AI assistance for code guidance, reviews, test instructions and documentation structure. I personally applied the changes and ran/reported the Windows checks described above. Each contributor's code and results remain identified in the group record.
+
+Evidence: H01–H03, C01–C13 and the reported pickup C19 result; UX-01 and UX-03; commits 74668e1, dbbc540, a1e8190 and the documentation push 107f643. Actual hours remain awaiting my input.
 
 ## UX and client-value evidence template
 
@@ -237,3 +286,17 @@ Kamalpreet reported the checkpoint pushed and requested review of all images and
 ## Whole-commit review following the screenshot audit
 
 The review covered all 71 changed paths in a1e8190, including 40 application source files. All 162 source/configuration assets match the prepared release Kamalpreet built. Git diff/conflict-marker checks and kiosk JavaScript syntax passed; no independent .NET/SQL execution was available on the review host. Required patron placement, missing importer/report handoffs, API proposal gaps, kiosk privacy runtime checks and the notification filter-reset issue are recorded in [PROJECT_PROGRESS_REVIEW.md](PROJECT_PROGRESS_REVIEW.md), with all rubric statuses and owner deliverables. No application source was changed by this documentation package, and no hours, meetings or member experience were inferred.
+
+## 15 October member-evidence preparation
+
+The lead asked for assistance with hours, minutes and reflection while the documentation push completed. Remote 107f643 was verified: all 235 tracked files match the prepared review/evidence package and all 24 indexed images are present. Known tasks/evidence are now entered into the time table; no numeric hours are inferred. Two supplied written messages are recorded as coordination notes; actual phone-call details remain an intake. Kamalpreet's reflection is drafted from the reported journey and needs personal accuracy review. Each other member supplies their own task durations, strength/limitation and value example. These named entries will be assembled into the group portfolio; the brief does not specify four separate reflection uploads.
+
+
+### Contract acceptance and member-record responsibilities — 15 October
+
+At 08:01 Darwin, Kamalpreet clarified that the original team contract was shared earlier and all four members replied yes then. Earlier statements that acceptance had not been supplied describe the preceding evidence state. Original acceptance date/time and reply references remain unconfirmed; no date has been inferred from Git commits or unrelated unit contracts. Kamalpreet will handle meeting minutes. Each member is being asked for their own actual/clearly labelled retrospective task hours and personal strengths, weaknesses, learning and value contribution, for completion on the group's 15 October internal deadline. The final shared record will retain four named individual sections.
+
+
+## 15 October retrospective session calculation
+
+At 09:47 Darwin the lead requested calculation from the start of the project chat, excluding gaps longer than two hours. The [time reconstruction](KAMALPREET_TIME_RECONSTRUCTION.md) records a partial recovered subtotal of **19.75 hours / approximately 19 hours 45 minutes**, including activity from 3, 4, 11, 14 and 15 October. The calculation uses original user timestamps where available, minute-level dated reports and three explicitly identified attached project-photo checkpoints. It is not a complete original message export or an exact active-time measurement. No task-level duration, other member's hours, meeting detail or personal experience has been invented. Earlier duration-pending entries describe earlier evidence states or the still-unrecorded task split.

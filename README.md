@@ -6,7 +6,7 @@ Group: Kamalpreet (S389008), Harsimran Singh, Mehakpreet Kaur and Sandesh Bhatta
 
 ## Revision and verification
 
-Working checkpoint a1e8190 on feature/holds-notifications combines baseline dbbc540 with Mehakpreet's kiosk/API contribution from 3b925ee. The applied circulation integration includes shared checkout/returns, eligible FIFO allocation, protected transfers and simulated pickup messages. Kamalpreet's Windows build succeeded; the supplied Get-Migration output shows all seven migrations Applied=True.
+Current documentation checkpoint 107f643 on feature/holds-notifications retains the circulation source reviewed at a1e8190, combining baseline dbbc540 with Mehakpreet's kiosk/API contribution from 3b925ee. The applied circulation integration includes shared checkout/returns, eligible FIFO allocation, protected transfers and simulated pickup messages. Kamalpreet's Windows build succeeded; the supplied Get-Migration output shows all seven migrations Applied=True.
 
 Five committed screenshots establish duplicate rejection, waiting order and cancellation. Later supplied images show Noah Ready at Darwin and damaged-copy borrowing rejection. The 14 October Windows reports cover reserved-member checkout, repeat checkout, repair allocation, protected Darwin-to-Palmerston transfer, collection and next-member handover. A damaged return preserved a new waiting request; the subsequent repair increased pickup-only history from four to six records, and the filtered count stayed 6 → 6 after restart. See the test records for exact inputs, results and evidence limits.
 
@@ -78,7 +78,7 @@ When comparing pickup messages, set the item code, Message type Ready for pickup
 
 - [Requirements](docs/HIT339_Group8_Requirements_Draft.docx)
 - [Assessment checklist](docs/ASSESSMENT_CHECKLIST.md): all 11 rubric categories, brief and final deliverables
-- [Group work record](docs/GROUP_WORK_RECORD.md): tasks, decisions, governance and missing genuine member inputs
+- [Group work record](docs/GROUP_WORK_RECORD.md): populated task/evidence rows, time intake, reported original contract acceptance, written coordination notes, Kamalpreet's call-minutes intake and her draft individual reflection
 - [Hold evidence](docs/HOLD_WORKFLOW_TEST_RECORD.md) and [screenshot index](docs/screenshots/README.md)
 - [Screenshot audit and coverage](docs/SCREENSHOT_AUDIT.md)
 - [Whole-commit review and complete rubric progress](docs/PROJECT_PROGRESS_REVIEW.md)
