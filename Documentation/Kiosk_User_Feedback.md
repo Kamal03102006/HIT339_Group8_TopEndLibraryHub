@@ -7,7 +7,7 @@
 **Project:** TopEndLibraryHub
 **Unit:** HIT339 — Group 8
 **Developer:** Mehakpreet Kaur
-**Component:** Self-Service Kiosk and Public Catalogue API
+**Component:** Self-Service Kiosk and Secure Catalogue API
 
 ## 1. Introduction
 
@@ -93,3 +93,9 @@ The TopEndLibraryHub self-service kiosk provides catalogue searching, filtering 
 Development improvements and functional API testing have helped strengthen the usability and reliability of the component. Informal feedback from Anjana, Robinpreet and Princedeep did not identify any further modifications required.
 
 The kiosk is ready for final security, integration and submission verification.
+
+## Combined release follow-up on 16 October
+
+The original participant report above is retained as supplied. Anjana and Robinpreet are consistently named; the third participant is not counted as confirmed until Mehakpreet resolves Navdeep/Princedeep. Code inspection cannot identify a tester. These are member-reported informal reviews, not independent acceptance of the combined release.
+
+Kamalpreet also encountered an input problem: membership text appeared uppercase while lowercase underlying input failed validation. The pattern now accepts either letter case and controllers normalise storage. Another observed problem was losing notification filters after a recheck; the release retains them and includes a regression check. These are developer acceptance observations followed by concrete corrections; they are not attributed to an outside user. Final usability retesting of the combined version remains to be recorded.

@@ -29,6 +29,13 @@ namespace TopEndLibraryHub.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            // Match the Identity schema already created by CreateIdentitySchema.
+            // This also keeps design-time/isolated contexts consistent with the
+            // MaxLengthForKeys convention configured by AddDefaultIdentity.
+            builder.Entity<IdentityUserLogin<string>>().Property(login => login.LoginProvider).HasMaxLength(128);
+            builder.Entity<IdentityUserLogin<string>>().Property(login => login.ProviderKey).HasMaxLength(128);
+            builder.Entity<IdentityUserToken<string>>().Property(token => token.LoginProvider).HasMaxLength(128);
+            builder.Entity<IdentityUserToken<string>>().Property(token => token.Name).HasMaxLength(128);
             // Each physical branch has a unique code.
             builder.Entity<Branch>()
                 .HasIndex(branch => branch.BranchCode)

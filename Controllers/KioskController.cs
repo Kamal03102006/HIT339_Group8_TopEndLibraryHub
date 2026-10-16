@@ -110,7 +110,7 @@ public class KioskController : Controller
                 DueDate = loan.DueDate, FineAmount = loan.FineAmount
             }).ToListAsync();
         foreach (var loan in vm.Loans)
-            loan.EstimatedLateFine = Math.Max(0, (_clock.Today - loan.DueDate.Date).Days) * 1.50m;
+            loan.EstimatedLateFine = FinePolicy.Calculate(loan.DueDate, _clock.Today);
         vm.EstimatedLateFines = vm.Loans.Sum(loan => loan.EstimatedLateFine);
         vm.OutstandingFines = await _db.Loans.AsNoTracking()
             .Where(loan => loan.BorrowerId == borrower.Id && !loan.FinePaid).SumAsync(loan => loan.FineAmount);

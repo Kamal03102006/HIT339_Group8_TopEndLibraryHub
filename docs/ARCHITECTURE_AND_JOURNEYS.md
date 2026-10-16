@@ -1,54 +1,47 @@
-# Integration and user journeys
+# Integrated architecture and user journeys
 
-Prepared 14 October 2026 for the circulation patch. These diagrams describe the integrated source. Main circulation outcomes are reported in the test record; kiosk/API, concurrency and final seven-module acceptance remain pending. They are inputs to the required final portfolio, not the final PDF.
-
-## Shared circulation
-
-Reception and the authenticated kiosk call CirculationService. It validates member/location/item state, acquires the same transaction-owned per-item SQL application lock, refreshes the hold queue, and commits loan/item/hold changes together. Transfer dispatch/receipt and authorised stock edits use that item lock and HoldWorkflowService. A filtered unique active-loan index is the final duplicate guard.
-
-Public catalogue, kiosk cards and API use CirculationRules for ordinary availability. Physical Available does not override an allocation. The API exposes catalogue projections only, behind an external API key. The notification worker catches up allocation and simulated messages every minute while the app runs, then source-state checks and a unique event/channel index protect its log.
-
-The subsequent patron hold patch adds `HoldPlacementService`: staff creation resolves a membership number; `/Kiosk/Hold` resolves only the authenticated Identity link. Both recheck eligibility, pickup branch, duplicate requests and the member's active loan under the same per-item transaction. New requests start Waiting without a pickup message. No schema change is introduced. The new placement path has a supplied clean Windows build, inspected PH01 placement/private-progress and PH02 FIFO-position images, reported duplicate/private-data actions and inspected inactive/unlinked GET/UI evidence in pushed 6a69ade. [The acceptance supplement](PATRON_HOLD_TEST_RECORD.md) distinguishes these from pending POST security, JavaScript-disabled expiry and final module checks.
-
-## Pickup state transitions
+TopEndLibraryHub uses one ASP.NET Core MVC application and one SQL Server database for its seven assignment expansions. Different access channels share circulation and availability rules so that a copy reserved or moving between branches cannot be offered as ordinary stock elsewhere.
 
 ```mermaid
-stateDiagram-v2
-    [*] --> Waiting
-    Waiting --> Allocated: Usable copy, another pickup branch
-    Waiting --> Ready: Usable copy at pickup branch
-    Allocated --> Ready: Destination receives copy
-    Ready --> Fulfilled: Correct member checks out
-    Waiting --> Cancelled: Staff cancellation
-    Allocated --> Cancelled: Staff cancellation
-    Ready --> Cancelled: Staff cancellation
-    Allocated --> Waiting: Member or pickup branch inactive
-    Ready --> Waiting: Member or pickup branch inactive
-    Fulfilled --> [*]
-    Cancelled --> [*]
+flowchart TD
+    P["Patron catalogue and kiosk"] --> C["Shared circulation and hold services"]
+    S["Staff desks and transfers"] --> C
+    A["Secure catalogue API"] --> R["Shared availability rules"]
+    M["Manager dashboard and exports"] --> R
+    C --> R
+    R --> D["SQL Server and Identity"]
+    I["Admin CSV import"] --> D
+    C --> N["Simulated notification log"]
+    N --> D
 ```
 
-Cancelled/fulfilled requests remain history. Queue eligibility uses active member + active pickup branch, ordered CreatedAtUtc then Id. Damaged stock is allocated only after an authorised repair; in-transit stock is not ready. Cancellation at an unsuitable physical branch may allocate the next request for another protected transfer.
+## Integration responsibilities
 
-## Repair-to-pickup journey
+| Expansion | Entry point | Shared contract | Outcome |
+| --- | --- | --- | --- |
+| Self-service kiosk | KioskController | IdentityUserId links one login to its Borrower; CirculationService and HoldPlacementService enforce ownership and stock rules | Private loans/requests, checkout and two-minute session reset |
+| Secure API | CatalogueApiController and API-key middleware | CirculationRules.GenerallyAvailable; GET-only projections and private external credential | Search, available copies, categories and health/configured branch status |
+| Automated messages | NotificationService and background worker | Unique EventKey/Channel; UTC storage and Darwin display | Simulated Email/SMS loan, reminder, fine and pickup records |
+| Branches and transfers | StaffLocationController and TransfersController | Active branch/desk; per-item transaction; InTransit=5 preserves earlier status values | Dispatch at source, receive at destination, protect reservation |
+| Holds | HoldsController and patron Kiosk/Hold | One active request per borrower/item; FIFO CreatedAtUtc/Id; one allocation per item | Waiting, allocated, ready and collected progression |
+| CSV importer | CsvImportController | Book inheritance, required PublicationYear, Quantity physical copies, selected active branch | Valid rows become separately coded copies; skipped rows have reasons |
+| Manager reporting | ManagerReportingService and ManagerReportExport | Same general availability as catalogue/API; recorded fines separate from current estimates | Dashboard, CSV and PDF reconcile to fine/inventory audit rows |
 
-| Stage | Person and goal | Action and feedback | Meaningful benefit | Evidence |
-| --- | --- | --- | --- | --- |
-| Find | Family wants a reusable toy | Search title/code, check condition and location. | Avoid a wasted visit for an unusable or reserved copy. | Final UI retest pending |
-| Request | Patron wants fair access | A linked active patron selects Join waiting list and an active pickup branch. Staff can create an assisted request through the same service. The private account shows the member's own waiting position. | Members can request independently; duplicate requests cannot jump the queue. | Earlier H01–H02/FIFO images inspected; PH01 account/request and PH02 shared queue inspected; duplicate/private-data actions reported; PH03 membership-blocking images inspected |
-| Repair | Admin restores the damaged copy | Edit repaired condition to Available; queue head becomes Allocated. | Repair releases the existing queue without a second request. | C07 rejection and C08 allocation/zero-notice images inspected |
-| Move | Reception delivers to pickup location | Dispatch from Darwin; receive only at Palmerston. | Reservation survives transport; no premature pickup message. | C09–C11 dispatch/receipt images inspected; transit borrowing rejection reported |
-| Collect | Correct member wants the reserved toy | Linked kiosk or staff checkout fulfils the allocation. | Later members cannot take a reserved copy. | C12 staff Collected/next-member cards inspected; C15 kiosk pending |
-| Reuse | Next waiting family wants access | Return in usable condition; next eligible request becomes Ready. | The queue continues fairly after borrowing. | C01 ready photo; C04–C06/C12 handover reported |
+A physical Available status is not sufficient for general borrowing. Active loans, transfers, usable allocations and eligible waiting requests are considered. The rightful Ready member can collect while later requests remain waiting. SQL Server locking and filtered unique indexes protect circulation; the separate real-provider tests still require execution on Windows.
 
-## Demonstrated lead journey
+## Family pickup journey
 
-Kamalpreet created Asha and Noah holds on borrowed TY-0001 at Darwin. The duplicate was rejected; positions were Asha 1 / Noah 2. Cancelling Asha retained her history and promoted Noah to 1. Five screenshots at dbbc540 support those three UI outcomes. Those five images cover the initial desk case. The subsequent TY-9001 run reports repair, protected transfer, staff collection, next-family handover and a return requiring repair. Pickup totals progressed 0 → 2 → 4 → 6, then stayed six after restart. The 24-image checkpoint preserves 21 previously pushed captures plus three original historical observations. This supplement adds two PH03 photographs. For new Damaged TY-9901, the lead reports Sky's self-service Palmerston request, shared duplicate rejection, Sky 1 / Asha 2 and Sky-only private progress, with zero premature pickup notices. Inactive/unlinked membership blocking is visible in PH03 photographs; reactivation and Finish/Back are reported. The remaining kiosk checkout, API, POST security and other unrun cases remain pending.
+| Stage | User need and action | System response | Evidence |
+| --- | --- | --- | --- |
+| Discover | Find a borrowed/damaged item and select Join waiting list | Explain availability; retain item code through login | Existing catalogue/hold evidence and shared source |
+| Request | Linked active member chooses pickup branch | Create own request; reject duplicate; show private FIFO position | Earlier Sky/Asha/Noah results and indexed captures |
+| Prepare | Staff return/repair the item | Allocate next eligible request; do not announce pickup at the wrong branch | Existing repair/allocation and zero-notice captures |
+| Move | Staff dispatch and receive at pickup branch | InTransit blocks borrowing; destination receipt makes request Ready | Harsimran's component captures and lead integration evidence |
+| Collect | Rightful member checks out at physical branch | Fulfil allocation, create one loan and record simulated confirmation | Earlier staff collection evidence; final SQL kiosk/concurrency checks pending |
+| Reuse | Return a usable copy | Record any late fine, then promote next eligible request | Earlier queue results; production fine test and pending SQL return test |
 
-## Other breadth features
+## Import and management journey
 
-Import and expanded management reports still await Sandesh's verified handoff. Their final integration diagram must identify actual routes, shared models, import validation and reporting reconciliation after the source is received. Do not present planned modules or draft PDF exports as implemented.
+An administrator selects an active branch and uploads the documented CSV. Quantity=2 produces two copies with unique library codes. Missing headers reject the upload; invalid rows explain their errors; re-uploading an existing ISBN skips it. The manager then reviews the same collection through the dashboard, CSV and PDF. Reserved/transit items remain unavailable to the general public. Fine audits identify each loan, amount, payment state and payment timestamp; current overdue estimates remain separate. Inventory audits explain each copy's branch, status, restriction and general availability.
 
-## Current completion actions
-
-This record preserves its tested checkpoint and stated evidence limits. The latest member handoffs and integration/VM actions are in [REMAINING_WORK.md](REMAINING_WORK.md). Documentation updates do not require repeating earlier tests solely to rename or index their evidence.
+The automated synthetic fixture checks these calculations and generates an inspected two-page PDF. Windows upload, exported files, route access and SQL transactions remain final release checks. See [release verification](RELEASE_CHECKS_16OCT.md), [the screenshot index](screenshots/README.md) and [the import/report guide](IMPORT_AND_REPORT_GUIDE.md). All captures retain their historical dates and evidence limits.

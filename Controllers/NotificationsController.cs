@@ -105,8 +105,15 @@ namespace TopEndLibraryHub.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CheckNow(CancellationToken cancellationToken)
+        public async Task<IActionResult> CheckNow(NotificationKind? kind = null,
+            NotificationChannel? channel = null, string? search = null, int page = 1,
+            CancellationToken cancellationToken = default)
         {
+            search = search?.Trim().ToUpperInvariant() ?? string.Empty;
+            if (!ModelState.IsValid || search.Length > 20 ||
+                (kind.HasValue && !Enum.IsDefined(kind.Value)) ||
+                (channel.HasValue && !Enum.IsDefined(channel.Value)))
+                return BadRequest("Choose valid notification filters.");
             try
             {
                 await _holds.ProcessAvailableItemsAsync(cancellationToken);
@@ -128,7 +135,7 @@ namespace TopEndLibraryHub.Controllers
                     "Automatic checks will retry while the app is running.";
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { kind, channel, search, page });
         }
     }
 }

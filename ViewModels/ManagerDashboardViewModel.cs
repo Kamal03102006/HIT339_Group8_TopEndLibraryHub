@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace TopEndLibraryHub.ViewModels
@@ -8,6 +8,8 @@ namespace TopEndLibraryHub.ViewModels
         // Item statistics
         public int TotalItems { get; set; }
         public int AvailableItems { get; set; }
+        public int InTransitItems { get; set; }
+        public int ReservedItems { get; set; }
         public int BorrowedItems { get; set; }
         public int DamagedItems { get; set; }
         public int DestroyedItems { get; set; }
@@ -22,6 +24,10 @@ namespace TopEndLibraryHub.ViewModels
         public decimal TotalFines { get; set; }
         public decimal PaidFines { get; set; }
         public decimal OutstandingFines { get; set; }
+        public decimal EstimatedCurrentLateCharges { get; set; }
+        public DateTime GeneratedAtDarwin { get; set; }
+        public List<FineAuditRow> FineAudit { get; set; } = new();
+        public List<InventoryAuditRow> InventoryAudit { get; set; } = new();
 
         // Percentage of items currently available
         public double AvailabilityRate { get; set; }
@@ -41,6 +47,30 @@ namespace TopEndLibraryHub.ViewModels
         public string ItemType { get; set; } = string.Empty;
         public int TotalItems { get; set; }
         public int AvailableItems { get; set; }
+    }
+
+    public class FineAuditRow
+    {
+        public int LoanId { get; set; }
+        public string ItemCode { get; set; } = string.Empty;
+        public string MembershipNumber { get; set; } = string.Empty;
+        public DateTime DueDate { get; set; }
+        public DateTime? ReturnedAtDarwin { get; set; }
+        public decimal FineAmount { get; set; }
+        public bool Paid { get; set; }
+        public DateTime? PaidAtDarwin { get; set; }
+    }
+
+    public class InventoryAuditRow
+    {
+        public string ItemCode { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string ItemType { get; set; } = string.Empty;
+        public string Branch { get; set; } = string.Empty;
+        public string PhysicalStatus { get; set; } = string.Empty;
+        public bool GenerallyAvailable { get; set; }
+        public bool Reserved { get; set; }
+        public bool InTransit { get; set; }
     }
 
     public class PopularItemViewModel

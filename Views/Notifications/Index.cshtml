@@ -34,6 +34,10 @@
             </p>
         </div>
         <form asp-controller="Notifications" asp-action="CheckNow" method="post">
+            <input type="hidden" name="kind" value="@Model.Kind" />
+            <input type="hidden" name="channel" value="@Model.Channel" />
+            <input type="hidden" name="search" value="@Model.Search" />
+            <input type="hidden" name="page" value="@Model.Page" />
             <button type="submit" class="btn btn-primary btn-lg text-nowrap">
                 Check loans and pickups now
             </button>

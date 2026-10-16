@@ -1,39 +1,25 @@
-# Remaining work and finish order
+# Remaining work for the combined release
 
-## Current position
+Updated 16 October. All seven required feature areas have combined implementation source. The code builds and automated fixture/model/export checks run as recorded in [release checks](RELEASE_CHECKS_16OCT.md). This is not a completed VM installation or a final submission declaration.
 
-All seven required feature areas have source across the member branches. The lead release **6a69ade** has substantial hold/repair/transfer/patron evidence, a successful reported Windows build and seven applied migrations. It is separate from master **deeeaac** and the Sandesh **2ab17fa** component. A final integrated build and acceptance result are still required.
+## Finish order
 
-The wording update covers the README, governance/reflection/checklist/test records and requirements Word document. AI assistance is recorded separately. All four members accepted the original agreement on its creation/sharing day; the original calendar date is unrecorded.
+1. Import the prepared integration branch into the local repository. Stop the running application and build the solution. Keep the existing seven-migration database if its history matches; otherwise select a separate fresh demonstration database as explained in INSTALLATION_GUIDE.md.
+2. Run `scripts/Test-Release.ps1 -IncludeSqlServer` on Windows with LocalDB. The three SQL Server checks use newly generated test databases; they cover fresh migration, rightful reserved pickup with a follower, simultaneous checkout and late-return queue/fine handling. Retain the TRX results. A successful run is not inferred from the Linux fixture tests.
+3. Run the local application. Verify one import and its row diagnostics; compare Manager dashboard/CSV/PDF figures; run the API script with the actual local secret; finish the targeted role, private-account and notification checks in RELEASE_CHECKS_16OCT.md. Earlier unchanged hold screenshots need not be recreated.
+4. Complete the installation instructions on a suitable VM, or obtain the lecturer's agreement to an alternative. The current LocalDB VM attempt failed. A local build and SQL test run do not replace the required VM check.
+5. Confirm Mehakpreet's revised time breakdown and Sandesh's final unrecorded duration. Harsimran's 31 hours are confirmed. Clarify the third feedback participant only if that named entry is retained; otherwise retain the consistently identified member-reported reviewers and acknowledge the unresolved entry.
+6. Assemble one Group Portfolio PDF from the prepared requirements, agreement, team approach/plan/task records, minutes, four individual accounts, installation/patron guides, diagrams/journeys and selected evidence. Update actual test statuses and final source revision, inspect every exported page, and verify repository/project-board read access.
+7. Push the combined integration branch, review/merge it into master after the Windows checks and submit the PDF plus final repository link. The official deadline remains 16 October 23:59 Darwin unless a written extension is received.
 
-The repository has 28 retained lead captures plus eight original Sandesh test captures. Kamalpreet's partial 19.75-hour estimate and Sandesh's partial 12.5-hour estimate keep their stated retrospective limits.
+## Member actions
 
-## Owners and concrete closure
+| Member | Remaining action |
+| --- | --- |
+| Kamalpreet | Bring in the integration release, coordinate final checks, update later personal time where recoverable, and assemble/submit the portfolio |
+| Harsimran | Help with final Windows transfer/installation checks; supply the blocked VM evidence and finish a successful VM run if a suitable environment becomes available |
+| Mehakpreet | Confirm the corrected hours proposal, resolve the participant-name discrepancy if using that entry, and help verify final kiosk/API/private-session behaviour |
+| Sandesh | Confirm final time spent on testing/documentation/fixes and help run the corrected importer/report checks; raw representative samples and synthetic export examples are now included |
+| Group | Record actual outcomes, complete final PDF and check marker access |
 
-| Owner | Received | Still needed |
-| --- | --- | --- |
-| Kamalpreet | Tested hold/notification/patron work, 28 images, individual reflection and partial time reconstruction | Apply this documentation update; supply real meeting dates, participants, decisions and actions; complete distinct outstanding notification and shared-circulation cases; coordinate the final release and portfolio. |
-| Sandesh S390535 | Source 2ab17fa / PR #7; eight local tests/captures; reflection; partial 12.5-hour estimate | Quantity creates the requested uniquely coded copies; valid publication year; row error feedback; transit/hold-aware inventory and Darwin dates; fine audit detail; unauthorised/non-zero/final-integration tests; raw CSV/PDF files and remaining time estimate. |
-| Harsimran | Branch/transfer source; installation guide 00c3842 | Resolve VM LocalDB setup and finish install, migration/seed, branch/desk, transfer and restart verification. Update the guide to the final integrated release; provide own hours and reflection/value account. |
-| Mehakpreet | Kiosk/API source through 42e5e8d, merged in master deeeaac; member testing report and patron guide | Verify the final combined checkout, session/privacy and API authentication/availability paths; resolve the final feedback record and any broken reference; provide own hours, reflection and value account. |
-| Group | Requirements, plan, board and source links; original agreement acceptance | Confirm open requirement decisions and actual task allocations/hours; obtain the missing member records; complete one integrated release, marker-access check and final Group Portfolio PDF. |
-
-## Integration dependency
-
-The lead checkpoint and Sandesh component are not ancestors of the fetched master. Mehakpreet's newer branch also has different migration/service changes. Review the differences in an isolated integration copy, preserve the tested hold/notification/patron work and existing database history, and resolve shared files before applying migrations or declaring a final release. The earlier Sandesh-to-lead merge check identified conflicts in the project file and shared layout.
-
-The documentation installer does not merge code, alter packages or change the database. Apply it in the lead feature branch.
-
-## VM status
-
-Harsimran installed Git and the .NET SDK on the VM. LocalDB setup failed with Error 1920 while SQL Server VSS Writer could not start; another environment blocked the installer. The root cause and a successful replacement setup are not yet established. A completed setup and working application on a suitable approved VM remain necessary evidence.
-
-## Finish order for 15 October
-
-1. Apply the single current documentation bundle and commit/push the documentation.
-2. In parallel, collect actual meeting/member records and complete owner fixes and VM setup.
-3. Consolidate and verify the final source, keeping the existing test history intact. Run the meaningful missing tests and checks after integration.
-4. Assemble one editable Word master with all Part A records, integration diagrams, journey maps and four named individual sections. Use the received records and actual results.
-5. Export and inspect the Group Portfolio PDF; verify README navigation, source revision and marker access. Submit the PDF and repository link.
-
-Planning allowance: approximately 5–8 elapsed hours if code fixes, VM verification and member inputs progress in parallel. This is an estimate, not a completion guarantee or an hours-worked record. VM setup, merge/migration conflicts or new failures can extend it. The group target is 15 October; the official deadline is 16 October 2026 at 23:59 Darwin.
+The group has the individual contribution/reflection material. Remaining work is integration acceptance, the VM requirement, final record confirmation and packaging. No exact completion percentage or predicted mark is assigned.

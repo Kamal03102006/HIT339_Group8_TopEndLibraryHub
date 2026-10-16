@@ -1,6 +1,6 @@
 @{
     var controllerName = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
-    var inAdministration = controllerName is "Admin" or "Books" or "Music" or "Toys";
+    var inAdministration = controllerName is "Admin" or "Books" or "Music" or "Toys" or "CsvImport";
     var inFrontDesk = controllerName is "Borrowers" or "Loans" or "Holds" or "StaffLocation" or "Transfers";
 }
 <!DOCTYPE html>
@@ -57,6 +57,7 @@
                                    aria-expanded="false">Administration</a>
                                 <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                                     <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index">Admin dashboard</a></li>
+                                    <li><a class="dropdown-item" asp-controller="CsvImport" asp-action="Index">Import books from CSV</a></li>
                                     <li><hr class="dropdown-divider" /></li>
                                     <li><a class="dropdown-item" asp-controller="Books" asp-action="Index">Manage books</a></li>
                                     <li><a class="dropdown-item" asp-controller="Music" asp-action="Index">Manage music</a></li>

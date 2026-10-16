@@ -10,7 +10,6 @@ public record CirculationResult(bool Succeeded, string Message,
 
 public class CirculationService
 {
-    private const decimal DailyFineRate = 1.50m;
     private readonly ApplicationDbContext _context;
     private readonly LibraryClock _clock;
     private readonly HoldWorkflowService _holds;
@@ -143,10 +142,7 @@ public class CirculationService
                 transfer.Status == TransferStatus.InTransit, cancellationToken))
             return new(false, "An in-transit transfer cannot be received as a loan return.", Field: "LibraryCode");
 
-        var overdueDays = Math.Max(0, (returnDate.Date - loan.DueDate.Date).Days);
-        loan.FineAmount = overdueDays * DailyFineRate;
-        loan.FinePaid = loan.FineAmount == 0 || payFineNow;
-        loan.FinePaidDate = loan.FineAmount > 0 && payFineNow ? _clock.UtcNow : null;
+        FinePolicy.RecordReturn(loan, returnDate, payFineNow, _clock.UtcNow);
         // Due/return inputs are Darwin calendar dates; event timestamps are UTC.
         loan.ReturnedDate = returnDate.Date == _clock.Today ? _clock.UtcNow :
             new DateTimeOffset(DateTime.SpecifyKind(returnDate.Date.AddDays(1).AddTicks(-1),

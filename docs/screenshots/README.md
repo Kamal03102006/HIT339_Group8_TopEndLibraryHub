@@ -112,3 +112,7 @@ Eight original component captures are added under screenshots/sandesh. The earli
 - [sd_tc06_csv_summary.png](sandesh/sd_tc06_csv_summary.png)
 - [sd_tc07_pdf_summary.png](sandesh/sd_tc07_pdf_summary.png)
 - [sd_tc08_branch_sql_result.png](sandesh/sd_tc08_branch_sql_result.png)
+
+## Additional member handoff on 16 October
+
+[Harsimran's seven component images](harsimran/README.md) are preserved separately with their 13 October date and original embedded-image mapping. These supplement the earlier index; they are not new combined-release or VM passes.

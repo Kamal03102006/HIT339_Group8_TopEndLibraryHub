@@ -1,6 +1,6 @@
 # Sandesh member handoff
 
-Member: Sandesh Bhattarai S390535. Component: CSV book importer and manager reporting exports. Source: **2ab17fa**, branch **feature/sandesh-csv-reports**, PR **#7**. Report supplied on 15 October 2026.
+Member: Sandesh Bhattarai S390535. Component: CSV book importer and manager reporting exports. Original component source: **2ab17fa**, branch **feature/sandesh-csv-reports**, PR **#7**. Report supplied on 15 October 2026. Later corrections were reviewed through **da0f483** on 16 October. The combined release adds shared-rule reporting and production-code tests; those later integration changes are recorded separately from the member's own work.
 
 ## Received test evidence
 
@@ -12,16 +12,14 @@ The member documents eight local test cases as passed. The original report's eig
 | TC02 | 0 imported / 100 skipped | [sd_tc02_duplicate_100_skipped.png](screenshots/sandesh/sd_tc02_duplicate_100_skipped.png) | The skipped count is visible; duplicate-ISBN cause is member-reported. |
 | TC03 | 0 imported / 1 skipped | [sd_tc03_one_row_skipped.png](screenshots/sandesh/sd_tc03_one_row_skipped.png) | The skipped count is visible; Quantity=0 is member-reported. |
 | TC04 | Required-column validation | [sd_tc04_missing_headers.png](screenshots/sandesh/sd_tc04_missing_headers.png) | The missing-header message is visible. |
-| TC05 | BK-0102 found in the catalogue | [sd_tc05_catalogue_bk0102_year_zero.png](screenshots/sandesh/sd_tc05_catalogue_bk0102_year_zero.png) | Searchability is visible; Year 0 is also visible and remains a data-quality defect. |
+| TC05 | BK-0102 found in the catalogue | [sd_tc05_catalogue_bk0102_year_zero.png](screenshots/sandesh/sd_tc05_catalogue_bk0102_year_zero.png) | Searchability is visible; Year 0 is visible in this historical capture. Current validation rejects it; this old image is not a corrected-version pass. |
 | TC06 | CSV summary opened | [sd_tc06_csv_summary.png](screenshots/sandesh/sd_tc06_csv_summary.png) | 104 total items, 102 available and zero fine totals are visible. |
 | TC07 | PDF summary opened | [sd_tc07_pdf_summary.png](screenshots/sandesh/sd_tc07_pdf_summary.png) | Visible figures agree with the supplied CSV summary; this is not a non-zero fine test. |
 | TC08 | Branch SQL result | [sd_tc08_branch_sql_result.png](screenshots/sandesh/sd_tc08_branch_sql_result.png) | Read-only query output shows BK-0102 at BranchId 1, Darwin Hub. |
 
-## Open corrections and tests
+## Final integration verification
 
-The current importer validates Quantity but constructs one Book per accepted row. PublicationYear is omitted, leaving 0 despite the model's 1000–2100 range. Correct these and retest. Improve row-specific feedback. Complete report coverage for transit and hold-aware availability, use shared Darwin dates and include traceable fine details.
-
-Add actual quantity/year, unauthorised-access, non-zero unpaid/paid-fine and final integrated stock tests. Keep TC01–TC08 as historical evidence for 2ab17fa; append new outcomes with the corrected revision. Supply the raw CSV samples, actual CSV/PDF exports and module operating instructions.
+The earlier one-copy/Year=0 defects have source corrections in the combined release, with automated quantity, invalid-year and duplicate-import checks. Dashboard/CSV/PDF share availability and fine definitions. Run the final Windows upload, route-access and real SQL tests in [release checks](RELEASE_CHECKS_16OCT.md). Keep TC01–TC08 as historical component results; do not relabel them as new-version evidence. Representative CSV samples, actual synthetic exports and operating instructions are included.
 
 ## Member supplied retrospective time estimate
 
@@ -48,3 +46,13 @@ A difficulty, response and outcome
 The most difficult component was adapting my work to a broader programme that was being updated by other people in the organisation. I had troubles with the .NET SDK, missing package references, build errors. I went through the bugs one by one; I tried the features in the browser and checked the branch assignment with a read only Local DB query for book BK-0102. The record was associated with Darwin Hub (BranchId 1).
 What I learned and what I would improve
 I learned more about ASP.NET Core MVC, Entity Framework Core, CSV validation, QuestPDF reporting, and git feature branches. Next time I would review group project models before coding, create smaller and earlier changes, track my actual time daily and design negative and integration tests from the beginning. I would also work with the group on reporting definitions before considering the FinePaid indication as a payment audit.
+
+## Later source corrections and combined release
+
+Sandesh subsequently added Quantity/PublicationYear handling, transit counts, Darwin dates and fine audit details in CSV/PDF. His later commits also removed a duplicate BranchId property and duplicate branch/transfer creation from the consolidated migration. These are received contributions. The integration retains the lead database's canonical seven-migration history instead of adding a second Holds/NotificationLogs creation.
+
+The combined release now uses the same availability predicate for API, catalogue and reporting; includes fine and inventory audit rows; separates recorded fines from current estimates; and shows import errors per row. Automated checks call production import, reporting, fine and payment code and generate labelled synthetic exports. See [release checks](RELEASE_CHECKS_16OCT.md) for results and the Windows/SQL checks still pending. The original eight captures above remain historical component evidence.
+
+## Time record
+
+The supplied dated log totals 12.5 hours and is partial. Its final testing/documentation duration and later correction hours have not been supplied. Commit counts and elapsed time are not used to invent those hours. Sandesh only needs to confirm genuine additional task durations and complete the targeted release checks available in his environment; he does not need to rewrite his whole report.

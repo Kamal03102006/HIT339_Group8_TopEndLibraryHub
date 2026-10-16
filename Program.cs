@@ -60,10 +60,13 @@ builder.Services.AddScoped<HoldQueueService>();
 builder.Services.AddScoped<HoldWorkflowService>();
 builder.Services.AddScoped<HoldPlacementService>();
 builder.Services.AddScoped<CirculationService>();
+builder.Services.AddScoped<ManagerReportingService>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<LibraryClock>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddHostedService<NotificationWorker>();
+builder.Services.Configure<Microsoft.AspNetCore.Builder.RequestLocalizationOptions>(options =>
+    options.SetDefaultCulture("en-AU").AddSupportedCultures("en-AU").AddSupportedUICultures("en-AU"));
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -101,6 +104,7 @@ else
     app.UseHsts();
 }
 
+app.UseRequestLocalization();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseSession();
