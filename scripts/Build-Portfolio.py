@@ -116,6 +116,8 @@ def parse(text,source):
   h=re.match(r'^(#{1,6})\s+(.+)$',s)
   if h:
    level=len(h.group(1));title=h.group(2)
+   if title=='My source history':items.append(CondPageBreak(320))
+   if title=='My acknowledgement of assistance':items.append(PageBreak())
    if level==1 or (level==2 and re.match(r'6\.[2-4] ',title)):
     if items and not isinstance(items[-1],PageBreak):items.append(PageBreak())
    items.append(p(title,'h1' if level==1 else 'h2' if level==2 else 'h3',source));i+=1;continue
