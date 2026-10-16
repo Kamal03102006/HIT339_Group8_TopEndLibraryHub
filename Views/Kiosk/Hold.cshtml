@@ -1,0 +1,63 @@
+@model TopEndLibraryHub.ViewModels.KioskHoldViewModel
+@{ ViewData["Title"] = "Join a waiting list"; }
+<link rel="stylesheet" href="~/css/kiosk.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/kiosk-additions.css" asp-append-version="true" />
+
+<div class="kiosk kiosk-journey">
+    <header class="kiosk-hero">
+        <h1>Join a waiting list</h1>
+        <p>Request an item that is on loan or awaiting repair. Choose where you want to collect it.</p>
+    </header>
+    <section class="kiosk-search-section">
+        <h2>Your pickup request</h2>
+        <p>For <strong>@Model.MemberName</strong> · @Model.MembershipNumber</p>
+        @if (Model.ItemName is not null)
+        {
+            <p><strong>Item:</strong> @Model.ItemName · @Model.ItemStatus</p>
+        }
+        <form asp-action="Hold" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger mb-3" role="alert"></div>
+            <div class="kiosk-field">
+                <label asp-for="LibraryCode"></label>
+                <input asp-for="LibraryCode" maxlength="20" autocomplete="off"
+                       spellcheck="false" placeholder="BK-0001 or TY-0001" autofocus
+                       aria-describedby="hold-code-help" />
+                <span asp-validation-for="LibraryCode" class="text-danger"></span>
+                <p id="hold-code-help">Find the library code in the catalogue or on the item's barcode.</p>
+            </div>
+            <div class="kiosk-field mb-4">
+                <label asp-for="PickupBranchId"></label>
+                <select asp-for="PickupBranchId" asp-items="Model.PickupBranches"
+                        aria-describedby="hold-pickup-help">
+                    <option value="">Choose a pickup branch</option>
+                </select>
+                <span asp-validation-for="PickupBranchId" class="text-danger"></span>
+                <p id="hold-pickup-help">Select the branch you can visit when the item is ready.</p>
+            </div>
+            <p class="kiosk-alert">
+                <strong>Requests are served in order.</strong> Returning or repairing an item
+                keeps your place. Wait for it to be ready at your chosen branch before collecting it.
+            </p>
+            <div class="kiosk-actions">
+                <button class="kiosk-button" type="submit" disabled="@(Model.PickupBranches.Count == 0)">Join waiting list</button>
+                <a asp-action="Account" class="kiosk-clear">Back to my account</a>
+            </div>
+            @if (Model.PickupBranches.Count == 0)
+            {
+                <p class="kiosk-alert" role="alert">No pickup branches are currently available. Ask staff for help.</p>
+            }
+        </form>
+    </section>
+    <nav class="kiosk-actions" aria-label="Waiting list actions">
+        <a asp-action="Index" class="kiosk-button">Browse catalogue</a>
+        <form asp-action="Finish" method="post" data-kiosk-finish data-keepalive="@Url.Action("KeepAlive", "Kiosk")">
+            @Html.AntiForgeryToken()<button class="kiosk-button" type="submit">Finish and sign out</button>
+        </form>
+    </nav>
+    <p class="small text-muted">Select Finish before leaving. Inactive sessions end after two minutes.</p>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/kiosk-session.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,4 @@
+Title,Author,ISBN,Category,Quantity,PublicationYear
+Another Valid Book,Demo Author,G8-DEMO-2026-C,Fiction,1,2024
+Invalid Quantity Example,Demo Author,G8-DEMO-2026-D,Fiction,0,2024
+Invalid Year Example,Demo Author,G8-DEMO-2026-E,Fiction,1,0

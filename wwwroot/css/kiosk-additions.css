@@ -55,6 +55,21 @@
     font-size: 17px;
 }
 
+.kiosk-journey .kiosk-field {
+    max-width: 650px;
+}
+
+.kiosk-journey .kiosk-field select {
+    min-height: 60px;
+    font-size: 20px;
+    border-color: #347b52;
+}
+
+.kiosk-button:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
 @media (max-width: 768px) {
     .kiosk-journey .kiosk-search-section {
         padding: 20px;

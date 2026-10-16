@@ -1,40 +1,23 @@
-# Kiosk integration handoff (11 October 2026)
+# Kiosk and secure catalogue API integration
 
-## Implemented
-- Optional IdentityUserId link, unique for non-null values, FK Restrict. Existing borrowers stay unlinked and retain loans.
-- Authenticated account summary resolves borrower exclusively from UserManager.GetUserId(User).
-- Active/inactive/unlinked membership handling; no account lookup by patron-supplied membership ID.
-- Sign out and 5-minute non-sliding Identity authentication cookie. Catalogue remains public.
-- Active loan exclusion in catalogue API; API-key middleware retained.
-- SQL filtered unique index on active loans per item to prevent duplicates once checkout is integrated.
+We combine the kiosk/API with shared circulation, hold/privacy and branch/transfer work. The 16 October release also connects the API's availability predicate to manager reporting. Earlier test reports remain historical evidence; current verification and current Windows/API results and remaining checks are in [release checks](../docs/RELEASE_CHECKS_16OCT.md).
 
-## CRITICAL BLOCKER
-Checkout is intentionally **fail-closed**. `POST /Kiosk/Checkout` does NOT create a loan until the shared hold, transfer and branch restrictions are available and reviewed. The `Kiosk:SharedBorrowingRulesIntegrated` switch cannot bypass this safeguard. No success screenshot should be claimed for checkout yet.
-The API available-items result checks status and active loans but not unfinished holds/transfers. Treat it as provisional, not authoritative borrowability.
+## Current behaviour
 
-## Migration
-The checked-in migration `20261011090000_LinkPatronIdentity` adds nullable `Borrowers.IdentityUserId`, a filtered unique index, and a foreign key. It also changes the existing loan ItemId index to filtered unique for active loans. **Before applying**, verify there are no duplicate active loans for an item; if there are, resolve the inconsistent records with staff before running migration. `DbInitializer` applies migrations on startup.
+The public catalogue and kiosk can be browsed without login. Account, checkout and hold actions derive ownership from the authenticated Identity user through the optional unique Borrower.IdentityUserId link. Existing borrowers are not automatically linked by email. Inactive and unlinked accounts cannot borrow or place new requests. Staff-assisted and patron requests use HoldPlacementService; checkout uses CirculationService for active membership, current location, transfers, active loans and reservation ownership. The rightful Ready member can collect while later members wait.
 
-## Link two fictional test accounts safely (authorised staff only)
-Create two confirmed Identity accounts with distinct strong passwords using the existing Identity UI, and create two *new fictional* Borrower records using authorised staff workflows. Do not reuse existing borrower records based on matching email. In a controlled local demo, a staff member may link records in SQL after verifying both identities:
-```sql
-UPDATE Borrowers SET IdentityUserId = (SELECT Id FROM AspNetUsers WHERE NormalizedEmail = 'PATRON1@EXAMPLE.TEST') WHERE MembershipNumber = 'MBR-9001' AND IdentityUserId IS NULL;
-UPDATE Borrowers SET IdentityUserId = (SELECT Id FROM AspNetUsers WHERE NormalizedEmail = 'PATRON2@EXAMPLE.TEST') WHERE MembershipNumber = 'MBR-9002' AND IdentityUserId IS NULL;
-```
-Check the `UPDATE` affected exactly one row each; use only staff-authorised demo data. Never run these updates against an existing real patron record without verification. Do not give patron accounts Admin, Reception, or Manager roles. Keep confirmed-account requirement.
+The account displays only that patron's loans, requests, recorded unpaid fines and separately labelled current late-charge estimates. Private responses use no-store. Finish signs out; patron tickets and the kiosk inactivity check expire after two minutes, including on the browsing screen when signed in. The final JavaScript-disabled expiry and forged POST checks remain pending.
 
-## Testing evidence
-1. Patron1 login -> Account shows only Patron1 loans/fines.
-2. Patron2 login -> Account shows only Patron2 loans/fines.
-3. Unlinked confirmed login -> explanatory message and no loan data.
-4. Inactive linked borrower -> inactive message; checkout rejected.
-5. Sign out -> protected Account and Scan redirect to login.
-6. Wait >5 minutes -> login required again on next request; test with browser back.
-7. Checkout -> safe pending-integration message, no new loan.
-8. API key required; active-loan item absent from available results.
+## Demonstration and configuration
 
-## Remaining team integration
-Obtain final Hold, Transfer, Branch models and shared borrowing service from team leader/Harsimran. Checkout must enforce holds allocated to correct borrower and pickup branch, transfers, damage, loan limits and atomic transactions before enabling real borrowing. API must incorporate holds/transfers and branch opening hours. A kiosk timeout should also clear the on-screen display after inactivity; the current 5-minute server auth expiration protects private requests but does not auto-navigate an idle screen.
+Development seeds the fictional patron@topendlibrary.local / Patron#2026! account linked to Sky Nguyen, MBR-8001, without staff roles. Preserve existing memberships and conflicting codes. This account is a local demonstration; do not reassign an existing real member to it. A general staff verification/linking interface is outside the chosen scope.
 
-## Environment
-Use `dotnet user-secrets set "CatalogueApi:ApiKey" "<long-random-secret>"` in the project directory (never commit the value). The project targets .NET 10. Run a full build and migration test in Visual Studio; this patch was generated without a local dotnet compiler.
+Set Kiosk:BranchCode to DAR, PAL or CAS in user-secrets and restart. This trusted server setting identifies the physical station; posted branch IDs do not choose checkout location. Set CatalogueApi:ApiKey to a private random secret, following [installation instructions](../docs/INSTALLATION_GUIDE.md). Send X-API-Key over HTTPS. Unconfigured key returns 503; missing/wrong key returns 401.
+
+## API contract
+
+GET /api/catalogue searches by search and accepts limit=1..100, category=Book/Music/Toy and an active branchId. GET /api/catalogue/available uses the same filters and shared general availability. GET /api/catalogue/categories lists item categories; /status reports service/database health and configured active branch flags, not live opening hours; /{code} returns a catalogue item. Responses exclude patron fields. No write endpoints are provided.
+
+## Evidence and remaining checks
+
+The member's successful component checkout, account and missing-key capture are preserved in her report. Earlier lead hold/access photographs remain indexed. Current automated tests exercise production availability/filter/middleware and ownership-related circulation code; three real SQL Server circulation tests and final HTTPS/browser checks are separate. Run scripts/Test-Release.ps1 -IncludeSqlServer and scripts/Test-CatalogueApi.ps1 on the final Windows source, then record actual results. See [patron guide](PatronUserGuide.md) and [historical acceptance record](../docs/PATRON_HOLD_TEST_RECORD.md).

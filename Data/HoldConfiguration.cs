@@ -26,6 +26,11 @@ namespace TopEndLibraryHub.Data
                 .HasForeignKey(hold => hold.BorrowerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasOne(hold => hold.PickupBranch)
+                .WithMany()
+                .HasForeignKey(hold => hold.PickupBranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Waiting, Allocated and ReadyForPickup are active.
             builder.HasIndex(hold => new
             { hold.ItemId, hold.BorrowerId })

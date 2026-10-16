@@ -1,9 +1,0 @@
-@{ ViewData["Title"] = "Checkout Confirmation"; }
-<link rel="stylesheet" href="~/css/kiosk.css" asp-append-version="true" />
-<main class="kiosk kiosk-journey"><header class="kiosk-hero"><h1>Checkout Confirmation</h1></header>
-@if (TempData["KioskSuccess"] != null) { <section class="kiosk-search-section" role="status"><h2>@TempData["KioskSuccess"]</h2></section> }
-else { <p>No new checkout confirmation is available.</p> }
-<a asp-action="Account" class="kiosk-button">My Loans</a>
-<form asp-action="Finish" method="post">@Html.AntiForgeryToken()<button class="kiosk-button" type="submit">Finish / Sign Out</button></form>
-</main>
-@await Html.PartialAsync("_KioskIdle")

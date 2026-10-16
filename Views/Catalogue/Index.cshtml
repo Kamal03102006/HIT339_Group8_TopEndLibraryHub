@@ -62,6 +62,7 @@
                            value="@Model.SearchString"
                            class="form-control"
                            type="search"
+                           maxlength="100"
                            placeholder="Title, code, author, artist or manufacturer" />
                 </div>
 
@@ -113,6 +114,9 @@
                                 selected="@(Model.SelectedStatus == "Borrowed")">
                             Borrowed
                         </option>
+
+                        <option value="OnHold" selected="@(Model.SelectedStatus == "OnHold")">On hold</option>
+                        <option value="InTransit" selected="@(Model.SelectedStatus == "InTransit")">In transit</option>
 
                         <option value="Damaged"
                                 selected="@(Model.SelectedStatus == "Damaged")">
@@ -182,7 +186,8 @@ else
                 _ => "Library item"
             };
 
-            var statusClass = item.Status switch
+            var availability = Model.AvailabilityLabel(item);
+            var statusClass = availability == "On hold" ? "text-bg-warning" : item.Status switch
             {
                 ItemStatus.Available => "text-bg-success",
                 ItemStatus.Borrowed => "text-bg-primary",
@@ -206,7 +211,7 @@ else
                             </div>
 
                             <span class="badge @statusClass">
-                                @item.Status
+                                @availability
                             </span>
                         </div>
 
@@ -217,6 +222,7 @@ else
                         <p class="text-muted">
                             @item.Description
                         </p>
+                        <p class="small"><strong>Location:</strong> @(item.Branch?.Name ?? "Ask staff")</p>
 
                         <div class="border-top pt-3 mt-auto">
                             @if (item is Book book)
@@ -262,6 +268,11 @@ else
                                         @(toy.Manufacturer ?? "Not provided")
                                     </dd>
                                 </dl>
+                            }
+                            @if (item.Status is ItemStatus.Borrowed or ItemStatus.Damaged)
+                            {
+                                <a asp-controller="Kiosk" asp-action="Hold" asp-route-libraryCode="@item.LibraryCode"
+                                   class="btn btn-primary mt-3">Join waiting list</a>
                             }
                         </div>
                     </div>

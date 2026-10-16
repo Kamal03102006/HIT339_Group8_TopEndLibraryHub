@@ -49,6 +49,15 @@
                               class="text-danger"></span>
                     </div>
 
+                    <div class="form-check mb-3">
+                        <input asp-for="NeedsRepair" class="form-check-input" />
+                        <label asp-for="NeedsRepair" class="form-check-label"></label>
+                        <div class="form-text">
+                            Keep a damaged item out of circulation. Its waiting list stays
+                            in place until staff record the completed repair.
+                        </div>
+                    </div>
+
                     <div class="form-check mb-4">
                         <input asp-for="PayFineNow"
                                class="form-check-input" />

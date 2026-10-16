@@ -69,6 +69,49 @@ namespace TopEndLibraryHub.Data
                 "Manager");
             await SeedBranchesAndDesksAsync(context);
             await SeedDemonstrationDataAsync(context);
+            if (scope.ServiceProvider.GetRequiredService<IHostEnvironment>().IsDevelopment())
+                await SeedDemoPatronAsync(context, userManager);
+        }
+
+        // A separate fictional membership demonstrates verified ownership.
+        // Never claim an existing member record using a matching email or card number.
+        private static async Task SeedDemoPatronAsync(ApplicationDbContext context,
+            UserManager<IdentityUser> userManager)
+        {
+            const string email = "patron@topendlibrary.local";
+            const string membership = "MBR-8001";
+            var borrower = await context.Borrowers.SingleOrDefaultAsync(
+                member => member.MembershipNumber == membership);
+            if (borrower is not null &&
+                (borrower.Email != email || borrower.FullName != "Sky Nguyen"))
+                return; // Preserve any member already using this demonstration code.
+            if (borrower is null && await context.Borrowers.AnyAsync(member => member.Email == email))
+                return;
+
+            var user = await userManager.FindByEmailAsync(email);
+            if (user is null)
+            {
+                user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+                var result = await userManager.CreateAsync(user, "Patron#2026!");
+                if (!result.Succeeded)
+                    throw new InvalidOperationException("The development patron account could not be created: " +
+                        string.Join("; ", result.Errors.Select(error => error.Description)));
+            }
+            if (borrower?.IdentityUserId is not null && borrower.IdentityUserId != user.Id) return;
+            if (await context.Borrowers.AnyAsync(member => member.IdentityUserId == user.Id &&
+                member.MembershipNumber != membership)) return;
+            if (borrower is null)
+            {
+                borrower = new Borrower
+                {
+                    MembershipNumber = membership, FullName = "Sky Nguyen", Email = email,
+                    Phone = "0400000801", Address = "Fictional demonstration member, Darwin NT",
+                    DateRegistered = DateTime.UtcNow, IsActive = true
+                };
+                context.Borrowers.Add(borrower);
+            }
+            borrower.IdentityUserId = user.Id;
+            await context.SaveChangesAsync();
         }
           private static async Task SeedBranchesAndDesksAsync(
     ApplicationDbContext context)

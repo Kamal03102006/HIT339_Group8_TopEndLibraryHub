@@ -1,6 +1,3 @@
-
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TopEndLibraryHub.Models
@@ -9,13 +6,11 @@ namespace TopEndLibraryHub.Models
     {
         public int Id { get; set; }
 
-        public string? IdentityUserId { get; set; }
-
         [Required]
         [StringLength(20)]
         [Display(Name = "Membership Number")]
         [RegularExpression(
-            @"^MBR-\d{4}$",
+            @"^[Mm][Bb][Rr]-[0-9]{4}$",
             ErrorMessage = "Use the format MBR-0001.")]
         public string MembershipNumber { get; set; } = string.Empty;
 
@@ -45,6 +40,8 @@ namespace TopEndLibraryHub.Models
 
         [Display(Name = "Active Member")]
         public bool IsActive { get; set; } = true;
+
+        public string? IdentityUserId { get; set; }
 
         public ICollection<Loan> Loans { get; set; } = new List<Loan>();
     }

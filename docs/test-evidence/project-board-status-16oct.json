@@ -1,0 +1,364 @@
+{
+  "reviewedAtUtc": "2026-10-16T12:50:24.340490+00:00",
+  "url": "https://github.com/users/Kamal03102006/projects/1",
+  "access": {
+    "role": "read",
+    "canChangeProjectVisibility": false,
+    "canCopy": false,
+    "canCopyAsTemplate": false
+  },
+  "pageInfo": {
+    "startCursor": "Y3Vyc29yOnYyOpKqMDAwMDAwMDEuMM4PkiP6",
+    "endCursor": "Y3Vyc29yOnYyOpK5MDAwMDAwMDAuMDU4ODIzNTI5NDExNzY0N84QUA6I",
+    "hasNextPage": false,
+    "hasPreviousPage": false
+  },
+  "totalCount": {
+    "value": 17,
+    "isApproximate": false
+  },
+  "items": [
+    {
+      "title": "Agree team responsibilities and availability.",
+      "number": 1,
+      "status": "Done",
+      "assignees": [
+        "bhattarai-sandesh",
+        "harsimran-s20",
+        "Kamal03102006",
+        "preetmehakkaur9-lab"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5687988130,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/1",
+        "globalRelayId": "I_kwDOU53W088AAAABUwfPog"
+      },
+      "fields": {
+        "420449247": {
+          "value": 2
+        },
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Write requirements and acceptance checks for all seven modules.",
+      "number": 2,
+      "status": "Done",
+      "assignees": [
+        "Kamal03102006"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5687993060,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/2",
+        "globalRelayId": "I_kwDOU53W088AAAABUwfi5A"
+      },
+      "fields": {
+        "420449247": {
+          "value": 2
+        },
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Verify every member can clone, build, and run the project.",
+      "number": 3,
+      "status": "Done",
+      "assignees": [
+        "bhattarai-sandesh",
+        "harsimran-s20",
+        "Kamal03102006",
+        "preetmehakkaur9-lab"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5687996055,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/3",
+        "globalRelayId": "I_kwDOU53W088AAAABUwfulw"
+      },
+      "fields": {
+        "420449247": {
+          "value": 2
+        },
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Agree shared database changes and rules for borrowing, holds, and transfers.",
+      "number": 4,
+      "status": "Done",
+      "assignees": [
+        "harsimran-s20",
+        "Kamal03102006"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5688002632,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/4",
+        "globalRelayId": "I_kwDOU53W088AAAABUwgISA"
+      },
+      "fields": {
+        "420449247": {
+          "value": 2
+        },
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Self-service kiosk and private patron account",
+      "number": 10,
+      "status": "Done",
+      "assignees": [
+        "preetmehakkaur9-lab"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884288991,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/10",
+        "globalRelayId": "I_kwDOU53W088AAAABXrsf3w"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Secure read-only catalogue API",
+      "number": 11,
+      "status": "Done",
+      "assignees": [
+        "preetmehakkaur9-lab"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884293899,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/11",
+        "globalRelayId": "I_kwDOU53W088AAAABXrszCw"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Simulated loan, reminder and pickup notifications",
+      "number": 12,
+      "status": "Done",
+      "assignees": [
+        "Kamal03102006"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884300621,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/12",
+        "globalRelayId": "I_kwDOU53W088AAAABXrtNTQ"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Branches, reception desks and item transfers",
+      "number": 13,
+      "status": "Done",
+      "assignees": [
+        "harsimran-s20"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884306116,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/13",
+        "globalRelayId": "I_kwDOU53W088AAAABXrtixA"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Holds, FIFO waiting list and pickup collection",
+      "number": 14,
+      "status": "Done",
+      "assignees": [
+        "Kamal03102006"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884309784,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/14",
+        "globalRelayId": "I_kwDOU53W088AAAABXrtxGA"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "CSV book importer with validation and quantity handling",
+      "number": 15,
+      "status": "Done",
+      "assignees": [
+        "bhattarai-sandesh"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884313584,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/15",
+        "globalRelayId": "I_kwDOU53W088AAAABXrt_8A"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Manager dashboard and CSV/PDF reporting",
+      "number": 16,
+      "status": "Done",
+      "assignees": [
+        "bhattarai-sandesh"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884318272,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/16",
+        "globalRelayId": "I_kwDOU53W088AAAABXruSQA"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Final acceptance: 33 Windows tests and 10 API checks",
+      "number": 17,
+      "status": "Done",
+      "assignees": [
+        "Kamal03102006"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884384352,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/17",
+        "globalRelayId": "I_kwDOU53W088AAAABXryUYA"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Installation guide and patron user guide",
+      "number": 18,
+      "status": "Done",
+      "assignees": [
+        "harsimran-s20",
+        "preetmehakkaur9-lab"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884391677,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/18",
+        "globalRelayId": "I_kwDOU53W088AAAABXryw_Q"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Individual reports, hours, reflections and group portfolio",
+      "number": 19,
+      "status": "Done",
+      "assignees": [
+        "bhattarai-sandesh",
+        "harsimran-s20",
+        "Kamal03102006",
+        "preetmehakkaur9-lab"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884394943,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/19",
+        "globalRelayId": "I_kwDOU53W088AAAABXry9vw"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "BLOCKED: Separate VM installation verification",
+      "number": 20,
+      "status": "In Progress",
+      "assignees": [
+        "harsimran-s20"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884402422,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/20",
+        "globalRelayId": "I_kwDOU53W088AAAABXrza9g"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Publish and merge the final integration release",
+      "number": 21,
+      "status": "In Progress",
+      "assignees": [
+        "Kamal03102006"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884405973,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/21",
+        "globalRelayId": "I_kwDOU53W088AAAABXrzo1Q"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    },
+    {
+      "title": "Submit portfolio PDF and GitHub repository link",
+      "number": 22,
+      "status": "Todo",
+      "assignees": [
+        "Kamal03102006"
+      ],
+      "type": "Issue",
+      "content": {
+        "id": 5884410143,
+        "url": "https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub/issues/22",
+        "globalRelayId": "I_kwDOU53W088AAAABXrz5Hw"
+      },
+      "fields": {
+        "420449247": null,
+        "420449341": null,
+        "420449562": null
+      }
+    }
+  ]
+}

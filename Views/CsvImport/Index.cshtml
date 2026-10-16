@@ -1,0 +1,43 @@
+@model TopEndLibraryHub.ViewModels.CsvImportViewModel
+@{
+    ViewData["Title"] = "Import books";
+}
+<div class="library-page-header">
+    <div><p class="library-eyebrow">Administration</p><h1>Import books</h1>
+    <p>Add physical copies to an active branch and review the outcome of each CSV row.</p></div>
+    <a asp-controller="Books" asp-action="Index" class="btn btn-outline-primary">Manage books</a>
+</div>
+<div class="library-panel p-4 mb-4">
+    <p>Required columns: <strong>Title, Author, ISBN, Category, Quantity, PublicationYear</strong>. Publisher is optional.
+        Quantity creates 1-100 separate copies with unique library codes. Existing ISBN rows are skipped when a file is uploaded again.</p>
+    <p class="text-muted">Use the representative files in <code>docs/samples</code>. Maximum file size: 5 MB.</p>
+    <form asp-action="Upload" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div class="row g-3 align-items-end">
+            <div class="col-md-4"><label for="branchId" class="form-label">Destination branch</label>
+                <select id="branchId" name="branchId" class="form-select" required>
+                    <option value="">Choose a branch</option>
+                    @foreach (var branch in Model.Branches)
+                    { <option value="@branch.Id" selected="@(branch.Id == Model.BranchId)">@branch.Name</option> }
+                </select>
+            </div>
+            <div class="col-md-5"><label for="file" class="form-label">CSV file</label>
+                <input id="file" name="file" type="file" accept=".csv,text/csv" class="form-control" required /></div>
+            <div class="col-md-3"><button class="btn btn-primary" disabled="@(!Model.Branches.Any())">Import copies</button></div>
+        </div>
+    </form>
+    @if (!Model.Branches.Any()) { <p class="alert alert-warning mt-3">No active branches are available.</p> }
+</div>
+@if (!string.IsNullOrEmpty(Model.Message))
+{ <div class="alert @(Model.Succeeded ? "alert-success" : "alert-danger")" role="status">@Model.Message</div> }
+@if (Model.Rows.Any())
+{
+    <div class="library-panel p-4"><h2 class="h4">Row results</h2>
+        <p>Showing up to the first 200 row outcomes. Summary counts cover the complete upload.</p>
+        <div class="table-responsive"><table class="table align-middle">
+            <thead><tr><th>CSV row</th><th>Title</th><th>Result</th><th>Details</th></tr></thead>
+            <tbody>@foreach (var row in Model.Rows)
+            { <tr><td>@row.RowNumber</td><td>@row.Title</td><td>@row.Outcome</td><td>@row.Detail</td></tr> }</tbody>
+        </table></div>
+    </div>
+}

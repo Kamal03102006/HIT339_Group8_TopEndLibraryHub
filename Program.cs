@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TopEndLibraryHub.Data;
-using TopEndLibraryHub.Middleware;
 using TopEndLibraryHub.Services;
+using TopEndLibraryHub.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,18 +36,38 @@ builder.Services
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-    options.SlidingExpiration = false;
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.SlidingExpiration = true;
     options.LoginPath = "/Identity/Account/Login";
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Events.OnSigningIn = context =>
+    {
+        var staff = context.Principal?.IsInRole("Admin") == true ||
+            context.Principal?.IsInRole("Reception") == true ||
+            context.Principal?.IsInRole("Manager") == true;
+        if (!staff)
+        {
+            context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(2);
+            context.Properties.IsPersistent = false;
+        }
+        return Task.CompletedTask;
+    };
 });
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<HoldQueueService>();
+builder.Services.AddScoped<HoldWorkflowService>();
+builder.Services.AddScoped<HoldPlacementService>();
+builder.Services.AddScoped<CirculationService>();
+builder.Services.AddScoped<ManagerReportingService>();
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddSingleton<LibraryClock>();
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddHostedService<NotificationWorker>();
+builder.Services.Configure<Microsoft.AspNetCore.Builder.RequestLocalizationOptions>(options =>
+    options.SetDefaultCulture("en-AU").AddSupportedCultures("en-AU").AddSupportedUICultures("en-AU"));
 builder.Services.AddDistributedMemoryCache();
-
-// Register kiosk checkout service.
-builder.Services.AddScoped<KioskCheckoutService>();
 
 builder.Services.AddSession(options =>
 {
@@ -56,9 +76,6 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
-// Register kiosk checkout service.
-builder.Services.AddScoped<KioskCheckoutService>();
-
 var app = builder.Build();
 
 try
@@ -87,14 +104,15 @@ else
     app.UseHsts();
 }
 
+app.UseRequestLocalization();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseSession();
 
 app.UseAuthentication();
+app.UseMiddleware<KioskSessionMiddleware>();
 app.UseAuthorization();
 
-// Protect catalogue API endpoints.
 app.UseMiddleware<CatalogueApiKeyMiddleware>();
 
 app.MapStaticAssets();

@@ -1,9 +1,11 @@
-﻿using System.Data;
+using System.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using TopEndLibraryHub.Services;
 using TopEndLibraryHub.Data;
 using TopEndLibraryHub.Models;
 using TopEndLibraryHub.ViewModels;
@@ -14,10 +16,12 @@ namespace TopEndLibraryHub.Controllers
     public class TransfersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly HoldWorkflowService _holds;
 
-        public TransfersController(ApplicationDbContext context)
+        public TransfersController(ApplicationDbContext context, HoldWorkflowService holds)
         {
             _context = context;
+            _holds = holds;
         }
 
         [HttpGet]
@@ -76,6 +80,8 @@ namespace TopEndLibraryHub.Controllers
                 .Where(i =>
                     i.BranchId == desk.BranchId &&
                     i.Status == ItemStatus.Available &&
+                    !_context.Holds.Any(h => h.ItemId == i.Id &&
+                        h.Status == HoldStatus.ReadyForPickup) &&
                     !_context.Loans.Any(l =>
                         l.ItemId == i.Id &&
                         l.ReturnedDate == null) &&
@@ -151,6 +157,12 @@ namespace TopEndLibraryHub.Controllers
 
             try
             {
+                await _holds.LockItemAsync(model.ItemId);
+                if (await GetWorkingDeskAsync() is null)
+                {
+                    TempData["LocationMessage"] = "Your working desk is no longer active. Select it again.";
+                    return RedirectToAction("Index", "StaffLocation");
+                }
                 var destinationExists = await _context.Branches
                     .AnyAsync(b =>
                         b.Id == model.DestinationBranchId &&
@@ -197,6 +209,19 @@ namespace TopEndLibraryHub.Controllers
                     }
                 }
 
+                if (item is not null && ModelState.IsValid)
+                {
+                    var allocation = await _holds.RefreshLockedAsync(item);
+                    if (allocation is not null &&
+                        (allocation.Status == HoldStatus.ReadyForPickup ||
+                         allocation.PickupBranchId != model.DestinationBranchId))
+                    {
+                        ModelState.AddModelError(nameof(model.DestinationBranchId),
+                            "A reserved copy may travel only to its selected pickup branch. " +
+                            "An item already ready for collection must stay there.");
+                    }
+                }
+
                 if (!ModelState.IsValid)
                 {
                     await transaction.RollbackAsync();
@@ -235,7 +260,7 @@ namespace TopEndLibraryHub.Controllers
             }
             catch (DbUpdateException)
             {
-                await transaction.RollbackAsync();
+                await transaction.DisposeAsync();
                 _context.ChangeTracker.Clear();
 
                 ModelState.AddModelError(
@@ -248,7 +273,17 @@ namespace TopEndLibraryHub.Controllers
 
                 return View(model);
             }
+            catch (SqlException exception) when (exception.Number is 1205 or 1222 or 51001)
+            {
+                await transaction.DisposeAsync();
+                _context.ChangeTracker.Clear();
+                ModelState.AddModelError(string.Empty,
+                    "This item is being updated. Refresh the transfer list before retrying.");
+                await PopulateTransferOptionsAsync(model, desk);
+                return View(model);
+            }
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -264,12 +299,23 @@ namespace TopEndLibraryHub.Controllers
                 return RedirectToAction("Index", "StaffLocation");
             }
 
+            var itemId = await _context.ItemTransfers.AsNoTracking()
+                .Where(transfer => transfer.Id == id)
+                .Select(transfer => (int?)transfer.ItemId).SingleOrDefaultAsync();
+            if (!itemId.HasValue) return NotFound();
+
             await using var transaction =
                 await _context.Database.BeginTransactionAsync(
                     IsolationLevel.Serializable);
 
             try
             {
+                await _holds.LockItemAsync(itemId.Value);
+                if (await GetWorkingDeskAsync() is null)
+                {
+                    TempData["LocationMessage"] = "Your working desk is no longer active. Select it again.";
+                    return RedirectToAction("Index", "StaffLocation");
+                }
                 var transfer = await _context.ItemTransfers
                     .Include(t => t.Item)
                     .SingleOrDefaultAsync(t => t.Id == id);
@@ -324,8 +370,6 @@ namespace TopEndLibraryHub.Controllers
 
                 transfer.Item.BranchId = desk.BranchId;
 
-                // Unreserved-item workflow only.
-                // Connect the shared hold rules before integration.
                 transfer.Item.Status = ItemStatus.Available;
 
                 transfer.Status = TransferStatus.Received;
@@ -335,7 +379,9 @@ namespace TopEndLibraryHub.Controllers
                     User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
                 await _context.SaveChangesAsync();
+                var allocation = await _holds.RefreshLockedAsync(transfer.Item);
                 await transaction.CommitAsync();
+                await _holds.NotifyReadyAfterCommitAsync(allocation);
 
                 TempData["SuccessMessage"] =
                     $"{transfer.Item.LibraryCode} received at " +
@@ -345,13 +391,20 @@ namespace TopEndLibraryHub.Controllers
             }
             catch (DbUpdateException)
             {
-                await transaction.RollbackAsync();
+                await transaction.DisposeAsync();
                 _context.ChangeTracker.Clear();
 
                 TempData["ErrorMessage"] =
                     "Receipt could not be saved. Refresh the transfer list " +
                     "and check whether another staff member has received it.";
 
+                return RedirectToAction(nameof(Index));
+            }
+            catch (SqlException exception) when (exception.Number is 1205 or 1222 or 51001)
+            {
+                await transaction.DisposeAsync();
+                _context.ChangeTracker.Clear();
+                TempData["ErrorMessage"] = "This item is being updated. Refresh before receiving it again.";
                 return RedirectToAction(nameof(Index));
             }
         }

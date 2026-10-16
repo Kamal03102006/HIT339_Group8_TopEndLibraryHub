@@ -1,77 +1,16 @@
-﻿# TopEndLibraryHub — Self-Service Kiosk Patron Guide
+# Top End Library Hub — patron guide
 
-**Project:** TopEndLibraryHub
-**Unit:** HIT339 — Group 8
-**Developed by:** Mehakpreet Kaur
+We provide this guide for the combined release. Browsing is public; private account/borrowing uses a verified login linked to membership.
 
-## 1. Introduction
+1. Open the application and select **Collection** or **Self service**. Browsing does not require login.
+2. Search by title, code or keyword. Choose a category and availability filter; use Clear filters to start again.
+3. Read the location and availability. **On hold** means a usable copy is reserved; **In transit** means it has not arrived. Borrowed, damaged or destroyed copies cannot be borrowed.
+4. For a borrowed or damaged copy, select **Join waiting list** on its catalogue card. Sign in with your verified linked library account, check the item code and select your pickup branch. Submit once. **My library account** confirms the request and shows your waiting position. Your place is preserved while staff handle return, repair and transfer. Ask Reception for help if your login is unlinked or your membership is inactive.
+5. Select **My library account** and sign in using your verified linked account. You can see your own current loans, dates, recorded unpaid fines, separately labelled estimated late charges and active pickup requests. An unlinked login needs staff assistance.
+6. At the item's physical pickup branch, select **Scan an item**, scan its barcode or type the library code, then choose **Borrow this item** when offered. The account shows the new loan and due date. An item reserved for somebody else cannot be borrowed.
+7. Ask staff for help if the item is at another branch, in transit, awaiting repair or your membership is inactive. A catalogue listing alone does not guarantee checkout.
+8. Select **Finish and sign out** before leaving a shared kiosk. Signed-in kiosk screens, including the public browsing screen, have a two-minute inactivity reset.
 
-Welcome to the TopEndLibraryHub Self-Service Kiosk. This kiosk allows library patrons to search the library catalogue, explore different item categories and check the availability of books, music and toys.
+Kiosk checkout defaults to a 14-day loan. Estimated late charges use AUD $1.50 per overdue Darwin calendar day; staff confirm the final fine when the item is returned. Members can place requests and view their own progress. Staff can place assisted requests and cancel them. One member can have one active request per item. Joining a waiting list does not mean an item is ready for collection; wait for **Ready for collection** at your chosen branch. This assessment application records simulated email/SMS messages.
 
-## 2. Accessing the Kiosk
-
-1. Open the TopEndLibraryHub application in a web browser.
-2. Navigate to the self-service kiosk page.
-3. The kiosk will display a welcome message and catalogue search options.
-
-No staff login is required to browse the public catalogue.
-
-## 3. Searching for Library Items
-
-1. Locate the catalogue search field.
-2. Enter an item name or relevant keyword.
-3. Select the search button.
-4. Review the matching results displayed on the screen.
-
-Each matching item displays relevant catalogue information.
-
-## 4. Filtering Catalogue Items
-
-The kiosk provides filters to make browsing easier.
-
-**Category filter:** Select Books, Music, Toys or All Categories.
-
-**Availability filter:** Select the desired availability option.
-
-The filters can be used together with the search field to narrow the results.
-
-To start a new search, select the clear-filters option.
-
-## 5. Understanding Item Information
-
-Catalogue results may display:
-
-* Item name
-* Library code
-* Description
-* Item category
-* Availability status
-
-An item marked Available is currently listed as available in the catalogue.
-
-An item marked Borrowed, Damaged or Destroyed is not available for ordinary borrowing.
-
-## 6. When an Item Cannot Be Found
-
-If the kiosk does not display the item you are searching for:
-
-1. Check the spelling of your search.
-2. Try a shorter or different keyword.
-3. Clear any selected filters.
-4. Contact library reception if assistance is needed.
-
-## 7. Getting Assistance
-
-If you need help locating an item, understanding its availability or arranging a borrowing service, contact the library reception desk.
-
-Provide the library code where possible so staff can identify the item.
-
-## 8. Privacy and Security
-
-The kiosk provides public catalogue information without requiring patrons to access staff management functions.
-
-Patrons cannot edit library item records through the catalogue interface.
-
-## 9. Conclusion
-
-The TopEndLibraryHub self-service kiosk provides a convenient and user-friendly way to explore the library catalogue. Its search and filtering features help patrons locate library materials and check availability efficiently.
+For a local Development demonstration only, use the fictional linked patron in [the integration handoff](Kiosk_Integration_Readme.md). Do not use another person's card number to access their account.

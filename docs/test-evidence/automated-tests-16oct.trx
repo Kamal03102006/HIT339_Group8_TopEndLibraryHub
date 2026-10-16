@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="ba72c832-0047-4290-94cd-2c307b3f7bdf" name="@a9866c1ceeac 2026-10-16 17:02:44" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-16T17:02:44.6396717+09:00" queuing="2026-10-16T17:02:44.6396718+09:00" start="2026-10-16T17:02:43.9540665+09:00" finish="2026-10-16T17:02:46.3378354+09:00" />
+  <TestSettings name="default" id="87657ae8-231f-4c51-9d68-5200e801189b">
+    <Deployment runDeploymentRoot="_a9866c1ceeac_2026-10-16_17_02_44" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="8c0893f8-559d-49ee-a92a-94789ff5efc2" testId="83eb4e25-5ddd-f258-db4e-836931d8399c" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.AdministrativeAndFinanceActions_DeclareRequiredRoleAndCsrfProtection" computerName="a9866c1ceeac" duration="00:00:00.0102661" startTime="2026-10-16T17:02:44.5300868+09:00" endTime="2026-10-16T17:02:44.5585801+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c0893f8-559d-49ee-a92a-94789ff5efc2" />
+    <UnitTestResult executionId="487d8485-11b8-4125-b745-2cb42d3c22c5" testId="633647f4-b3c9-7072-5c95-aa65455a72cd" testName="TopEndLibraryHub.Tests.FineCalculationTests.ReturnFine_RecordsPaymentStateAndTimestamp(payNow: False)" computerName="a9866c1ceeac" duration="00:00:00.0003311" startTime="2026-10-16T17:02:44.6011777+09:00" endTime="2026-10-16T17:02:44.6012205+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="487d8485-11b8-4125-b745-2cb42d3c22c5" />
+    <UnitTestResult executionId="5c3aea02-a40b-4f1a-af6f-40b575ebb970" testId="5417be6b-9e17-4c8f-585f-26c71340db32" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.CsvCells_AreEscapedAgainstSpreadsheetFormulas(text: &quot;@formula&quot;)" computerName="a9866c1ceeac" duration="00:00:00.0000040" startTime="2026-10-16T17:02:46.1808931+09:00" endTime="2026-10-16T17:02:46.1809236+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5c3aea02-a40b-4f1a-af6f-40b575ebb970" />
+    <UnitTestResult executionId="50b8f13d-e346-44b8-aa2d-bc8e31ff3c55" testId="a2eae63b-5fc0-fa1c-ecf6-7c1dd244b9f6" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.CsvCells_AreEscapedAgainstSpreadsheetFormulas(text: &quot;=SUM(1,2)&quot;)" computerName="a9866c1ceeac" duration="00:00:00.0000772" startTime="2026-10-16T17:02:46.1806754+09:00" endTime="2026-10-16T17:02:46.1807212+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="50b8f13d-e346-44b8-aa2d-bc8e31ff3c55" />
+    <UnitTestResult executionId="8331794f-7797-4de7-80a3-b7fab519d43a" testId="9103b02b-2d8a-c63d-0ede-599376ed7929" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.ControllerAndCsv_UseTheSameDefinitionsAndTraceableFineRows" computerName="a9866c1ceeac" duration="00:00:00.0140599" startTime="2026-10-16T17:02:46.2511736+09:00" endTime="2026-10-16T17:02:46.2640720+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8331794f-7797-4de7-80a3-b7fab519d43a" />
+    <UnitTestResult executionId="2759a17a-4637-442f-933c-461444950dc2" testId="fb4b7d14-dbcd-20fb-0088-8218714ac6fd" testName="TopEndLibraryHub.Tests.FineCalculationTests.ReturnFine_RecordsPaymentStateAndTimestamp(payNow: True)" computerName="a9866c1ceeac" duration="00:00:00.0059505" startTime="2026-10-16T17:02:44.6010494+09:00" endTime="2026-10-16T17:02:44.6010890+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2759a17a-4637-442f-933c-461444950dc2" />
+    <UnitTestResult executionId="b6647650-46ea-48a4-878f-7c9661f9a57a" testId="e2999b54-df58-cf8d-bf21-855670ad81f9" testName="TopEndLibraryHub.Tests.NotificationFilterTests.FailedManualCheck_KeepsTheSelectedFiltersForRetry" computerName="a9866c1ceeac" duration="00:00:00.1420520" startTime="2026-10-16T17:02:44.5297952+09:00" endTime="2026-10-16T17:02:44.6725214+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6647650-46ea-48a4-878f-7c9661f9a57a" />
+    <UnitTestResult executionId="20eb7431-8dbe-4eef-99ed-8f1e133798b0" testId="71cae716-09e0-dd81-aced-edc737242c14" testName="TopEndLibraryHub.Tests.ApiKeyTests.Middleware_RequiresTheConfiguredApiKey(key: null, status: 401, expectedCalled: False)" computerName="a9866c1ceeac" duration="00:00:00.0029642" startTime="2026-10-16T17:02:44.6024534+09:00" endTime="2026-10-16T17:02:44.6024935+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20eb7431-8dbe-4eef-99ed-8f1e133798b0" />
+    <UnitTestResult executionId="5381dab9-72de-4a52-aa4b-45db8b69e3a0" testId="cdd89f19-cc3f-1f36-2f36-86ce6616ad4a" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.InvalidRows_AreExplainedWithoutLosingValidRows" computerName="a9866c1ceeac" duration="00:00:00.0383571" startTime="2026-10-16T17:02:46.1239473+09:00" endTime="2026-10-16T17:02:46.1624661+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5381dab9-72de-4a52-aa4b-45db8b69e3a0" />
+    <UnitTestResult executionId="7a901a62-d493-462d-b5af-48b7b129caf4" testId="67cf659a-f928-e0ef-8669-3cc071410f45" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.CatalogueApi_SharesAvailabilityAndSupportsBranchCategoryFilters" computerName="a9866c1ceeac" duration="00:00:00.0689497" startTime="2026-10-16T17:02:46.1810718+09:00" endTime="2026-10-16T17:02:46.2499237+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a901a62-d493-462d-b5af-48b7b129caf4" />
+    <UnitTestResult executionId="683fe2ea-d5e6-4832-a0d0-0718e13fa64c" testId="a7fbd4ce-12fb-61da-c9e1-199ac3e698d7" testName="TopEndLibraryHub.Tests.SqlServerCirculationTests.ReadyOwner_CanCollectWhileAnotherMemberWaits" computerName="a9866c1ceeac" duration="00:00:00.0010000" startTime="2026-10-16T17:02:44.5549037+09:00" endTime="2026-10-16T17:02:44.5549316+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="683fe2ea-d5e6-4832-a0d0-0718e13fa64c">
+      <Output>
+        <ErrorInfo>
+          <Message>Set TOPEND_TEST_SQLSERVER to run isolated SQL Server migration and circulation checks.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5f1b7c3c-5049-461b-b69b-cba2767147f0" testId="aacef1fe-83f1-7579-3496-e25820abb69d" testName="TopEndLibraryHub.Tests.ApiKeyTests.Middleware_RequiresTheConfiguredApiKey(key: &quot;wrong&quot;, status: 401, expectedCalled: False)" computerName="a9866c1ceeac" duration="00:00:00.0010774" startTime="2026-10-16T17:02:44.6025717+09:00" endTime="2026-10-16T17:02:44.6026117+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5f1b7c3c-5049-461b-b69b-cba2767147f0" />
+    <UnitTestResult executionId="559f02a7-c3e6-42bf-b629-402b4adc88c5" testId="6d800c9f-1d90-217e-4ee6-d3a1cfe36c3a" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.ImportQuantity_CreatesDistinctCopiesAndReuploadSkipsExistingIsbn" computerName="a9866c1ceeac" duration="00:00:00.0126638" startTime="2026-10-16T17:02:46.1626706+09:00" endTime="2026-10-16T17:02:46.1752901+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="559f02a7-c3e6-42bf-b629-402b4adc88c5" />
+    <UnitTestResult executionId="7e619af2-3311-4617-9dd1-7d5c9d9b907c" testId="90feeb5f-11fb-6a2f-cac8-e243e77202b9" testName="TopEndLibraryHub.Tests.FineCalculationTests.NoFine_CannotRetainAnOldPaymentTimestamp" computerName="a9866c1ceeac" duration="00:00:00.0015025" startTime="2026-10-16T17:02:44.6007823+09:00" endTime="2026-10-16T17:02:44.6008182+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7e619af2-3311-4617-9dd1-7d5c9d9b907c" />
+    <UnitTestResult executionId="b3b87650-2945-4936-af7f-c4da030ac5e9" testId="b470297a-b689-ce5b-2657-ae08d9a87649" testName="TopEndLibraryHub.Tests.FineCalculationTests.DarwinDate_ChangesAt1430Utc" computerName="a9866c1ceeac" duration="00:00:00.0021326" startTime="2026-10-16T17:02:44.6009159+09:00" endTime="2026-10-16T17:02:44.6009536+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3b87650-2945-4936-af7f-c4da030ac5e9" />
+    <UnitTestResult executionId="a4f1c3d5-1440-49b0-846b-e54e968c0839" testId="b2728509-92e0-006d-c253-6c4c1fd23559" testName="TopEndLibraryHub.Tests.MigrationModelTests.SqlServerMigrationChain_HasOneCreationPerSharedTable" computerName="a9866c1ceeac" duration="00:00:01.1375142" startTime="2026-10-16T17:02:44.5300572+09:00" endTime="2026-10-16T17:02:45.6680337+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4f1c3d5-1440-49b0-846b-e54e968c0839" />
+    <UnitTestResult executionId="b6d98b01-7edc-4f00-a78d-40cdbe4dbe3b" testId="e86eebc4-79cb-eabd-84b3-f0523550e8b1" testName="TopEndLibraryHub.Tests.ApiKeyTests.UnconfiguredApi_FailsClosed" computerName="a9866c1ceeac" duration="00:00:00.0567679" startTime="2026-10-16T17:02:44.5576740+09:00" endTime="2026-10-16T17:02:44.6013401+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6d98b01-7edc-4f00-a78d-40cdbe4dbe3b" />
+    <UnitTestResult executionId="e528a6b3-8e48-4987-abf4-6123e81fceed" testId="ee65d0bc-9ee4-1dc8-9ddc-ebd6e50daa5e" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.RecordedRevenue_SeparatesUnpaidFinesFromAccruingEstimates" computerName="a9866c1ceeac" duration="00:00:00.0044392" startTime="2026-10-16T17:02:46.2642926+09:00" endTime="2026-10-16T17:02:46.2685699+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e528a6b3-8e48-4987-abf4-6123e81fceed" />
+    <UnitTestResult executionId="0a30ff4a-c400-4b07-90c8-71e9fbcda3df" testId="b83be46c-f1c9-a81b-5c69-e5547aa9e9a2" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.EmptyLibrary_ReportsZeroWithoutDivisionErrors" computerName="a9866c1ceeac" duration="00:00:00.0051404" startTime="2026-10-16T17:02:46.1754877+09:00" endTime="2026-10-16T17:02:46.1805160+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a30ff4a-c400-4b07-90c8-71e9fbcda3df" />
+    <UnitTestResult executionId="34a39eb8-699a-4059-8d6e-ecdb40f4ded9" testId="e98fcc89-aaa1-405e-8cdc-d8f4f702de54" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.PdfExport_ProducesARealReportFromTheSameSnapshot" computerName="a9866c1ceeac" duration="00:00:00.3511880" startTime="2026-10-16T17:02:45.7535831+09:00" endTime="2026-10-16T17:02:46.1188591+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34a39eb8-699a-4059-8d6e-ecdb40f4ded9" />
+    <UnitTestResult executionId="dbc2d3eb-ec77-4729-b94d-e8e1657613db" testId="d55cca0f-6d28-131e-aa4f-0987cf08a6dc" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.Availability_ExcludesReservationsLoansTransfersAndInactiveBranches" computerName="a9866c1ceeac" duration="00:00:00.0087225" startTime="2026-10-16T17:02:46.2686908+09:00" endTime="2026-10-16T17:02:46.2773973+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dbc2d3eb-ec77-4729-b94d-e8e1657613db" />
+    <UnitTestResult executionId="62369515-6010-4893-bd95-ab7d876b24a0" testId="7621a4ac-2973-42ac-d833-44ed925ddc40" testName="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: -1, expected: 0)" computerName="a9866c1ceeac" duration="00:00:00.0092832" startTime="2026-10-16T17:02:44.5278136+09:00" endTime="2026-10-16T17:02:44.5604749+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62369515-6010-4893-bd95-ab7d876b24a0" />
+    <UnitTestResult executionId="cd3c6e5f-d281-44a3-842e-2d10f8cc2c72" testId="d26a79bd-5977-6d5c-743e-57d6b1ce5b25" testName="TopEndLibraryHub.Tests.PaymentActionTests.PayingRecordedFine_MovesOnlyThatAmountFromUnpaidToPaid_AndRepeatIsIdempotent" computerName="a9866c1ceeac" duration="00:00:01.4033943" startTime="2026-10-16T17:02:44.5300000+09:00" endTime="2026-10-16T17:02:45.9338677+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cd3c6e5f-d281-44a3-842e-2d10f8cc2c72" />
+    <UnitTestResult executionId="bb6ddec3-6e54-4756-8b03-4df60ba9b38a" testId="57fc815f-185f-6c3f-e75d-2ed65a4f9000" testName="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: 0, expected: 0)" computerName="a9866c1ceeac" duration="00:00:00.0000070" startTime="2026-10-16T17:02:44.6004059+09:00" endTime="2026-10-16T17:02:44.6004470+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb6ddec3-6e54-4756-8b03-4df60ba9b38a" />
+    <UnitTestResult executionId="d38f05d1-211f-42c2-b460-7f676bc6206b" testId="0397bda2-5873-464b-eb2b-2b928e0cf786" testName="TopEndLibraryHub.Tests.SqlServerCirculationTests.LateReturn_RecordsFineAndPromotesTheNextHold" computerName="a9866c1ceeac" duration="00:00:00.0010000" startTime="2026-10-16T17:02:44.5299585+09:00" endTime="2026-10-16T17:02:44.5309587+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d38f05d1-211f-42c2-b460-7f676bc6206b">
+      <Output>
+        <ErrorInfo>
+          <Message>Set TOPEND_TEST_SQLSERVER to run isolated SQL Server migration and circulation checks.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="57823d2a-e7ff-4fc8-a90f-36f054b2360e" testId="f8ea8fcf-63d4-fe82-e390-61e97ddddb5c" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.CsvCells_AreEscapedAgainstSpreadsheetFormulas(text: &quot;   +command&quot;)" computerName="a9866c1ceeac" duration="00:00:00.0000010" startTime="2026-10-16T17:02:46.1809723+09:00" endTime="2026-10-16T17:02:46.1810027+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="57823d2a-e7ff-4fc8-a90f-36f054b2360e" />
+    <UnitTestResult executionId="c72612d0-6bec-4a65-8b7a-8b4d5909d67d" testId="423ba24a-dfff-2ab3-6626-d46eec7504bc" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.CsvCells_AreEscapedAgainstSpreadsheetFormulas(text: &quot;\tformula&quot;)" computerName="a9866c1ceeac" duration="00:00:00.0001646" startTime="2026-10-16T17:02:46.1807948+09:00" endTime="2026-10-16T17:02:46.1808257+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c72612d0-6bec-4a65-8b7a-8b4d5909d67d" />
+    <UnitTestResult executionId="6c67a5e9-a1c4-404d-a4ba-d217ab5c9a3a" testId="c4d512b1-4f0b-6831-6655-04920c6acbbc" testName="TopEndLibraryHub.Tests.ReportingAndImportTests.MissingHeadersAndInactiveBranch_AreRejected" computerName="a9866c1ceeac" duration="00:00:01.2108148" startTime="2026-10-16T17:02:44.5999828+09:00" endTime="2026-10-16T17:02:45.7533769+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6c67a5e9-a1c4-404d-a4ba-d217ab5c9a3a" />
+    <UnitTestResult executionId="8d95f382-e735-4d2f-87e3-305f101ba094" testId="6c4619cf-ead6-ac7d-4d3d-99f22fbb80f9" testName="TopEndLibraryHub.Tests.ApiKeyTests.Middleware_RequiresTheConfiguredApiKey(key: &quot;test-only-key&quot;, status: 200, expectedCalled: True)" computerName="a9866c1ceeac" duration="00:00:00.0001481" startTime="2026-10-16T17:02:44.6026701+09:00" endTime="2026-10-16T17:02:44.6027078+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8d95f382-e735-4d2f-87e3-305f101ba094" />
+    <UnitTestResult executionId="812c3612-895d-4a8e-9067-36265f88753d" testId="b5a9595f-02d9-4dbc-0b2c-46a53778f3f3" testName="TopEndLibraryHub.Tests.SqlServerCirculationTests.TwoSimultaneousCheckouts_CreateOneLoan" computerName="a9866c1ceeac" duration="00:00:00.0010000" startTime="2026-10-16T17:02:44.5540484+09:00" endTime="2026-10-16T17:02:44.5541459+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="812c3612-895d-4a8e-9067-36265f88753d">
+      <Output>
+        <ErrorInfo>
+          <Message>Set TOPEND_TEST_SQLSERVER to run isolated SQL Server migration and circulation checks.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="67286a04-d784-4181-848f-1ef802bb8439" testId="af4b9373-8343-a4c8-3c71-7feee94ce6d0" testName="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: 1, expected: 1.5)" computerName="a9866c1ceeac" duration="00:00:00.0000018" startTime="2026-10-16T17:02:44.6006468+09:00" endTime="2026-10-16T17:02:44.6006817+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="67286a04-d784-4181-848f-1ef802bb8439" />
+    <UnitTestResult executionId="feebf01a-6322-4c6b-aaaf-464d5ed54412" testId="84ec04dd-f89e-2f13-6ee9-d7e34d3284a7" testName="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: 8, expected: 12)" computerName="a9866c1ceeac" duration="00:00:00.0000029" startTime="2026-10-16T17:02:44.6005293+09:00" endTime="2026-10-16T17:02:44.6005803+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="feebf01a-6322-4c6b-aaaf-464d5ed54412" />
+    <UnitTestResult executionId="8fa958cd-a838-4192-a550-1094825b1b11" testId="d1f13e6b-03b7-f20e-8a71-7c9d0726c6ab" testName="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: 4, expected: 6)" computerName="a9866c1ceeac" duration="00:00:00.0003120" startTime="2026-10-16T17:02:44.6000110+09:00" endTime="2026-10-16T17:02:44.6000812+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8fa958cd-a838-4192-a550-1094825b1b11" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.CsvCells_AreEscapedAgainstSpreadsheetFormulas(text: &quot;\tformula&quot;)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="423ba24a-dfff-2ab3-6626-d46eec7504bc">
+      <Execution id="c72612d0-6bec-4a65-8b7a-8b4d5909d67d" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="CsvCells_AreEscapedAgainstSpreadsheetFormulas" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.ReturnFine_RecordsPaymentStateAndTimestamp(payNow: True)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="fb4b7d14-dbcd-20fb-0088-8218714ac6fd">
+      <Execution id="2759a17a-4637-442f-933c-461444950dc2" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="ReturnFine_RecordsPaymentStateAndTimestamp" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: -1, expected: 0)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="7621a4ac-2973-42ac-d833-44ed925ddc40">
+      <Execution id="62369515-6010-4893-bd95-ab7d876b24a0" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="ProductionFinePolicy_UsesCalendarDays" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.NotificationFilterTests.FailedManualCheck_KeepsTheSelectedFiltersForRetry" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="e2999b54-df58-cf8d-bf21-855670ad81f9">
+      <Execution id="b6647650-46ea-48a4-878f-7c9661f9a57a" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.NotificationFilterTests" name="FailedManualCheck_KeepsTheSelectedFiltersForRetry" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.RecordedRevenue_SeparatesUnpaidFinesFromAccruingEstimates" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="ee65d0bc-9ee4-1dc8-9ddc-ebd6e50daa5e">
+      <Execution id="e528a6b3-8e48-4987-abf4-6123e81fceed" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="RecordedRevenue_SeparatesUnpaidFinesFromAccruingEstimates" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.CsvCells_AreEscapedAgainstSpreadsheetFormulas(text: &quot;   +command&quot;)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="f8ea8fcf-63d4-fe82-e390-61e97ddddb5c">
+      <Execution id="57823d2a-e7ff-4fc8-a90f-36f054b2360e" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="CsvCells_AreEscapedAgainstSpreadsheetFormulas" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.ImportQuantity_CreatesDistinctCopiesAndReuploadSkipsExistingIsbn" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="6d800c9f-1d90-217e-4ee6-d3a1cfe36c3a">
+      <Execution id="559f02a7-c3e6-42bf-b629-402b4adc88c5" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="ImportQuantity_CreatesDistinctCopiesAndReuploadSkipsExistingIsbn" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.CsvCells_AreEscapedAgainstSpreadsheetFormulas(text: &quot;=SUM(1,2)&quot;)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="a2eae63b-5fc0-fa1c-ecf6-7c1dd244b9f6">
+      <Execution id="50b8f13d-e346-44b8-aa2d-bc8e31ff3c55" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="CsvCells_AreEscapedAgainstSpreadsheetFormulas" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.NoFine_CannotRetainAnOldPaymentTimestamp" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="90feeb5f-11fb-6a2f-cac8-e243e77202b9">
+      <Execution id="7e619af2-3311-4617-9dd1-7d5c9d9b907c" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="NoFine_CannotRetainAnOldPaymentTimestamp" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ApiKeyTests.Middleware_RequiresTheConfiguredApiKey(key: &quot;test-only-key&quot;, status: 200, expectedCalled: True)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="6c4619cf-ead6-ac7d-4d3d-99f22fbb80f9">
+      <Execution id="8d95f382-e735-4d2f-87e3-305f101ba094" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ApiKeyTests" name="Middleware_RequiresTheConfiguredApiKey" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ApiKeyTests.UnconfiguredApi_FailsClosed" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="e86eebc4-79cb-eabd-84b3-f0523550e8b1">
+      <Execution id="b6d98b01-7edc-4f00-a78d-40cdbe4dbe3b" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ApiKeyTests" name="UnconfiguredApi_FailsClosed" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.DarwinDate_ChangesAt1430Utc" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="b470297a-b689-ce5b-2657-ae08d9a87649">
+      <Execution id="b3b87650-2945-4936-af7f-c4da030ac5e9" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="DarwinDate_ChangesAt1430Utc" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.EmptyLibrary_ReportsZeroWithoutDivisionErrors" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="b83be46c-f1c9-a81b-5c69-e5547aa9e9a2">
+      <Execution id="0a30ff4a-c400-4b07-90c8-71e9fbcda3df" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="EmptyLibrary_ReportsZeroWithoutDivisionErrors" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.Availability_ExcludesReservationsLoansTransfersAndInactiveBranches" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="d55cca0f-6d28-131e-aa4f-0987cf08a6dc">
+      <Execution id="dbc2d3eb-ec77-4729-b94d-e8e1657613db" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="Availability_ExcludesReservationsLoansTransfersAndInactiveBranches" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ApiKeyTests.Middleware_RequiresTheConfiguredApiKey(key: &quot;wrong&quot;, status: 401, expectedCalled: False)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="aacef1fe-83f1-7579-3496-e25820abb69d">
+      <Execution id="5f1b7c3c-5049-461b-b69b-cba2767147f0" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ApiKeyTests" name="Middleware_RequiresTheConfiguredApiKey" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.ControllerAndCsv_UseTheSameDefinitionsAndTraceableFineRows" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="9103b02b-2d8a-c63d-0ede-599376ed7929">
+      <Execution id="8331794f-7797-4de7-80a3-b7fab519d43a" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="ControllerAndCsv_UseTheSameDefinitionsAndTraceableFineRows" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.CatalogueApi_SharesAvailabilityAndSupportsBranchCategoryFilters" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="67cf659a-f928-e0ef-8669-3cc071410f45">
+      <Execution id="7a901a62-d493-462d-b5af-48b7b129caf4" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="CatalogueApi_SharesAvailabilityAndSupportsBranchCategoryFilters" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.MissingHeadersAndInactiveBranch_AreRejected" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="c4d512b1-4f0b-6831-6655-04920c6acbbc">
+      <Execution id="6c67a5e9-a1c4-404d-a4ba-d217ab5c9a3a" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="MissingHeadersAndInactiveBranch_AreRejected" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: 0, expected: 0)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="57fc815f-185f-6c3f-e75d-2ed65a4f9000">
+      <Execution id="bb6ddec3-6e54-4756-8b03-4df60ba9b38a" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="ProductionFinePolicy_UsesCalendarDays" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: 4, expected: 6)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="d1f13e6b-03b7-f20e-8a71-7c9d0726c6ab">
+      <Execution id="8fa958cd-a838-4192-a550-1094825b1b11" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="ProductionFinePolicy_UsesCalendarDays" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.SqlServerCirculationTests.TwoSimultaneousCheckouts_CreateOneLoan" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="b5a9595f-02d9-4dbc-0b2c-46a53778f3f3">
+      <Execution id="812c3612-895d-4a8e-9067-36265f88753d" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.SqlServerCirculationTests" name="TwoSimultaneousCheckouts_CreateOneLoan" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.ReturnFine_RecordsPaymentStateAndTimestamp(payNow: False)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="633647f4-b3c9-7072-5c95-aa65455a72cd">
+      <Execution id="487d8485-11b8-4125-b745-2cb42d3c22c5" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="ReturnFine_RecordsPaymentStateAndTimestamp" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.SqlServerCirculationTests.ReadyOwner_CanCollectWhileAnotherMemberWaits" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="a7fbd4ce-12fb-61da-c9e1-199ac3e698d7">
+      <Execution id="683fe2ea-d5e6-4832-a0d0-0718e13fa64c" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.SqlServerCirculationTests" name="ReadyOwner_CanCollectWhileAnotherMemberWaits" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.SqlServerCirculationTests.LateReturn_RecordsFineAndPromotesTheNextHold" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="0397bda2-5873-464b-eb2b-2b928e0cf786">
+      <Execution id="d38f05d1-211f-42c2-b460-7f676bc6206b" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.SqlServerCirculationTests" name="LateReturn_RecordsFineAndPromotesTheNextHold" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.MigrationModelTests.SqlServerMigrationChain_HasOneCreationPerSharedTable" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="b2728509-92e0-006d-c253-6c4c1fd23559">
+      <Execution id="a4f1c3d5-1440-49b0-846b-e54e968c0839" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.MigrationModelTests" name="SqlServerMigrationChain_HasOneCreationPerSharedTable" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.InvalidRows_AreExplainedWithoutLosingValidRows" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="cdd89f19-cc3f-1f36-2f36-86ce6616ad4a">
+      <Execution id="5381dab9-72de-4a52-aa4b-45db8b69e3a0" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="InvalidRows_AreExplainedWithoutLosingValidRows" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ApiKeyTests.Middleware_RequiresTheConfiguredApiKey(key: null, status: 401, expectedCalled: False)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="71cae716-09e0-dd81-aced-edc737242c14">
+      <Execution id="20eb7431-8dbe-4eef-99ed-8f1e133798b0" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ApiKeyTests" name="Middleware_RequiresTheConfiguredApiKey" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.PaymentActionTests.PayingRecordedFine_MovesOnlyThatAmountFromUnpaidToPaid_AndRepeatIsIdempotent" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="d26a79bd-5977-6d5c-743e-57d6b1ce5b25">
+      <Execution id="cd3c6e5f-d281-44a3-842e-2d10f8cc2c72" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.PaymentActionTests" name="PayingRecordedFine_MovesOnlyThatAmountFromUnpaidToPaid_AndRepeatIsIdempotent" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: 1, expected: 1.5)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="af4b9373-8343-a4c8-3c71-7feee94ce6d0">
+      <Execution id="67286a04-d784-4181-848f-1ef802bb8439" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="ProductionFinePolicy_UsesCalendarDays" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.CsvCells_AreEscapedAgainstSpreadsheetFormulas(text: &quot;@formula&quot;)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="5417be6b-9e17-4c8f-585f-26c71340db32">
+      <Execution id="5c3aea02-a40b-4f1a-af6f-40b575ebb970" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="CsvCells_AreEscapedAgainstSpreadsheetFormulas" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.FineCalculationTests.ProductionFinePolicy_UsesCalendarDays(days: 8, expected: 12)" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="84ec04dd-f89e-2f13-6ee9-d7e34d3284a7">
+      <Execution id="feebf01a-6322-4c6b-aaaf-464d5ed54412" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.FineCalculationTests" name="ProductionFinePolicy_UsesCalendarDays" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.PdfExport_ProducesARealReportFromTheSameSnapshot" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="e98fcc89-aaa1-405e-8cdc-d8f4f702de54">
+      <Execution id="34a39eb8-699a-4059-8d6e-ecdb40f4ded9" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="PdfExport_ProducesARealReportFromTheSameSnapshot" />
+    </UnitTest>
+    <UnitTest name="TopEndLibraryHub.Tests.ReportingAndImportTests.AdministrativeAndFinanceActions_DeclareRequiredRoleAndCsrfProtection" storage="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/topendlibraryhub.tests/bin/debug/net10.0/topendlibraryhub.tests.dll" id="83eb4e25-5ddd-f258-db4e-836931d8399c">
+      <Execution id="8c0893f8-559d-49ee-a92a-94789ff5efc2" />
+      <TestMethod codeBase="/workspace/scratch/8c45bb8b3771/work/group8-integration-oct16/TopEndLibraryHub.Tests/bin/Debug/net10.0/TopEndLibraryHub.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="TopEndLibraryHub.Tests.ReportingAndImportTests" name="AdministrativeAndFinanceActions_DeclareRequiredRoleAndCsrfProtection" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="83eb4e25-5ddd-f258-db4e-836931d8399c" executionId="8c0893f8-559d-49ee-a92a-94789ff5efc2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="633647f4-b3c9-7072-5c95-aa65455a72cd" executionId="487d8485-11b8-4125-b745-2cb42d3c22c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5417be6b-9e17-4c8f-585f-26c71340db32" executionId="5c3aea02-a40b-4f1a-af6f-40b575ebb970" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a2eae63b-5fc0-fa1c-ecf6-7c1dd244b9f6" executionId="50b8f13d-e346-44b8-aa2d-bc8e31ff3c55" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9103b02b-2d8a-c63d-0ede-599376ed7929" executionId="8331794f-7797-4de7-80a3-b7fab519d43a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fb4b7d14-dbcd-20fb-0088-8218714ac6fd" executionId="2759a17a-4637-442f-933c-461444950dc2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e2999b54-df58-cf8d-bf21-855670ad81f9" executionId="b6647650-46ea-48a4-878f-7c9661f9a57a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="71cae716-09e0-dd81-aced-edc737242c14" executionId="20eb7431-8dbe-4eef-99ed-8f1e133798b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cdd89f19-cc3f-1f36-2f36-86ce6616ad4a" executionId="5381dab9-72de-4a52-aa4b-45db8b69e3a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="67cf659a-f928-e0ef-8669-3cc071410f45" executionId="7a901a62-d493-462d-b5af-48b7b129caf4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a7fbd4ce-12fb-61da-c9e1-199ac3e698d7" executionId="683fe2ea-d5e6-4832-a0d0-0718e13fa64c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aacef1fe-83f1-7579-3496-e25820abb69d" executionId="5f1b7c3c-5049-461b-b69b-cba2767147f0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d800c9f-1d90-217e-4ee6-d3a1cfe36c3a" executionId="559f02a7-c3e6-42bf-b629-402b4adc88c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="90feeb5f-11fb-6a2f-cac8-e243e77202b9" executionId="7e619af2-3311-4617-9dd1-7d5c9d9b907c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b470297a-b689-ce5b-2657-ae08d9a87649" executionId="b3b87650-2945-4936-af7f-c4da030ac5e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2728509-92e0-006d-c253-6c4c1fd23559" executionId="a4f1c3d5-1440-49b0-846b-e54e968c0839" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e86eebc4-79cb-eabd-84b3-f0523550e8b1" executionId="b6d98b01-7edc-4f00-a78d-40cdbe4dbe3b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee65d0bc-9ee4-1dc8-9ddc-ebd6e50daa5e" executionId="e528a6b3-8e48-4987-abf4-6123e81fceed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b83be46c-f1c9-a81b-5c69-e5547aa9e9a2" executionId="0a30ff4a-c400-4b07-90c8-71e9fbcda3df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e98fcc89-aaa1-405e-8cdc-d8f4f702de54" executionId="34a39eb8-699a-4059-8d6e-ecdb40f4ded9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d55cca0f-6d28-131e-aa4f-0987cf08a6dc" executionId="dbc2d3eb-ec77-4729-b94d-e8e1657613db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7621a4ac-2973-42ac-d833-44ed925ddc40" executionId="62369515-6010-4893-bd95-ab7d876b24a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d26a79bd-5977-6d5c-743e-57d6b1ce5b25" executionId="cd3c6e5f-d281-44a3-842e-2d10f8cc2c72" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57fc815f-185f-6c3f-e75d-2ed65a4f9000" executionId="bb6ddec3-6e54-4756-8b03-4df60ba9b38a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0397bda2-5873-464b-eb2b-2b928e0cf786" executionId="d38f05d1-211f-42c2-b460-7f676bc6206b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f8ea8fcf-63d4-fe82-e390-61e97ddddb5c" executionId="57823d2a-e7ff-4fc8-a90f-36f054b2360e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="423ba24a-dfff-2ab3-6626-d46eec7504bc" executionId="c72612d0-6bec-4a65-8b7a-8b4d5909d67d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c4d512b1-4f0b-6831-6655-04920c6acbbc" executionId="6c67a5e9-a1c4-404d-a4ba-d217ab5c9a3a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6c4619cf-ead6-ac7d-4d3d-99f22fbb80f9" executionId="8d95f382-e735-4d2f-87e3-305f101ba094" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b5a9595f-02d9-4dbc-0b2c-46a53778f3f3" executionId="812c3612-895d-4a8e-9067-36265f88753d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af4b9373-8343-a4c8-3c71-7feee94ce6d0" executionId="67286a04-d784-4181-848f-1ef802bb8439" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="84ec04dd-f89e-2f13-6ee9-d7e34d3284a7" executionId="feebf01a-6322-4c6b-aaaf-464d5ed54412" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1f13e6b-03b7-f20e-8a71-7c9d0726c6ab" executionId="8fa958cd-a838-4192-a550-1094825b1b11" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="33" executed="30" passed="30" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.13)
+[xUnit.net 00:00:00.09]   Discovering: TopEndLibraryHub.Tests
+[xUnit.net 00:00:00.14]   Discovered:  TopEndLibraryHub.Tests
+[xUnit.net 00:00:00.17]   Starting:    TopEndLibraryHub.Tests
+[xUnit.net 00:00:00.21]       Set TOPEND_TEST_SQLSERVER to run isolated SQL Server migration and circulation checks.
+[xUnit.net 00:00:00.23]       Set TOPEND_TEST_SQLSERVER to run isolated SQL Server migration and circulation checks.
+[xUnit.net 00:00:00.23]       Set TOPEND_TEST_SQLSERVER to run isolated SQL Server migration and circulation checks.
+Test 'TopEndLibraryHub.Tests.SqlServerCirculationTests.LateReturn_RecordsFineAndPromotesTheNextHold' was skipped in the test run.
+Test 'TopEndLibraryHub.Tests.SqlServerCirculationTests.TwoSimultaneousCheckouts_CreateOneLoan' was skipped in the test run.
+Test 'TopEndLibraryHub.Tests.SqlServerCirculationTests.ReadyOwner_CanCollectWhileAnotherMemberWaits' was skipped in the test run.
+[xUnit.net 00:00:01.96]   Finished:    TopEndLibraryHub.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="a9866c1ceeac" outcome="Warning" timestamp="2026-10-16T17:02:44.5327139+09:00">
+        <Text>[xUnit.net 00:00:00.21]     TopEndLibraryHub.Tests.SqlServerCirculationTests.LateReturn_RecordsFineAndPromotesTheNextHold [SKIP]</Text>
+      </RunInfo>
+      <RunInfo computerName="a9866c1ceeac" outcome="Warning" timestamp="2026-10-16T17:02:44.5564797+09:00">
+        <Text>[xUnit.net 00:00:00.23]     TopEndLibraryHub.Tests.SqlServerCirculationTests.TwoSimultaneousCheckouts_CreateOneLoan [SKIP]</Text>
+      </RunInfo>
+      <RunInfo computerName="a9866c1ceeac" outcome="Warning" timestamp="2026-10-16T17:02:44.5565426+09:00">
+        <Text>[xUnit.net 00:00:00.23]     TopEndLibraryHub.Tests.SqlServerCirculationTests.ReadyOwner_CanCollectWhileAnotherMemberWaits [SKIP]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

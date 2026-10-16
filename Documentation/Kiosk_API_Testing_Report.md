@@ -1,4 +1,6 @@
-﻿# Self-Service Kiosk and Catalogue API — Testing Report
+> Integration note, 14 October: This is Mehakpreet's historical component report from her source branch. Its reported passes and informal participant feedback have not been independently verified here and do not establish a pass for the combined circulation patch. Final private-account, checkout, two-minute timeout and shared-availability tests remain pending.
+
+# Self-Service Kiosk and Catalogue API — Testing Report
 
 Project: TopEndLibraryHub
 Unit: HIT339 — Group 8
@@ -84,8 +86,25 @@ No specific changes were requested during the informal review.
 
 Further details are recorded in Kiosk_User_Feedback.md.
 
+## 7. Testing Evidence
 
-## 7. Limitations
+Supporting evidence includes:
+- Kiosk homepage screenshot
+- Catalogue search results
+- Category and availability filters
+- API catalogue JSON response
+- API search response
+- Empty search response
+- HTTP 405 POST rejection
+- Valid library-code lookup
+- Invalid library-code response
+- Input validation responses
+- Valid result-limit response
+
+Screenshots should be retained alongside the final
+project documentation.
+
+## 8. Limitations
 
 Testing was performed in the local development environment.
 
@@ -95,7 +114,7 @@ The following activities require final verification:
 - Complete application security
 - Group demonstration workflow
 
-## 8. Conclusion
+## 9. Conclusion
 
 The self-service kiosk and catalogue API passed the recorded
 functional tests.

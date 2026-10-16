@@ -19,6 +19,8 @@ namespace TopEndLibraryHub.Models
         [Range(1, int.MaxValue)]
         public int PickupBranchId { get; set; }
 
+        public Branch PickupBranch { get; set; } = null!;
+
         public DateTime CreatedAtUtc { get; set; }
             = DateTime.UtcNow;
 
