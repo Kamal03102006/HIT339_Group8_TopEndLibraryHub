@@ -1,13 +1,9 @@
-# AI acknowledgement
+# My acknowledgement of assistance
 
-## Kamalpreet
+Kamalpreet, S389008
 
-I used ChatGPT/Codex to explain Git and Entity Framework workflows, help draft and review code, plan test cases, organise evidence and help draft the project documentation and my reflection. I also used it to reconstruct a partial working-session estimate from available timestamps using the two-hour cutoff I selected.
+I used ChatGPT/Codex to explain Git and Entity Framework, help draft/review code, plan test cases, organise evidence and draft documentation and my reflection. I also used it to reconstruct a partial elapsed-session estimate using my selected four-hour cutoff.
 
-I applied the earlier changes in Visual Studio, ran the recorded Windows build and application checks, and supplied the reported outcomes and screenshots. On 16 October I also used Codex to prepare the combined source, correct import/report rules, write automated tests, run the Linux build and fixture/model checks, and organise the release package. Those automated results are labelled separately from my Windows and VM checks. The evidence records distinguish captured results, my reports and pending tests. The 19.75-hour figure is a partial retrospective estimate rather than a complete active-time timesheet.
+I applied changes in Visual Studio and supplied my Windows outcomes/screenshots. On 16 October I used Codex to prepare the combined source, correct import/report rules, write production-code tests, run the Linux build/fixtures and organise the release. I then ran the Windows build/all 33 tests and supplied the actual browser exports, payment result and ten-check HTTPS API pass. The Linux, Windows and failed VM results are labelled separately. My 30.76 hours are a partial retrospective estimate, not a complete active timesheet.
 
-The repository identifies Mehakpreet's kiosk/API contribution and Harsimran's branch/transfer contribution separately. Their individual AI-use details, and Sandesh's, have not been supplied and are not assumed in this statement. The final group declaration can include their own accounts when provided.
-
-## Submission declaration
-
-The supplied Group Project brief specifies the portfolio and repository deliverables but does not prescribe an AI-declaration template. Any separate unit instructions also apply. This acknowledgement records the assistance used; ordinary project sections describe the team's work directly.
+I retain each member's contribution and history separately. This statement covers my own use of assistance; I do not make an AI-use declaration for the others. The brief does not prescribe a declaration template; any separate unit instructions also apply. Ordinary project sections describe our work directly.

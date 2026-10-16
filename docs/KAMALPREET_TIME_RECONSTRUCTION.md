@@ -1,56 +1,31 @@
-# Kamalpreet — retrospective chat-session estimate
+# My working-session summary
 
-HIT339 Distributed Development, Group 8 / TopEndLibraryHub. Prepared through **15 October 2026, 09:47 Darwin**. The estimate uses the session rule selected by Kamalpreet and the available project-activity checkpoints. [AI acknowledgement](AI_ACKNOWLEDGEMENT.md).
+Kamalpreet | S389008 | Cutoff: 16 October 2026, 19:29 Darwin
 
-## Result and coverage
+I reconstructed **30 h 46 min (30.76 hours)** using my revised four-hour break rule: count an interval between available assignment checkpoints when the gap is four hours or less; exclude the whole interval when it is longer. Exactly four hours is included. This is a partial retrospective elapsed-session estimate, including some waiting and breaks, rather than a measured active or billable timesheet.
 
-**Reconstructed subtotal: approximately 19 hours 45 minutes (19.75 hours).** This is a **partial retrospective elapsed-session estimate**, not a complete record of active or billable hours. The earliest recovered project-chat point is **3 October 2026, 07:44 Darwin**. Earlier and intermediate messages are not all retrievable; missing sessions and offline work are not recorded as zero.
-
-Some intervals contain reading, applying changes, testing, waiting for assisted instructions and short breaks. Shorter breaks have not been separately deducted because the selected rule retains gaps of two hours or less. This subtotal must not be described as a stopwatch measurement or as proof of total effort across the whole assignment.
-
-## Method
-
-1. Convert recovered original user-message timestamps to Australia/Darwin. Supplement with the already dated user-progress reports in the group work record and the attached project-photo checkpoints below.
-2. Sort available checkpoints chronologically. For each consecutive pair, count the elapsed gap only when it is **two hours or less**; discard the entire gap when it is **more than two hours**. Exactly two hours is retained.
-3. Group retained gaps into sessions; count each interval once. Split the overnight session at midnight for daily totals. Do not allocate the same session total to multiple coding/testing/documentation tasks.
-4. Exclude the September Assignment 2 baseline, unrelated unit conversations, unverified retrieval matches and periods outside the recoverable checkpoint coverage. A single isolated activity point has no measurable elapsed duration.
-
-No complete original per-message timestamp export was available. The photo/checkpoint additions are an approximation to activity at the corresponding conversation point. Therefore the two-hour rule has been applied to **available project-activity checkpoints**, not certified against every original chat message.
-
-## Reconstructed sessions
-
-Displayed clock windows are approximate; elapsed durations are rounded to the nearest minute. Tasks describe each mixed session and are not separately billed durations.
-
-| Date, 2026 | Darwin activity window | Estimated elapsed time | Work covered |
+| Date, 2026 | Darwin window | Elapsed estimate | Work covered |
 | --- | --- | ---: | --- |
-| 03 Oct | Around 07:44–08:26 | 0 h 42 min | Brief/base-project discussion and locating Assignment 2 |
-| 03 Oct | Around 16:29–18:19 | 1 h 49 min | Build/GitHub environment and project-field setup |
-| 04 Oct | Around 17:04–17:21 | 0 h 17 min | Leader responsibilities and completion planning |
-| 11 Oct | Around 10:32–14:34 | 4 h 02 min | Holds/notifications implementation, tests and documentation planning |
-| 11 Oct | Around 20:11–22:30 | 2 h 19 min | README/interface and member-role/Identity coordination |
-| 14 Oct | Around 09:53–10:23 | 0 h 31 min | Rubric and remaining-work review |
-| 14 Oct–15 Oct | Around 16:38–00:55 | 8 h 18 min | Merge, hold/circulation/repair/transfer tests, evidence and review-patch application |
-| 15 Oct | Around 08:01–09:47 | 1 h 47 min | Build/package fix, patron holds/privacy acceptance and member-record coordination |
+| 03 Oct | 07:44-08:26 | 0 h 42 min | Brief and locating my Assignment 2 baseline |
+| 03 Oct | 16:29-18:19 | 1 h 49 min | Build, repository and project-board setup |
+| 04 Oct | 17:04-17:21 | 0 h 17 min | Roles and completion plan |
+| 11 Oct | 10:32-14:34 | 4 h 02 min | Holds, messages and application checks |
+| 11 Oct | 20:11-22:30 | 2 h 19 min | README, interface and shared Identity/module coordination |
+| 14 Oct | 09:53-10:23 | 0 h 31 min | Rubric and remaining-work review |
+| 14 Oct-15 Oct | 16:38-00:55 | 8 h 18 min | Merge, repair/transfer/collection tests, evidence and patches |
+| 15 Oct | 08:01-18:50 | 10 h 49 min | Build/package fix, patron tests, member reports, wording, minutes, VM and extension coordination |
+| 16 Oct | 17:31-19:29 | 1 h 58 min | Release import, 33 Windows tests, actual CSV/PDF/payment, API and permissions/logout checks |
 
-## Daily subtotal
+**Total: approximately 30 h 46 min / 30.76 hours.** Unrounded timestamps are used in the calculation; displayed rows can differ by a minute from the rounded total. The overnight session is counted once.
 
-| Date, 2026 | Estimated elapsed time |
-| --- | ---: |
-| 03 October | 2 h 32 min |
-| 04 October | 0 h 17 min |
-| 11 October | 6 h 21 min |
-| 14 October | 7 h 53 min |
-| 15 October | 2 h 42 min |
-| **Reconstructed total** | **Approximately 19 h 45 min / 19.75 h** |
+The old subtotal stopped on the morning of 15 October. This update includes the later reports/documentation, VM and extension coordination that day, plus the recorded release checks on 16 October. Some offline and unrecovered work remains outside the subtotal. I have not invented separate feature durations or counted the same session against several tasks.
 
-## Evidence and limits
+## Calculation basis and coverage
 
-- The earlier activity endpoints come from retrieved user-message timestamps, including short completion replies and the quoted Git/README/member-role questions. These establish communication checkpoints, not uninterrupted attention.
-- The [group work record](GROUP_WORK_RECORD.md) supplies minute-level reports for the 14 October merge/testing sequence and 15 October contract clarification. These are received/reported times, not original stopwatch logs.
-- Three attached project-photo checkpoints supplement this reconstruction: **14 October 18:38:49**, screenshot organisation; **15 October 00:48:35**, patch-directory deletion prompt; and **15 October 00:55:33**, the subsequent screenshot/progress-file check. Their time basis is the timestamp in the original attachment filenames and the corresponding project conversation. They are approximate message/activity points rather than independently recovered original message timestamps. They prevent a known intervening evidence-update action from being silently omitted, but do not prove constant work between points.
-- The morning build/audit/patron acceptance reports and current user-message times provide the final session through 09:47. No time after that cutoff is included in this version.
-- Brief contacts on **10 and 12 October** have no reconstructible duration in this dataset. Other unretrieved intervals remain unrecorded; they are not a claim that no work occurred.
-- No arbitrary split of 19.75 hours into individual tasks has been invented. The task table retains delivery evidence; this session subtotal should appear once as supporting retrospective evidence.
-- Harsimran, Mehakpreet and Sandesh supply their own hours. This calculation does not estimate their work, create meeting minutes, confirm reflection wording or complete the final portfolio.
+The earlier recoverable subtotal was 19.7529 hours through 15 October 09:47. The first recovered checkpoint is 3 October 07:44. The earlier reconstruction used original user-message times, dated test reports and approximate attachment checkpoints on 14 October at 18:38:49 and 15 October at 00:48:35 and 00:55:33. A full original per-message export was not available.
 
-For the final portfolio, retain the label **partial retrospective chat-session estimate**. A fuller timestamp export or Kamalpreet's recollection of missing/offline sessions may extend or correct the record; any overlap must be removed before changing the total.
+On 16 October I changed the selected break threshold from two hours to four hours. Recovered 15 October checkpoints include the 10:06 push, 10:22 reflection, 10:29 format, 10:33 wording, 14:16 contract/handoff, 14:29 Sandesh report, 15:09 follow-up, 15:18 documentation, 16:21 Mehak handoff, 18:00 VirtualBox, 18:06 storage/RAM, 18:15 extension, 18:31 form and 18:50 lecturer-email requests. The largest retained afternoon gap is about 3 h 43 min, between the 10:33 and 14:16 checkpoints. The rule retains that elapsed gap; it does not prove uninterrupted attention during it.
+
+The 16 October session runs from 17:31:08 to 19:29:09 and includes the recorded release import, 33-test run, actual imports/exports/payment and API/access checks. Earlier activity that day without reliable user checkpoints is not filled with guesses. Assistant processing is not added as a second task, and Git commit times do not measure working duration.
+
+I excluded unrelated units, Assignment 2 baseline work, query text incorrectly returned as historical activity and isolated checkpoints without an elapsed interval. The retained session endpoints and arithmetic are in test-evidence/kamalpreet-hours-calculation-16oct.json. This remains a partial record, not a complete active-time log.

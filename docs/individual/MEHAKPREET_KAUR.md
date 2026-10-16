@@ -1,6 +1,6 @@
 # Mehakpreet Kaur individual contribution
 
-Student ID: S390303, confirmed against the earlier HIT353 submitted-by table. Responsibilities: Self-Service Kiosk and Secure Read-Only Catalogue API.
+Student ID: S390303. Responsibilities: Self-Service Kiosk and Secure Read-Only Catalogue API.
 
 ## Personal reflection
 
@@ -26,6 +26,6 @@ If I were to complete a similar project again, I would establish shared database
 
 Overall, this project strengthened my practical skills in ASP.NET Core MVC, C#, Entity Framework Core, SQL Server, authentication, API development, testing and GitHub collaboration. More importantly, it taught me how to approach unfamiliar technical challenges systematically, take responsibility for my assigned work and persist when a solution does not work initially. I am proud of completing my kiosk and API contribution and successfully integrating it into the group repository. The experience has increased my confidence in contributing to larger software development projects and highlighted the importance of teamwork, testing, security and continuous learning.
 
-## Time record and evidence scope
+## My time record
 
-The revised time proposal is in [the time-record review](MEHAKPREET_HOURS_REVIEW.md). Its 48 hours are an estimate awaiting member confirmation. This reflection describes Mehakpreet's component work and local observations. Combined-release verification is recorded separately in [the release check record](../RELEASE_CHECKS_16OCT.md).
+My revised record is a **48-hour retrospective estimate**, consolidated after I requested a review of overlapping entries. It is not a dated actual timesheet. My component reflection remains separate from the later combined-release verification.

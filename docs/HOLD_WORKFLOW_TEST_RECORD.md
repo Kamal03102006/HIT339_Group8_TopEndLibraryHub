@@ -1,5 +1,8 @@
 # Holds desk test and evidence record
 
+Tester: Kamalpreet, S389008. I retain the dated sequence below. Current outcomes are in RELEASE_CHECKS_16OCT.md: Windows 33/33 and HTTPS API 10/10 passed; actual import/report/payment and selected access/logout checks are complete. Historical pending entries describe their original checkpoint. Successful VM verification and the listed deeper security cases remain incomplete.
+
+
 Updated 14 October 2026. Tester: Kamalpreet, Windows application. Times are Darwin/ACST (UTC+09:30). The tested desk, interface, membership regex and pickup-branch migration are pushed at `dbbc540` on `feature/holds-notifications`.
 
 ## Verified screenshot results
@@ -36,11 +39,11 @@ The applied circulation patch adds automatic allocation, shared reception/kiosk 
 | Inactive eligibility | Member/branch inactivity pauses eligibility without rewriting request order. | Pending |
 | Simultaneous checkout | Exactly one channel succeeds for the same copy. | Pending |
 
-Kamalpreet reports results; written records and captions are maintained from those reports and supplied evidence. Actual working hours remain separate in the group work record.
+I report results; written records and captions are maintained from those reports and supplied evidence. Actual working hours remain separate in the group work record.
 
 ### Repeat checkout report
 
-Kamalpreet confirmed the C06 result matched expectations at 20:40 Darwin: another checkout was rejected and the Active TY-0001 filter showed one loan belonging to Noah. This is a reported pass, not a simultaneous-channel test. The damaged-item/repair/transfer journey remains pending.
+I confirmed the C06 result matched expectations at 20:40 Darwin: another checkout was rejected and the Active TY-0001 filter showed one loan belonging to Noah. This is a reported pass, not a simultaneous-channel test. The damaged-item/repair/transfer journey remains pending.
 
 ### Damaged-item rejection — C07
 
@@ -48,7 +51,7 @@ The 21:02 screenshot, c07_damaged_toy_checkout_rejected.jpg, shows borrowing TY-
 
 ### Palmerston first receipt — C11, partial
 
-At 21:49 Darwin, Kamalpreet confirmed the guided TY-9001 receipt at Palmerston / PAL-D01 matched the expected Asha Ready for pickup and two pickup-record outcomes. No screenshot was taken. The current Ready card and pickup rows can be captured before checkout. Repeated receipt, Noah's remaining waiting state and the C12 collection/next-family return sequence remain pending.
+At 21:49 Darwin, I confirmed the guided TY-9001 receipt at Palmerston / PAL-D01 matched the expected Asha Ready for pickup and two pickup-record outcomes. No screenshot was taken. The current Ready card and pickup rows can be captured before checkout. Repeated receipt, Noah's remaining waiting state and the C12 collection/next-family return sequence remain pending.
 
 ### Collection and next-member handover — C12, partial
 

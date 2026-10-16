@@ -1,12 +1,10 @@
-# Mehakpreet Kaur time record review
+# My revised time breakdown
 
-Student ID: S390303. Prepared 16 October following the member's request, relayed by Kamalpreet, to review overlapping or impractical entries.
+Mehakpreet Kaur | S390303 | Retrospective estimate, 16 October 2026
 
-The original report contains 25 undated proposed/estimated entries totalling **88 hours**; its printed total of 85 is an arithmetic error. It is not a dated actual timesheet. No daily totals can be calculated from that table.
+My original report contained 25 undated estimated entries totalling 88 hours, although the printed total was 85. I requested a review of overlapping or impractical entries. I did not supply daily start/end times. The revised nine packages total **48 hours as an estimate**. The original two-hour allowances for duplicate protection, session security and feedback remain within their groups and have not been reduced again.
 
-The proposal below consolidates overlapping preparation, debugging, testing and integration activities into nine work packages. It is a **48-hour proposed retrospective estimate, awaiting Mehakpreet's confirmation**, not a measured or confirmed actual total. The original two-hour allowances for duplicate-checkout protection, session security and user feedback are retained within the corresponding groups; they have not been cut again. Original submitted records remain historical evidence.
-
-| Work package | Original task numbers | Original estimate | Proposed revised estimate |
+| Work package | Original task numbers | Original estimate | Revised estimate |
 | --- | --- | ---: | ---: |
 | Requirements, existing code review and interface planning | 1, 2, 3 | 10 | 5 |
 | Kiosk welcome, catalogue search, filters and scanning | 4, 5, 6, 7 | 14 | 8 |
@@ -19,4 +17,5 @@ The proposal below consolidates overlapping preparation, debugging, testing and 
 | Technical/patron documentation and Git collaboration | 23, 24 | 7 | 4 |
 | Total | | 88 | 48 |
 
-The largest consolidation is in the shared-model/troubleshooting group, because the earlier outline separately budgets model integration, migration troubleshooting, rebuilding and merge investigation without dates showing that these were distinct sessions. This proposal must not erase time that was actually spent. Any previously corrected entry or separately recorded session takes precedence over the proposal. The final portfolio should use the member-confirmed corrected breakdown and identify retrospective estimates as such.
+
+The largest adjustment groups the overlapping model, migration, rebuild and merge-troubleshooting entries. The original table does not establish distinct sessions for all of them. This revision does not claim measured actual time; a dated personal log would give a stronger basis.

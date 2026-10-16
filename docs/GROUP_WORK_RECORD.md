@@ -1,68 +1,72 @@
-# Group 8 project work record
+# Our agreement, approach and project plan
 
-Project: TopEndLibraryHub. Unit: HIT339 Distributed Development. Updated 16 October 2026 for the combined release. The original agreement was accepted by all four members on the day it was created and shared; its calendar date is not recorded. Earlier progress logs remain in Git history at 9b28459.
+HIT339 Distributed Development | Group 8 | TopEndLibraryHub | 16 October 2026
 
-## Team agreement
+## Our agreement
 
-We selected Kamalpreet's Assignment 2 codebase as our shared foundation. Each member owns the implementation, explanation, evidence and handover of their assigned modules. Shared model, migration, identity and circulation changes require coordination. Work is developed on feature branches, reviewed and integrated; build success and component screenshots are distinguished from final acceptance. The group uses GitHub issues and the project board to track tasks, dependencies and unresolved work. Members communicate availability and blockers through the group channel and escalate integration issues to Kamalpreet.
+We selected Kamalpreet's Assignment 2 application as our common baseline. All four of us accepted the original agreement on the day it was created and shared. We did not retain its calendar date and have not assigned a later acceptance date.
 
-Each member provides a contribution account and a time record with its basis. We retain actual test outcomes and limitations, preserve other members' work during conflict resolution, and keep user credentials out of committed configuration. AI assistance is disclosed separately in [the acknowledgement](AI_ACKNOWLEDGEMENT.md).
+We each take responsibility for implementing, explaining, testing and handing over our assigned modules. We work on feature branches and coordinate shared models, migrations, Identity and circulation changes. We preserve each member's work while resolving conflicts and distinguish component build/screenshots from final acceptance. We communicate availability, blockers and handoffs through our discussions and follow-ups. Kamalpreet coordinates dependencies, the release and portfolio.
 
-## Members and responsibilities
+We use GitHub issues and the project board to track tasks. We supply individual contribution/reflection and time records, identify estimates and keep private secrets in local configuration. Our acknowledgement records the assistance used in the lead's work.
 
-| Member | Student number | Responsibility | Handover position |
-| --- | --- | --- | --- |
-| Kamalpreet | S389008 | Team coordination, holds, notifications, shared circulation, integration and portfolio assembly | Working code and extensive observed/reported evidence; final Windows acceptance and PDF assembly remain |
-| Harsimran Singh | S388232 | Branches, reception desks, transfers, installation guide and VM attempt | Report, seven historical component captures, reflection/value account and 31 confirmed hours received; successful VM verification remains blocked |
-| Mehakpreet Kaur | S390303 | Self-service kiosk, secure catalogue API, patron guide and UX record | Component report, reflection and source received; revised hours proposal and final combined acceptance remain |
-| Sandesh Bhattarai | S390535 | CSV importer, manager analytics and CSV/PDF exports | Source through da0f483, component report, reflection and eight captures received; final time entry and Windows handover remain |
-
-## Project plan and actual milestones
-
-| Period | Planned outcome | Actual progress and dependency |
+| Member | Student number | Agreed responsibility |
 | --- | --- | --- |
-| 3-4 October | Establish the repository, task board, shared baseline and requirements | Foundation selected, roles discussed and requirements prepared |
-| 10-12 October | Establish cross-module contracts and implement modules | Identity/Borrower link, hold/branch relationship and InTransit=5 coordinated; branch/transfer and hold/notification work progressed |
-| 13-14 October | Integrate features and collect working results | Transfer component evidence captured; lead integrated circulation/patron safeguards and ran the documented hold/repair/transfer tests |
-| 15 October | Internal completion target and member handovers | Reports and source handovers received; Mehak kiosk/API merged into master; Sandesh corrected importer/report code later that evening; final integration and VM verification remained open |
-| 16 October | Complete the integrated release, verification and portfolio | Combined source, tests and updated records prepared. Current results and remaining work are in RELEASE_CHECKS_16OCT.md and REMAINING_WORK.md |
+| Kamalpreet | S389008 | Lead; holds, simulated notifications, circulation integration, acceptance and portfolio. |
+| Harsimran Singh | S388232 | Branches, desks, staff location, transfers, installation guide and VM check. |
+| Mehakpreet Kaur | S390303 | Kiosk, secure catalogue API, patron guide and feedback. |
+| Sandesh Bhattarai | S390535 | CSV importer, manager analytics/exports and component tests/handoff. |
 
-The official submission deadline is 16 October 2026 at 23:59 Darwin. An extension was requested; approval and a revised deadline are not recorded here. The original deadline remains the working target until written approval is received.
+## Our plan and actual progress
+
+| Period | Planned work | Actual progress |
+| --- | --- | --- |
+| 3-4 October | Baseline, repository, board, roles and requirements. | We established the common project and allocations. |
+| 10-12 October | Modules and shared dependencies. | Identity/Borrower, pickup branch and InTransit=5 coordinated; branch foundation preceded transfers. |
+| 13-14 October | Integration and cross-module tests. | Branch evidence and hold, repair, transfer, collection/private-patron checks retained. |
+| 15 October | Internal completion and handoffs. | Reports received; kiosk/API reached master. Import/report fixes continued later; VM/integration still open. |
+| 16 October | One verified release and portfolio. | Combined source, 33 Windows tests, ten API checks, actual imports, report reconciliation and AUD 27 payment transition completed. Portfolio compiled; VM remains blocked. |
+
+Our official deadline is 16 October 2026, 23:59 Darwin. We requested an extension but have no recorded approval or revised deadline.
+
+Repository: https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub
 
 Project board: https://github.com/users/Kamal03102006/projects/1
-Repository: https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub
-Marker access must be checked using a signed-out session before submission.
 
-## Task allocations and time records
+Both pages were publicly readable without authentication in the 16 October access check. We need to retain read access for marking and push the prepared final source.
 
-The following records have different evidence bases and are not interchangeable. Do not add a member's subtotal again to the underlying tasks.
+## Dependencies and integration
 
-| Member | Recorded total or subtotal | Basis and remaining detail |
-| --- | ---: | --- |
-| Kamalpreet | Approximately 19.75 hours through 15 October 09:47 | Partial recovered elapsed-session estimate using her selected two-hour gap rule. Later/offline work and task-level splits are not included; see KAMALPREET_TIME_RECONSTRUCTION.md |
-| Harsimran | 31 hours | Confirmed through Kamalpreet on 16 October. The ten-task breakdown is in individual/HARSIMRAN_SINGH.md; no daily start/end times were supplied |
-| Mehakpreet | 48-hour proposal | Consolidated retrospective estimate awaiting member confirmation. The original 25 undated entries total 88, not the printed 85. See individual/MEHAKPREET_HOURS_REVIEW.md |
-| Sandesh | 12.5-hour partial estimate | Earlier numerical entries supplied retrospectively; additional testing/documentation and later fixes are not yet timed. See SANDESH_MEMBER_HANDOFF.md |
+We integrated Sandesh's corrections through da0f483 into the tested 9b28459 lead checkpoint, which already included kiosk/API and branch/transfer contributions. A direct merge produced 18 conflicts. We resolved shared files around one checkout service and one migration chain rather than accepting competing versions indiscriminately.
 
-Kamalpreet's allocated work includes requirements/coordination, hold models and queue rules, staff and patron placement, notifications, shared checkout/repair/transfer integration, interface improvements, evidence organisation, testing and documentation. Delivered work is linked in the existing circulation, patron and notification test records. The combined importer/report corrections and automated release checks on 16 October are integration work and are not silently counted as Sandesh's own hours.
+We retained seven canonical migrations, explicit Identity-to-Borrower ownership, two-minute kiosk handling and durable simulated events. We kept InTransit=5 and a real Branch foreign key for pickup. We aligned Identity key lengths with the committed schema and checked pending model changes/duplicate table creation.
 
-Harsimran's ten-task record and Mehakpreet's nine-package proposal provide manageable task breakdowns. Sandesh's dated eight-row log records his earlier importer/report work. Original Assignment 2 development-log hours are baseline history and must not be added to this group project.
+Catalogue, API, kiosk and reports use common eligibility. A physical Available copy can be reserved; the rightful Ready member can collect while later members wait. Manager outputs share one service, keeping recorded paid/unpaid fines separate from current estimates. CSV Quantity creates separate physical copies with unique codes and row-specific errors.
 
-## Team approach and integration decisions
+## Allocations and hours
 
-The integration starts from the lead's tested 9b28459 checkpoint, which already contains the branch/transfer foundation, Identity link, holds, notifications, patron placement and shared circulation services. Sandesh's quantity/year/import and export work through da0f483 is incorporated into that foundation. Common stock eligibility now serves catalogue, kiosk, API and management reports. Kiosk checkout calls CirculationService so a rightful pickup owner is not blocked solely because another member is waiting.
+| Member | Total/subtotal | Basis | Detailed record |
+| --- | ---: | --- | --- |
+| Kamalpreet | 30.76 hours | Partial retrospective elapsed sessions; four-hour rule, through 16 Oct 19:29. | Individual account/session record. |
+| Harsimran | 31 hours | Confirmed task hours; no daily start/end log supplied. | Individual ten-task table. |
+| Mehakpreet | 48 hours | Revised retrospective estimate after overlap review; not measured actual time. | Individual nine-package table. |
+| Sandesh | 35 hours | Member-supplied retrospective task estimate replacing earlier partial record. | Individual ten-task table. |
 
-The seven-migration lead history is retained. The competing consolidated migration that creates already-existing tables is not added to that history. Identity key lengths are explicitly aligned with the committed schema, and the model/script test checks for pending model differences and duplicate shared-table creation. Existing database histories are checked before startup; a different historical schema requires a separate fresh demonstration database rather than deletion or blind migration-history editing.
+We count each total once and do not add unlike records into a precise team billable total. Assignment 2 baseline time and later assisted integration are not silently reassigned to another member.
 
-Dashboard and export calculations share one reporting service. Recorded unpaid/paid fines and estimated current late charges are separate; exports contain traceable loan-level fine rows and item-level availability. The importer creates physical copies for Quantity and provides row-specific validation outcomes.
+## Risks and responses
 
-## Meeting minutes and individual sections
+| Risk | Response/result |
+| --- | --- |
+| Shared model/migration conflicts | Agreed data contract, canonical history, model/script and real SQL checks. |
+| Reserved/transit stock shown as available | Shared eligibility, transaction/index guards and traceable inventory rows. |
+| Late integration | One combined release and targeted acceptance; less time remained for VM recovery. |
+| Incomplete daily logs | Confirmed hours, retrospective estimates and partial sessions kept distinct. |
+| VM LocalDB failure | Preserved troubleshooting/failure record; no successful alternative claimed. |
+| Final source visibility | Safe cumulative update prepared; owner still needs to push/review/merge before submission. |
 
-[Prepared meeting minutes](MEETING_MINUTES.md) consolidate the actual supplied discussion record and verbal-discussion follow-ups. They do not invent call start times, durations or full attendance. Recordings are not specified by the brief.
+## Our strengths and weaknesses
 
-- [Kamalpreet](individual/KAMALPREET.md): contribution, reflection and partial time basis, with implementation evidence in the circulation/patron/notification records.
-- [Harsimran Singh](individual/HARSIMRAN_SINGH.md): contribution, confirmed hours, strengths/weaknesses, learning and value added.
-- [Mehakpreet Kaur](individual/MEHAKPREET_KAUR.md): supplied personal reflection, technical contribution and separate hours-review proposal.
-- [Sandesh Bhattarai](SANDESH_MEMBER_HANDOFF.md): contribution, reflection, historical tests, source changes and partial time record.
+We covered seven modules and checked a connected repair-to-pickup journey. Named branches and retained evidence helped trace contributions, and exact messages/export rows helped explain confusing results.
 
-All four individual accounts are received. The final portfolio still requires consolidation and final time-record confirmation; no member needs to recreate their reflection from scratch solely for formatting.
+Our weaknesses were late integration, uneven confidence with Git/shared models, incomplete daily time logs and arranging a usable VM too late. We would set data contracts, trial installation and schedule smaller integrations near the start next time.

@@ -1,6 +1,6 @@
 # Top End Library Hub
 
-HIT339 Distributed Development Group 8 expands Kamalpreet's Assignment 2 ASP.NET Core MVC library system into seven connected access channels and operational modules.
+We are HIT339 Distributed Development Group 8. We expanded Kamalpreet's Assignment 2 library system into seven connected modules and access channels.
 
 | Member | Student number | Main responsibility |
 | --- | --- | --- |
@@ -13,7 +13,9 @@ HIT339 Distributed Development Group 8 expands Kamalpreet's Assignment 2 ASP.NET
 
 The 16 October integration combines the lead's tested `9b28459` source with Sandesh's `da0f483` corrections and the kiosk/API/branch work in those histories. Shared checkout, reservation, transfer and notification rules are retained. General availability now also drives manager reports. The importer creates physical copies for Quantity, validates PublicationYear and explains skipped rows. CSV/PDF exports include fine and inventory audit details with AUD amounts and Darwin timestamps.
 
-Actual automated results and their limits are in [release checks](docs/RELEASE_CHECKS_16OCT.md). The prepared source builds on .NET 10 and includes fixture/model/export tests plus three separate SQL Server tests. The final Windows/browser run and a successful installation on a VM remain to be recorded. Earlier screenshots and supplied Windows results are retained as historical evidence. No overall completion score or VM pass is inferred.
+Our Windows build and all 33 tests passed with none skipped at b79faf3. All ten HTTPS API checks passed. Actual imports, matching manager CSV/PDF, a non-zero payment transition and selected route/logout checks are recorded in [release checks](docs/RELEASE_CHECKS_16OCT.md). The final source includes documentation and a duplicate-button cleanup without changing report calculations. Our VM installation remains blocked.
+
+The complete [Group Portfolio PDF](docs/HIT339_Group8_Portfolio.pdf) is the submission document. The cumulative package records the final commit; push the updated integration branch before submitting its repository link.
 
 ## Download and install
 
@@ -102,9 +104,9 @@ Representative CSVs are in [docs/samples](docs/samples); [the import/report guid
 ## Documentation and submission
 
 - [Installation guide](docs/INSTALLATION_GUIDE.md) and [patron user guide](Documentation/PatronUserGuide.md)
-- [Requirements](docs/HIT339_Group8_Requirements_Draft.docx), [group agreement/plan/task records](docs/GROUP_WORK_RECORD.md) and [minutes](docs/MEETING_MINUTES.md)
+- [Current requirements](docs/REQUIREMENTS.md), [group agreement/plan/task records](docs/GROUP_WORK_RECORD.md) and [minutes](docs/MEETING_MINUTES.md)
 - [Integration and journeys](docs/ARCHITECTURE_AND_JOURNEYS.md), [assessment checklist](docs/ASSESSMENT_CHECKLIST.md) and [remaining work](docs/REMAINING_WORK.md)
-- [Harsimran's individual account](docs/individual/HARSIMRAN_SINGH.md), [Mehakpreet's reflection](docs/individual/MEHAKPREET_KAUR.md), [Sandesh's handoff](docs/SANDESH_MEMBER_HANDOFF.md) and [Kamalpreet's report](docs/individual/KAMALPREET.md)
+- [Harsimran's individual account](docs/individual/HARSIMRAN_SINGH.md), [Mehakpreet's reflection](docs/individual/MEHAKPREET_KAUR.md), [Sandesh's account](docs/individual/SANDESH_BHATTARAI.md) and [Kamalpreet's report](docs/individual/KAMALPREET.md)
 - [Submission guide](docs/SUBMISSION_GUIDE.md) and [AI acknowledgement](docs/AI_ACKNOWLEDGEMENT.md)
 
 Submit one Group Portfolio PDF plus the final source repository link. The portfolio includes all four named individual sections, installation/patron guides, project-management artifacts, integration diagrams and user journeys. Final source revision, actual test outcomes and marker access must be checked before upload. The official deadline is 16 October 2026 at 23:59 Darwin unless an extension is confirmed in writing.

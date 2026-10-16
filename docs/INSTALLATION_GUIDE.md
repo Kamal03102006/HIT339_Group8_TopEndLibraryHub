@@ -1,6 +1,6 @@
 # Installation and running instructions
 
-This guide covers the combined .NET 10 MVC release for all physical branches. It incorporates Harsimran's installation work and the later importer/report/kiosk configuration. The final commit and VM installation outcome must be recorded after actual verification. A successful VM installation is not yet claimed.
+We use these instructions for the combined .NET 10 MVC release at each physical branch. Our Windows-tested revision is b79faf3; the cumulative update records the final documentation commit. Our separate VM installation remains unsuccessful.
 
 ## Prerequisites
 
@@ -26,7 +26,10 @@ The integration branch must first be pushed from the supplied bundle. After it i
 For a fresh installation choose a new demonstration database through user-secrets; SQL Server creates it when startup migrations are applied:
 
 ```powershell
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=(localdb)\MSSQLLocalDB;Database=HIT339_Group8_Demo;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+$connection = 'Server=(localdb)\MSSQLLocalDB;Database=HIT339_Group8_Demo;'
+$connection += 'Trusted_Connection=True;MultipleActiveResultSets=true;'
+$connection += 'TrustServerCertificate=True'
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" $connection
 $apiKey = [Guid]::NewGuid().ToString('N') + [Guid]::NewGuid().ToString('N')
 dotnet user-secrets set "CatalogueApi:ApiKey" $apiKey
 dotnet user-secrets set "Kiosk:BranchCode" "DAR"
@@ -58,12 +61,40 @@ Sign in with the local demonstration Admin or Reception account. Open Working lo
 
 A physical kiosk uses the trusted server configuration `Kiosk:BranchCode`; change it to PAL or CAS for a station at those branches, then restart. A patron cannot select a different checkout branch through form input. Use separate patron accounts and profiles for private-account testing. A new registration is not automatically linked to an existing borrower by email; use the controlled fictional linking process in Documentation/Kiosk_Integration_Readme.md.
 
+## Local demonstration accounts
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | admin@topendlibrary.local | Admin#2026! |
+| Reception | reception@topendlibrary.local | Reception#2026! |
+| Manager | manager@topendlibrary.local | Manager#2026! |
+| Development patron Sky/MBR-8001 | patron@topendlibrary.local | Patron#2026! |
+
+These fictional accounts are for the local assessment. The linked patron is seeded only in Development and has no staff role.
+
 ## Verify installation and restart
 
 On the VM, follow the guide from source download through migration/seed and launch. Record OS/VM, Git/.NET/LocalDB versions, final commit, configuration method, actual result and corrections. Verify login, location selection at each branch, catalogue, kiosk account, API with a local key, a safe fictional circulation/transfer journey, importer and manager exports. Stop/restart the app; check that previous demonstration records are retained and branches/desks are not duplicated. Keep screenshots or logs of meaningful outcomes. Run the supplied Windows tests and record their actual results separately.
 
 ## Known VM blocker and troubleshooting
 
-Harsimran installed Git and the .NET SDK in the Darwin VM, but SQL Server 2022 LocalDB installation failed with Error 1920: SQL Server VSS Writer could not start. An administrator attempt also failed, and Event Viewer reported a startup timeout. Another VM/environment blocked installation through administrator restrictions. The underlying cause is not confirmed. These are failed attempts, not installation passes.
+During our VM attempt we installed Git and .NET in the Darwin VM, but SQL Server 2022 LocalDB installation failed with Error 1920: SQL Server VSS Writer could not start. An administrator attempt also failed, and Event Viewer reported a startup timeout. Another VM/environment blocked installation through administrator restrictions. The underlying cause is not confirmed. These are failed attempts, not installation passes.
 
 Use a suitable environment or obtain lecturer agreement to an alternative verification method. Repeating the same blocked installer does not establish that the instructions work. Build-file locks in a OneDrive project previously cleared after stopping the app/Visual Studio and shutting down build servers; generated bin/obj files can then be rebuilt. Do not remove source, screenshots, migrations or database files during cleanup.
+
+## Repeatable release checks
+
+Stop the app before building. From the repository root:
+
+```powershell
+.\scripts\Test-Release.ps1 -IncludeSqlServer
+dotnet run --launch-profile https
+```
+
+In a second PowerShell window in the same folder:
+
+```powershell
+.\scripts\Test-CatalogueApi.ps1 -BaseUrl 'https://localhost:7197'
+```
+
+The API script prompts for the private local key without displaying it. Clients send X-Api-Key. Use the actual URL printed by the application if different. SQL tests create unique TopEndLibraryHub_Tests_* databases and clean up only those; they do not reset application data. Our Windows run passed all 33 tests, but does not establish a VM installation pass.

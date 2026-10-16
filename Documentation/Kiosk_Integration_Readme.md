@@ -1,6 +1,6 @@
 # Kiosk and secure catalogue API integration
 
-Mehakpreet's kiosk/API contribution is combined with Kamalpreet's circulation/hold/privacy work and Harsimran's branches/transfers. The 16 October release also connects the API's availability predicate to manager reporting. Earlier test reports remain historical evidence; current verification and pending Windows checks are in [release checks](../docs/RELEASE_CHECKS_16OCT.md).
+We combine the kiosk/API with shared circulation, hold/privacy and branch/transfer work. The 16 October release also connects the API's availability predicate to manager reporting. Earlier test reports remain historical evidence; current verification and current Windows/API results and remaining checks are in [release checks](../docs/RELEASE_CHECKS_16OCT.md).
 
 ## Current behaviour
 

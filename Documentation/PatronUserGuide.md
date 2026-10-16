@@ -1,6 +1,6 @@
 # Top End Library Hub — patron guide
 
-Original kiosk contribution: Mehakpreet Kaur. Updated for the Identity-linked patron hold patch following checkpoint 107f643. The lead's 15 October placement, private progress and Finish/Back checks are recorded in [the acceptance supplement](../docs/PATRON_HOLD_TEST_RECORD.md). Final application walkthrough, remaining security checks and genuine user retest are pending; the lead's acceptance run is not external UX feedback.
+We provide this guide for the combined release. Browsing is public; private account/borrowing uses a verified login linked to membership.
 
 1. Open the application and select **Collection** or **Self service**. Browsing does not require login.
 2. Search by title, code or keyword. Choose a category and availability filter; use Clear filters to start again.

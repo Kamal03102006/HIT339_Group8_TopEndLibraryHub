@@ -1,34 +1,33 @@
-# Top End Library Hub Individual Report
+# Kamalpreet - individual contribution and reflection
 
-Kamalpreet  |  S389008  |  HIT339 Distributed Development  |  Group 8
+Student number: S389008 | Role: team lead, holds, simulated notifications and integration
 
-Contribution record as at 15 October 2026. Role: group lead, holds and simulated notifications, with shared integration and acceptance testing.
+## My contribution
 
-My contribution focused on keeping a patron's request connected to the condition and physical location of a library item. I worked on holds and simulated notifications, applied and checked shared changes in Visual Studio, and coordinated the evidence needed to show how the separate modules work together. The group used my Assignment 2 application as its starting point.
+We used my Assignment 2 application as the foundation. I worked on holds and simulated notifications and coordinated shared circulation, branch and patron changes in Visual Studio. My aim was to keep a family's request connected to the condition and physical location of the item, so that repair or transfer would not lose its place or send an early pickup message.
 
-## 1 Contribution and task allocation
+| My allocation | Delivered outcome | Evidence |
+| --- | --- | --- |
+| Requirements/coordination | Scope, roles, dependencies and shared data decisions. | Requirements, group record and minutes. |
+| Holds and queue | One active request per member/item, FIFO, cancellation and one allocation per copy. | H01-H03 and C07-C13. |
+| Patron placement | Private Identity-linked request/progress; inactive/unlinked guards. | PH01-PH03 and shared queue captures. |
+| Simulated notifications | Loan, reminder, fine and pickup events with duplicate protection. | Notification records and Email/SMS captures. |
+| Shared workflow | Repair allocation, destination readiness, protected collection and next-member promotion. | Integrated journey and real SQL tests. |
+| Acceptance/evidence | Guided Windows checks, exact outcomes, screenshots and export reconciliation. | 33-test run, ten API checks and actual CSV/PDF files. |
+| Interface/portfolio | Green theme, clearer navigation, evidence captions and final documents. | Views/theme source and portfolio. |
 
-The shared work has named owners. Harsimran developed branches, desks and transfers; Mehakpreet developed the kiosk and API; Sandesh developed CSV import and manager exports. My integration work connects those contributions and keeps their authorship visible in the group record.
+My earlier checkpoints include 74668e1, dbbc540, a1e8190, 70db5b7 and 9b28459. On 16 October I imported the combined b79faf3 release. The final documentation and duplicate-export-button cleanup follow that tested calculation/circulation source. Each member's history remains attributed in the repository.
 
-The documentation checkpoint is 9b28459 on feature/holds-notifications. Source milestones include 74668e1, dbbc540, a1e8190 and 70db5b7. Final integration of the newer member changes remains a group task.
+## My testing
 
-## 2 Testing and evidence
+I ran the Windows build and Test-Release.ps1 -IncludeSqlServer: 33 passed, zero failed and zero skipped. The three real SQL cases cover rightful pickup collection, simultaneous checkout and late-return/queue handling. All ten HTTPS API checks also passed.
 
-I ran the guided checks in the Windows application and reported the actual messages, counts and status changes. The evidence records distinguish what is visible in a screenshot from an outcome I reported after testing. The following examples show the coverage of my work.
+I imported three physical copies from two CSV rows and repeated the file with zero new copies. I checked mixed invalid rows and a missing header and supplied the actual manager CSV/PDF. Both exports agreed on nine items, four generally available and AUD 27 recorded fines. After I recorded the fine as paid, paid became 27 and unpaid zero, while total fines, the separate current estimate and inventory stayed unchanged.
 
-## Acceptance work still open
+I confirmed signed-out and Patron route restrictions and that a fresh My library account request after Finish asks for login. Earlier inactive/unlinked account captures show the membership guards. I kept captured outcomes separate from my written results and unrun cases.
 
-The recorded results establish selected local workflows. Simultaneous checkout, focused forged request and antiforgery checks, some notification fine and date boundary cases, and the final combined kiosk/API tests still require recorded outcomes. A clean VM installation has also not yet passed. These checks remain open in the assessment checklist.
+## My personal reflection
 
-Email and SMS in this application are simulated records. The notification screens show their recipient and message content; they do not establish delivery through a real messaging provider.
-
-## Evidence locations
-
-Hold workflow test record  |  Circulation integration test record
-
-Patron hold test record  |  Notification test record
-
-## 3 Personal reflection
 
 ## Strengths in practical testing
 
@@ -46,36 +45,15 @@ I sometimes found similar looking test steps confusing. One example was a notifi
 
 I would agree the shared model and service boundaries earlier, bring the branches together in smaller batches and record each result while the relevant screen is open. I would also keep a dated time log from the beginning. Coordinating four modules made me more aware that having code on separate branches and having one tested release are different stages of the work.
 
-## 4 Value added to the application
 
-The main value of my contribution is continuity of a patron's request. A damaged item can be repaired and moved to the chosen branch while the waiting list remains meaningful. The patron should be told to collect only when that copy is actually ready at the destination. The repair, allocation and pickup evidence demonstrates selected stages of this behaviour.
+## My value added
 
-The authenticated hold form also lets an active linked patron place a request through their own account and see its progress. The queue screenshots show how the private request joins the same staff managed waiting list. Simulated notification history gives staff a way to check what was recorded for that event and investigate an unexpected count.
+My contribution keeps the pickup request meaningful through repair and physical movement. The patron hears that the copy is ready only when it has arrived at the chosen branch. Asha and Noah's journey made this benefit concrete.
 
-The value demonstrated here is the connected workflow and its recorded outcomes. Staff time saved and comparative novelty have not been measured.
+The private hold form lets an active linked member join the same queue that staff manage and follow their own progress. The simulated notification history helps explain an unexpected message count. I also helped bring the separate modules into one release.
 
-## 5 Partial retrospective time record
+## My hours and improvement
 
-The available activity checkpoints give approximately 19 hours 45 minutes through 15 October 2026 at 09:47 Darwin. I selected a rule that retains gaps of two hours or less and excludes longer gaps. This is a partial estimate of elapsed work sessions, including some waiting and short breaks. It is not a complete active or billable timesheet.
+My recoverable subtotal is **30 h 46 min (30.76 hours)** through 16 October 19:29 Darwin, using my revised four-hour gap rule. It is a partial retrospective elapsed-session estimate, including some waiting and breaks. I did not keep a complete active/billable timesheet or invent feature-level durations. The detailed sessions follow in this portfolio and in my time record.
 
-Clock windows are approximate and durations are rounded. The reconstruction uses recoverable message timestamps and dated project checkpoints. Missing sessions, offline work and work after the stated cutoff are outside this subtotal. Each session covers several activities and is counted once. Separate task durations were not recorded.
-
-Time reconstruction and calculation basis
-
-## 6 Contribution status and project records
-
-The hold, notification and patron work has source and selected local evidence on the lead branch. On 15 October I pushed the consolidated documentation update as 9b28459, including attributed member handoffs. The final release still needs the newer member fixes, combined acceptance checks and a successful VM installation. Meeting minutes will record the actual discussions supplied by the participants.
-
-The following records connect this report to the shared project. They also identify the remaining work and preserve the ownership of each member's contribution.
-
-Group work and individual contribution record
-
-Assessment checklist
-
-Remaining work and owners
-
-Screenshot index
-
-## Release integration supplement
-
-On 16 October the combined source added shared-rule manager reports, quantity/year import validation, fine/inventory audit exports, notification-filter retention and production-code regression tests. Automated Linux results are recorded separately from the Windows and VM checks. No additional hours are inferred from these code changes. See [release checks](../RELEASE_CHECKS_16OCT.md) and [partial time reconstruction](../KAMALPREET_TIME_RECONSTRUCTION.md).
+Next time I would agree data contracts earlier, integrate smaller changes, keep a dated task/time log and test the VM guide near the beginning. I would learn the Git/migration workflow before the team changes shared models. Our VM installation is still unsuccessful; deeper forged-POST/history-cache/server-only expiry checks are not recorded as passed.

@@ -1,149 +1,100 @@
-# Group 8 Team Discussion Minutes
+# Our discussion minutes
 
-HIT339 Distributed Development  |  TopEndLibraryHub
+HIT339 Group 8 | Recorder: Kamalpreet, S389008
 
-Prepared retrospectively on 15 October 2026. Recorder: Kamalpreet S389008.
+We compiled these minutes from our discussions and recorded follow-ups. Dates identify the follow-ups. Exact start/end times and complete attendance for the earlier conversations were not recorded.
 
-Group members: Kamalpreet, Harsimran Singh, Mehakpreet Kaur and Sandesh Bhattarai.
+## M01 - Choosing the project and dividing the work
 
-These minutes summarise the discussions confirmed by Kamalpreet and their recorded follow ups. Dates identify the follow ups; exact meeting start and finish times and complete attendance at preceding conversations were not recorded. Named contributors are identifiable in the retained records.
+Dates: 3-4 October 2026
 
-## M01 Project scope and allocation
+We chose Kamalpreet's Assignment 2 project as our shared starting point. We wanted the new modules to work together: a family could request an unavailable toy, keep its place during repair/transfer and collect at its chosen branch.
 
-Recorded follow up dates: 3 and 4 October 2026
-
-Contributors identified: All four members
-
-Retained reference: Group record pages 1 and 2
-
-Discussion and direction. The group would extend Kamalpreet's Assignment 2 application. The proposed demonstration follows an unavailable toy through repair, fair allocation, transfer to the patron's chosen branch and collection through the kiosk. The allocation covers all seven technical additions.
-
-| Member | Technical work | Supporting delivery |
-
+| Responsibility | Owner | Next action |
 | --- | --- | --- |
+| Holds and simulated messages | Kamalpreet | Define queue rules and coordinate requirements. |
+| Branches/desks/transfers | Harsimran | Share the foundation before dependent modules. |
+| Kiosk/API | Mehakpreet | Review login and borrower ownership before checkout. |
+| Importer/manager exports | Sandesh | Review Book and report data structures. |
 
-| Kamalpreet | Holds, waiting lists and simulated notifications | Requirements, coordination and integration evidence |
+We each needed to clone, build and run the project and retain our hours/tests/contribution evidence. Repository access was being arranged; Sandesh accepted the invitation on 4 October.
 
-| Harsimran | Branches, desks and item transfers | Installation guide and VM verification |
+## M02 - Schedule and dependencies
 
-| Mehakpreet | Kiosk and secure read only API | Patron guide, feedback and API tests |
+Dates: 10-12 October 2026
 
-| Sandesh | CSV import and manager exports | Import/report instructions, test data and portfolio sections |
+We set 15 October as our internal completion target, ahead of the official 16 October deadline. The first feature target was 13 October; on 11 October we requested working handoffs by 14 October so that integration/documentation could use 14-15 October.
 
-Actions. Everyone to clone, build and run the shared project, review the requirements and confirm responsibilities/availability. Harsimran to deliver the branch foundation first. Sandesh confirmed accepting the repository invitation on 4 October. Every member to retain their own contribution, hours and testing evidence.
+The branch foundation was needed by holds, kiosk and imports. By 12 October it was running while transfers were still in progress. The patron login needed an explicit Borrower link.
 
-## M02 Schedule and dependencies
-
-Recorded follow ups: 10 to 12 October 2026. Contributors: all four members. Reference: group record pages 2 to 5.
-
-The internal completion target was 15 October, with the official deadline on 16 October. The initial feature target was 13 October; the later 11 October handoff request aimed for working modules by 14 October. Integration and documentation were reserved for 14 to 15 October.
-
-Actions. Harsimran to share models, location fields, migrations and seed data before finishing transfers. Mehakpreet to coordinate patron identity and checkout guards with holds/transfers. Sandesh to define CSV branch mapping and distinguish unpaid fines from collected revenue. On 12 October Harsimran reported the foundation running and transfers still pending.
-
-## M03 Merge practice and shared files
-
-Recorded follow up dates: 13 October 2026
-
-Contributors identified: Kamalpreet, Harsimran and Mehakpreet
-
-Retained reference: Group record page 5
-
-Discussion. Harsimran reported that branch work had already been merged. Mehakpreet raised concern that merging unfinished shared changes could create conflicts or lose another contribution. Harsimran explained that other members needed current code and gave shared layout edits as an example. Kamalpreet acknowledged the need to connect the branches.
-
-Outcome. The exchange establishes different views about merge timing. It does not record an agreed rule to delay every merge until the end, or a completed final integration. Shared files and database changes needed explicit coordination.
-
-Follow up. Kamalpreet and the module owners to review the shared changes before the final merge, retain each member's contribution and rebuild the combined application. The project file, navigation, models and database history are integration points requiring review.
-
-## M04 VM testing and missing hold model
-
-Recorded follow up dates: 13 and 14 October 2026
-
-Contributors identified: Kamalpreet, Harsimran, Mehakpreet and Sandesh
-
-Retained reference: Group record pages 5 to 7
-
-Discussion. Harsimran asked about the VM requirement. The recorded scope included downloading the application, installing prerequisites, building and creating the database/seed data, selecting a branch and desk, and completing a transfer. Kamalpreet confirmed on 14 October that VM testing was required. The exact virtualisation product was not settled in that exchange.
-
-Harsimran subsequently reported problems with VM testing. This was recorded as a blocker; no successful VM installation was established by that update. He was to continue the setup and supply a usable installation guide and verification result.
-
-A separate dependency was resolved when Mehakpreet could not locate Hold.cs in the main branch. Ownership was clarified as Kamalpreet's. Kamalpreet identified the model in her feature branch, and Mehakpreet confirmed that she found it on 14 October.
-
-Sandesh was asked for his progress and said that he would provide the completed work that evening. The final importer/report handoff was still awaited at that point.
-
-Actions. Harsimran to resolve and document the VM blocker. Mehakpreet to use the shared Hold model when connecting checkout. Sandesh to provide his branch and delivery update. Kamalpreet to coordinate the shared dependencies.
-
-## M05 Branch and hold data contract
-
-Recorded follow up dates: Calendar date not visible in the retained screenshot
-
-Contributors identified: Kamalpreet and Harsimran
-
-Retained reference: Private technical follow up screenshot supplied on 15 October
-
-The retained screenshot labels the reply Tuesday without displaying a calendar date. It records Kamalpreet's response to the branch foundation and the following technical alignment:
-
-| Technical point | Recorded direction |
-
+| Action | Owner |
 | --- | --- |
+| Share branch/desk models, item location, migrations and seeds. | Harsimran |
+| Align Identity, checkout, hold and transfer guards. | Mehakpreet and Kamalpreet |
+| Define branch mapping for imports and separate unpaid fines from collected revenue. | Sandesh |
 
-| Pickup location | Hold.PickupBranchId references Branch.Id. |
+## M03 - Bringing the branches together
 
-| Transit status | ItemStatus.InTransit uses value 5, preserving values 1 to 4. |
+Date: 13 October 2026
 
-| Checkout and API | Exclude items in transit and respect existing hold allocations. |
+We discussed merge timing. Branch changes were already being brought together because other modules needed them. We also raised the risk of unfinished changes overwriting another contribution, especially in the shared layout, models, Program.cs and context/snapshot.
 
-| Migrations and item location | Coordinate the branch, hold, notification and patron identity model snapshots. Provide a valid branch on item creation, preserve location during ordinary edits and use transfers for moves. |
+We needed to review affected shared files with their owners, preserve each contribution and rebuild the combined application. This did not mean every feature was already accepted, or that every merge should wait until the final day.
 
-Actions. Harsimran to handle the item creation/edit compatibility issue and coordinate the next migration. Kamalpreet to coordinate the hold/notification integration with Mehakpreet's identity work. This record confirms the data contract; it is not a record of completed runtime tests.
+Action: Kamalpreet to coordinate the combined review; module owners to identify their shared model/configuration dependencies.
 
-## M06 Final handoffs and correction review
+## M04 - VM requirement and locating Hold.cs
 
-Recorded follow up dates: 15 October 2026
+Dates: 13-14 October 2026
 
-Contributors identified: Kamalpreet and Sandesh; requests addressed to all members
+We checked that the installation guide must be tested on a VM through download, prerequisites, database setup and a working application for the selected branch. Harsimran owned the guide and VM check. Setup problems remained a blocker with no successful result.
 
-Retained reference: Group record pages 7 to 11
+Mehakpreet could not find Hold.cs on main. We clarified that it belonged to Kamalpreet's feature branch, and it was located on 14 October. Kiosk checkout needed the shared model rather than a second hold model. We also requested Sandesh's importer/report branch and delivery update that evening.
 
-Discussion. Kamalpreet restated the 15 October internal deadline and requested dated task hours and individual reflections from every member. Approximate past hours were to be labelled as estimates. Each reflection was to cover contribution, strength, difficulty, learning and improvement. Kamalpreet took responsibility for minutes and combining the named sections.
+Actions: Harsimran to document/resolve the VM blocker; Mehakpreet to use the shared Hold model; Sandesh to supply the branch; Kamalpreet to coordinate integration.
 
-Sandesh supplied his report and reported a pushed importer/reporting branch and PR 7. Review of 2ab17fa confirmed the features existed. His eight local test cases, screenshots and reflection were accepted as usable component evidence, with corrections required before final integration.
+## M05 - Branch, hold and migration contract
 
-Requested corrections. Quantity must create the requested uniquely coded copies; publication year must be valid. Reports need transit and hold aware availability, Darwin dates and traceable fine details. Further outcomes were requested for quantity/year, access restrictions and non-zero fines before and after payment. Sandesh was to supply sample CSVs, actual exports, operating instructions, a revised hours total and a final build/commit.
+Date: not recorded in the retained technical follow-up; these decisions were used in the 14 October integration.
 
-Integration action. Sandesh and Kamalpreet to resolve project package and shared layout conflicts together, retaining the existing dependency fix and navigation. Kamalpreet to assemble the confirmed member material and final formatting. The 15:12 follow up retained the existing evidence and requested new results for the corrected revision.
+We aligned the shared data before generating another migration:
 
-## Action register
+| Decision | Responsibility |
+| --- | --- |
+| Hold.PickupBranchId references Branch.Id. | Kamalpreet/Harsimran |
+| InTransit uses value 5, preserving values 1-4. | Harsimran and module consumers |
+| Checkout/API exclude transit and respect allocations. | Mehakpreet/Kamalpreet |
+| Combine branch, hold, notification and patron Identity snapshots before migration. | Affected owners |
+| Assign a valid branch on create, preserve it on ordinary edits and use transfers for moves. | Harsimran |
 
-This register consolidates the recorded requests. Delivery or discussion alone is not treated as final integration acceptance. The source period ends with the 15 October follow up at 15:12; later changes are tracked in the project records.
+BranchId had become required while the existing Book/Music/Toy inputs did not provide it. We needed the old create/edit workflows to remain compatible.
 
-| ID | Action and owner | Recorded position and target |
+## M06 - Final handoffs and corrections
 
+Date: 15 October 2026
+
+We restated the internal deadline and requested each member's task hours and own reflection, including a strength, difficulty, learning and improvement. Kamalpreet took responsibility for combining the portfolio and minutes.
+
+We reviewed the importer/report handoff and kept its existing eight component cases. Before final acceptance we needed Quantity creating separate copies, valid publication years, hold/transit-aware availability, Darwin dates and loan-level fine details. We also needed a non-zero fine before/after payment rather than only zero-value summaries.
+
+| Action | Owner | Target |
 | --- | --- | --- |
+| Correct import/report rules; supply samples, exports and final branch. | Sandesh | Internal handoff: 15 October |
+| Resolve shared packages/layout/models while retaining working features. | Kamalpreet and owners | Before combined acceptance |
+| Supply own task hours/reflection and identify estimates. | Every member | Final handoff |
+| Compile portfolio, evidence and minutes. | Kamalpreet | Before submission |
 
-| A01 | All members: work from the shared base and retain identifiable contributions. | Assigned 3 to 4 October. Confirm operation again on the final release. |
+## Action closeout - 16 October
 
-| A02 | Harsimran: branch/desk foundation, item locations, seeds and transfer handoff. | Foundation reported running 12 October. Final transfer integration remains a group check. |
+This is a technical action update, not an additional meeting with assumed attendance.
 
-| A03 | Kamalpreet and Mehakpreet: align identity, holds, availability and checkout. | Shared dependency identified 10 to 11 October. Hold model located 14 October. |
+| Action | Current position |
+| --- | --- |
+| Shared modules/schema | Combined release; seven canonical migrations retained. |
+| Import/report corrections | Actual import captures, matching CSV/PDF and AUD 27 payment transition verified. |
+| Combined tests | Windows build and 33 tests passed; all ten HTTPS API checks passed. Selected route denial and fresh-request logout matched expectations. |
+| Individual handoffs | Four accounts received: 31 confirmed hours, 48/35 retrospective estimates and 30.76 partial reconstructed lead hours. |
+| VM check | Still blocked during LocalDB installation; no successful or approved alternative recorded. |
+| Submission | Final source push/review, portfolio upload and receipt remain release actions. |
 
-| A04 | Kamalpreet and Harsimran: preserve the branch and hold data contract. | Technical directions retained in M05. Review shared snapshots before another migration. |
-
-| A05 | Harsimran: finish VM installation/run verification and update the guide. | VM problems reported 14 October. Successful result not established in these minutes. |
-
-| A06 | Sandesh: quantity/year fixes, inventory and fine reporting, Darwin dates. | Requested 15 October after source/report review. Target: 15 October. |
-
-| A07 | Sandesh: targeted tests, sample inputs, actual exports and operating instructions. | Keep the eight existing cases; append corrected revision outcomes. Target: 15 October. |
-
-| A08 | All members: dated task hours and individual contribution/reflection. | Requested 15 October. Label estimates and remove overlapping time; confirm member totals. |
-
-| A09 | Kamalpreet: compile minutes and combine the named portfolio sections. | Responsibility confirmed 15 October. These retrospective minutes prepared that day. |
-
-| A10 | Kamalpreet with all owners: resolve shared files and test one combined release. | Required before the final portfolio and submission. Preserve working features and dependency fixes. |
-
-## Sources and record scope
-
-Reference A: supplied group project discussion export, 11 pages, covering 20 September to 15 October 2026. Project decisions used here begin on 3 October. Page references in the minutes point to this retained export.
-
-Reference B: supplied Harsimran technical follow up screenshot. Its weekday label and visible content support M05; the calendar date is not displayed. Private contact details and unrelated conversation are omitted from these minutes.
-
-The group agreement acceptance is maintained separately. The export shows role allocation, repository access and planning acknowledgements; these do not establish an original calendar date for every member's contract acceptance.
+We preserved decisions and actions without inventing a call location, duration, attendance list or missing acceptance date.

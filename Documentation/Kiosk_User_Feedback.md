@@ -1,7 +1,3 @@
-> Integration note, 14 October: This is Mehakpreet's historical component report from her source branch. Its reported passes and informal participant feedback have not been independently verified here and do not establish a pass for the combined circulation patch. Final private-account, checkout, two-minute timeout and shared-availability tests remain pending.
-
-> Review required: The source report lists Navdeep in its participant table but Princedeep in its feedback/conclusion. Mehakpreet must confirm the actual participant before this report is used in the portfolio; no replacement identity has been inferred.
-
 # Self-Service Kiosk — User Feedback, Improvements and Evaluation Report
 
 **Project:** TopEndLibraryHub
@@ -57,7 +53,7 @@ After the kiosk functionality was implemented, three participants were invited t
 | ---------- | ----------------------------- | ------------------------- |
 | Anjana     | No specific problems reported | None                      |
 | Robinpreet | No specific problems reported | None                      |
-| Princedeep | No specific problems reported | None                      |
+| Navdeep | No specific problems reported | None                      |
 
 The feedback did not identify additional changes required after the participants' review.
 
@@ -90,12 +86,10 @@ Future evaluation should include testing the kiosk with a wider range of users, 
 
 The TopEndLibraryHub self-service kiosk provides catalogue searching, filtering and item availability information through a public interface.
 
-Development improvements and functional API testing have helped strengthen the usability and reliability of the component. Informal feedback from Anjana, Robinpreet and Princedeep did not identify any further modifications required.
+Development improvements and functional API testing have helped strengthen the usability and reliability of the component. Informal feedback from Anjana, Robinpreet and Navdeep did not identify any further modifications required.
 
 The kiosk is ready for final security, integration and submission verification.
 
-## Combined release follow-up on 16 October
+## Combined release follow-up
 
-The original participant report above is retained as supplied. Anjana and Robinpreet are consistently named; the third participant is not counted as confirmed until Mehakpreet resolves Navdeep/Princedeep. Code inspection cannot identify a tester. These are member-reported informal reviews, not independent acceptance of the combined release.
-
-Kamalpreet also encountered an input problem: membership text appeared uppercase while lowercase underlying input failed validation. The pattern now accepts either letter case and controllers normalise storage. Another observed problem was losing notification filters after a recheck; the release retains them and includes a regression check. These are developer acceptance observations followed by concrete corrections; they are not attributed to an outside user. Final usability retesting of the combined version remains to be recorded.
+We confirmed Navdeep as the third reviewer through the member follow-up. These informal reviews requested no specific further changes. Our internal acceptance observations and actual corrections are recorded separately in docs/UX_FEEDBACK_RECORD.md. The later combined API suite passed ten checks; a successful VM installation remains missing.

@@ -1,5 +1,8 @@
 # Circulation integration test record
 
+Tester: Kamalpreet, S389008. I retain the dated sequence below. Current outcomes are in RELEASE_CHECKS_16OCT.md: Windows 33/33 and HTTPS API 10/10 passed; actual import/report/payment and selected access/logout checks are complete. Historical pending entries describe their original checkpoint. Successful VM verification and the listed deeper security cases remain incomplete.
+
+
 Updated with the screenshot audit and whole-commit review of pushed a1e8190. The application source matches the applied circulation patch against dbbc540, including Mehakpreet's 3b925ee contribution. Windows build and all seven applied migrations are confirmed. The current table below includes inspected images; dated narratives preserve the reports as received. Source/patch checks are separate from Kamalpreet's Windows tests.
 
 ## Current result summary
@@ -22,7 +25,7 @@ Kiosk/API/private ownership, simultaneous checkout, remaining loan/fine notifica
 
 ## Windows setup evidence received
 
-- At 19:55 Darwin, Kamalpreet reported the build completed after applying the 54-file patch.
+- At 19:55 Darwin, I reported the build completed after applying the 54-file patch.
 - The Package Manager Console transcript received at 20:02 contains Build succeeded, and its latest Update-Database ends with No migrations were applied. The database is already up to date, followed by Done.
 - Earlier commands in the same transcript applied branch/desks, transfers and the pickup-branch FK. The initial transcript did not show LinkPatronIdentity application. The subsequent Get-Migration output supplied at 20:06 Darwin resolves the check: all seven listed migrations, including LinkPatronIdentity and LinkHoldsToPickupBranches, show Applied=True.
 - Build succeeded is visible in the migration-list output. This verifies the selected project/context migration state, including the new identity link and active-loan index migration. The later Ready screenshot confirms the application was running. The workflow evidence below distinguishes screenshot observations from user reports; concurrency and clean-VM installation remain pending.
@@ -50,11 +53,11 @@ Capture the ready hold + pickup messages, wrong-member rejection and correct-mem
 
 ## Reported pickup recheck result — C02/C03
 
-Kamalpreet confirmed at 20:30 Darwin that the filtered TY-0001 / Ready for pickup / All channels result stayed at **two records** after using Check loans and pickups now. This is a **reported pass for the unchanged repeated-check count (2 → 2)**. No pickup-log screenshot has been supplied yet, so exact message wording, recipients, channel pairing and event timestamps are not independently image-verified. It is not evidence of overlapping scans, restart behaviour or another business date.
+I confirmed at 20:30 Darwin that the filtered TY-0001 / Ready for pickup / All channels result stayed at **two records** after using Check loans and pickups now. This is a **reported pass for the unchanged repeated-check count (2 → 2)**. No pickup-log screenshot has been supplied yet, so exact message wording, recipients, channel pairing and event timestamps are not independently image-verified. It is not evidence of overlapping scans, restart behaviour or another business date.
 
 ## Reported reservation and checkout results — C04–C06
 
-At 20:40 Darwin, Kamalpreet confirmed that all three results matched the guided expectations. These are **tester-reported passes**, with screenshots for these outcomes not yet supplied.
+At 20:40 Darwin, I confirmed that all three results matched the guided expectations. These are **tester-reported passes**, with screenshots for these outcomes not yet supplied.
 
 | Check | Reported outcome | Evidence limit |
 | --- | --- | --- |
@@ -82,17 +85,17 @@ Do not mark these checks passed from the expected-outcome column.
 
 ## Damaged-copy checkout evidence — C07
 
-At 20:58 Darwin, Kamalpreet reported completing the TY-9001 damaged-copy setup and asked about the general rejection message. The screenshot supplied at 21:02 resolves the wording/page check: it shows **Borrow item**, Library Code **TY-9001**, Membership **MBR-9001**, due **28/10/2026**, and **This item is not currently available for borrowing.** This is an **observed pass for the borrowing rejection UI** in the guided damaged-copy scenario. The photograph does not independently show the item condition, both waiting requests or a database loan count; those setup details are tester-reported. Subsequent repair, dispatch and first destination-receipt reports are recorded below.
+At 20:58 Darwin, I reported completing the TY-9001 damaged-copy setup and asked about the general rejection message. The screenshot supplied at 21:02 resolves the wording/page check: it shows **Borrow item**, Library Code **TY-9001**, Membership **MBR-9001**, due **28/10/2026**, and **This item is not currently available for borrowing.** This is an **observed pass for the borrowing rejection UI** in the guided damaged-copy scenario. The photograph does not independently show the item condition, both waiting requests or a database loan count; those setup details are tester-reported. Subsequent repair, dispatch and first destination-receipt reports are recorded below.
 
 Evidence filename: c07_damaged_toy_checkout_rejected.jpg. The current message is shared by non-Available stock and an existing active loan; it is not a damage-specific explanation.
 
 ## Reported repair allocation and no early notice — C08
 
-At 21:17 Darwin, Kamalpreet reported that the guided repair of TY-9001 produced **Allocated for Asha** and the filtered pickup-notification result showed **zero records**. These are reported passes for allocation and absence of an early pickup notice. The user has captured the allocated-Asha screenshot locally but has not supplied it here. The recommended zero-result capture was reported complete at 21:21; it provides a before/after record for destination receipt once supplied. This is an evidence recommendation, not a quoted rubric requirement for every test screenshot. Noah's remaining waiting state and catalogue/API availability exclusion have not been separately verified in this report.
+At 21:17 Darwin, I reported that the guided repair of TY-9001 produced **Allocated for Asha** and the filtered pickup-notification result showed **zero records**. These are reported passes for allocation and absence of an early pickup notice. The user has captured the allocated-Asha screenshot locally but has not supplied it here. The recommended zero-result capture was reported complete at 21:21; it provides a before/after record for destination receipt once supplied. This is an evidence recommendation, not a quoted rubric requirement for every test screenshot. Noah's remaining waiting state and catalogue/API availability exclusion have not been separately verified in this report.
 
 ## Reported transfer dispatch and rejection checks — C09 / reception portion of C10
 
-In the subsequent 14 October evening update, Kamalpreet reported completing the latest transfer batch and obtaining the expected results. These are **reported passes**, not independently inspected screenshots or SQL results.
+In the subsequent 14 October evening update, I reported completing the latest transfer batch and obtaining the expected results. These are **reported passes**, not independently inspected screenshots or SQL results.
 
 | Check | Guided inputs | Reported outcome |
 | --- | --- | --- |
@@ -105,11 +108,11 @@ For this batch, retain two useful evidence screenshots: the wrong-destination re
 
 ## Reported first destination receipt and pickup records — C11, partial
 
-At 21:49 Darwin on 14 October, Kamalpreet confirmed the latest guided Palmerston receipt step produced the expected result and explicitly said no screenshot was taken. The guided inputs were Working location Palmerston Hub / PAL-D01 and receipt of TY-9001. The expected outcomes confirmed by that report were **Asha Ready for pickup** and **two filtered pickup simulations, one Email and one SMS**. This is a **reported pass for first receipt and those displayed outcomes**; it is not an image-inspected result.
+At 21:49 Darwin on 14 October, I confirmed the latest guided Palmerston receipt step produced the expected result and explicitly said no screenshot was taken. The guided inputs were Working location Palmerston Hub / PAL-D01 and receipt of TY-9001. The expected outcomes confirmed by that report were **Asha Ready for pickup** and **two filtered pickup simulations, one Email and one SMS**. This is a **reported pass for first receipt and those displayed outcomes**; it is not an image-inspected result.
 
 Exact message wording/recipients, Noah's waiting state, the transfer row/physical-branch display, repeated receipt and simultaneous operations have not been independently verified by this report. Save the current Asha Ready card and the two filtered pickup rows before the next checkout. Re-run the manual notification check with TY-9001 / Ready for pickup / All channels; the count should stay two, but its actual recheck result is still pending. The C12 wrong-member/right-member collection and next-family handover remain pending.
 
-At 21:54 Darwin, Kamalpreet reported taking the notification and transfer/transit captures locally and asked whether the Holds capture was also needed. The Asha Ready / Palmerston card remains the recommended remaining capture. Neither image has been supplied here, and this capture report does not establish the repeated-scan count.
+At 21:54 Darwin, I reported taking the notification and transfer/transit captures locally and asked whether the Holds capture was also needed. The Asha Ready / Palmerston card remains the recommended remaining capture. Neither image has been supplied here, and this capture report does not establish the repeated-scan count.
 
 At 21:57 Darwin, the tester acknowledged completion of the subsequent Holds capture/recheck instructions. The Holds capture is recorded as locally completed pending its filename/image. The actual numeric recheck count has not been restated, so the Palmerston repeat-count outcome is not inferred from Done.
 
@@ -128,7 +131,7 @@ Capture the resulting Holds cards for Asha Collected and Noah Ready, splitting t
 
 ## C12 reported collection/handover and notification count clarification
 
-At 22:27 Darwin, Kamalpreet reported taking two screenshots: Asha Collected and Noah Ready. This records **reported displayed collection/next-member readiness outcomes** and **local screenshot capture completion**. The image filenames/content have not been supplied here. The prior Noah wrong-member rejection, zero fine, loan closure details and exact form dates were not explicitly restated in this message.
+At 22:27 Darwin, I reported taking two screenshots: Asha Collected and Noah Ready. This records **reported displayed collection/next-member readiness outcomes** and **local screenshot capture completion**. The image filenames/content have not been supplied here. The prior Noah wrong-member rejection, zero fine, loan closure details and exact form dates were not explicitly restated in this message.
 
 The tester reported **six notification results: two for Noah and four for Asha**, with Asha's rows including Loan confirmed and pickup messages. This is not a report of six pickup messages. The expected explanation for this mixed-type view is two earlier Asha pickup records, two Asha borrowing-confirmation records and two new Noah pickup records. Exact individual channels and applied filters have not been image-verified. The source maps Loan confirmed to Kind=1 and Ready for pickup to Kind=4; the GET filter restricts Kind when selected. The current CheckNow action redirects to the unfiltered Index, so filters must be reapplied after using the immediate check button. This is a possible contributor to the reported count confusion, not an observed interaction sequence.
 
@@ -149,7 +152,7 @@ Capture the new Asha Waiting / Awaiting repair card after the damaged return. Th
 
 ## C13 reported damaged return and waiting request
 
-At 22:45 Darwin, Kamalpreet confirmed the guided batch produced the expected results. This records **reported passes** for Noah's successful checkout, Asha's new Waiting request, return with NeedsRepair selected leaving the copy Damaged and the new request Waiting, and the pickup-only total remaining four with no new ready notice for that request. Fine amount, database transaction atomicity and exact event/channel rows are not independently inferred.
+At 22:45 Darwin, I confirmed the guided batch produced the expected results. This records **reported passes** for Noah's successful checkout, Asha's new Waiting request, return with NeedsRepair selected leaving the copy Damaged and the new request Waiting, and the pickup-only total remaining four with no new ready notice for that request. Fine amount, database transaction atomicity and exact event/channel rows are not independently inferred.
 
 The tester explicitly reported taking **one screenshot showing Waiting only, nothing else**. It is retained as reported capture of the waiting state; its filename and image have not been supplied. Do not caption it as proof of the item's Damaged status, the repair explanation or the notification count. Those outcomes are supported by the user's test report at this checkpoint.
 
@@ -159,7 +162,7 @@ At 22:50 Darwin, the lead questioned why the guidance repeated similar actions. 
 
 At 23:02 Darwin, the tester reported that after returning the toy the new hold still showed Waiting and only four pickup notifications were present. This matches the earlier damaged-return state if the item still has Damaged status. The tester has not confirmed a successfully saved edit to Available, so the next repair/Ready/six-record outcome remains pending; no application defect or successful restart check is inferred. Clarified action: Administration → Manage toys → Edit TY-9001 → Status Available → save, then verify the saved list status before checking the new Asha request and pickup filter. If Available is confirmed but Waiting persists, obtain the exact waiting explanation/current branch and diagnose that observed state.
 
-At 23:07 Darwin, after the clarified repair-edit instruction, Kamalpreet reported **It's six now**. This records a **reported pickup-only total of six following the completed-repair guidance**, compared with the prior four while the new request waited for repair. The exact saved toy-status display and Asha Ready card were not separately restated or image-inspected in this reply. No code fix is inferred; recording the repair resolved the reported count discrepancy. The process-restart check remains pending.
+At 23:07 Darwin, after the clarified repair-edit instruction, I reported **It's six now**. This records a **reported pickup-only total of six following the completed-repair guidance**, compared with the prior four while the new request waited for repair. The exact saved toy-status display and Asha Ready card were not separately restated or image-inspected in this reply. No code fix is inferred; recording the repair resolved the reported count discrepancy. The process-restart check remains pending.
 
 Next startup/recovery procedure: stop the app in Visual Studio with Shift+F5, start it again with the green https Run button, allow it to run for about one minute, then open Notifications and apply TY-9001 / Ready for pickup / All channels using Filter records. Expected result: six historical pickup records remain, with no duplicate generation added. Report the actual count; this is the final check in the current hold/repair/transfer batch, not completion of all seven modules or all recovery/privacy tests.
 
