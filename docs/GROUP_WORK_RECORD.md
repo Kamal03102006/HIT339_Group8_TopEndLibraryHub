@@ -4,11 +4,11 @@ HIT339 Distributed Development | Group 8 | TopEndLibraryHub | 16 October 2026
 
 ## Our agreement
 
-We selected Kamalpreet's Assignment 2 application as our common baseline. All four of us accepted the original agreement on the day it was created and shared. We did not retain its calendar date and have not assigned a later acceptance date.
+We selected Kamalpreet's Assignment 2 application as our common baseline. All four of us accepted the original agreement on the day it was created and shared. The calendar date of acceptance was not retained.
 
-We each take responsibility for implementing, explaining, testing and handing over our assigned modules. We work on feature branches and coordinate shared models, migrations, Identity and circulation changes. We preserve each member's work while resolving conflicts and distinguish component build/screenshots from final acceptance. We communicate availability, blockers and handoffs through our discussions and follow-ups. Kamalpreet coordinates dependencies, the release and portfolio.
+We each take responsibility for implementing, explaining, testing and handing over our assigned modules. We work on feature branches and coordinate shared models, migrations, Identity and circulation changes. We review shared files during conflict resolution and test the combined application after integration. We communicate availability, blockers and handoffs through our discussions and follow-ups. Kamalpreet coordinates dependencies, the release and portfolio.
 
-We use GitHub issues and the project board to track tasks. We supply individual contribution/reflection and time records, identify estimates and keep private secrets in local configuration. Our acknowledgement records the assistance used in the lead's work.
+We use feature branches, pull requests and a shared task register to organise the work. Each member provides a contribution, reflection and time record. Estimated hours are labelled, and private configuration stays outside the repository.
 
 | Member | Student number | Agreed responsibility |
 | --- | --- | --- |
@@ -27,13 +27,17 @@ We use GitHub issues and the project board to track tasks. We supply individual 
 | 15 October | Internal completion and handoffs. | Reports received; kiosk/API reached master. Import/report fixes continued later; VM/integration still open. |
 | 16 October | One verified release and portfolio. | Combined source, 33 Windows tests, ten API checks, actual imports, report reconciliation and AUD 27 payment transition completed. Portfolio compiled; VM remains blocked. |
 
-Our official deadline is 16 October 2026, 23:59 Darwin. We requested an extension but have no recorded approval or revised deadline.
+Our official deadline is 16 October 2026, 23:59 Darwin.
 
 Repository: https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub
 
 Project board: https://github.com/users/Kamal03102006/projects/1
 
-Both pages were publicly readable without authentication in the 16 October access check. We need to retain read access for marking and push the prepared final source.
+Both pages were publicly readable without authentication in the 16 October access check. At that review, the board contained four foundation issues: three marked Todo and one In Progress. Module delivery and acceptance had progressed beyond those entries. The task register below records the wider work and its evidence. Keeping the board current was a weakness in our project management.
+
+## Task completion register
+
+:::include PROJECT_TASK_REGISTER.md
 
 ## Dependencies and integration
 
@@ -47,12 +51,12 @@ Catalogue, API, kiosk and reports use common eligibility. A physical Available c
 
 | Member | Total/subtotal | Basis | Detailed record |
 | --- | ---: | --- | --- |
-| Kamalpreet | 30.76 hours | Partial retrospective elapsed sessions; four-hour rule, through 16 Oct 19:29. | Individual account/session record. |
+| Kamalpreet | 30.76 hours | Retrospective estimate through 16 Oct 19:29. | Individual account/session record. |
 | Harsimran | 31 hours | Confirmed task hours; no daily start/end log supplied. | Individual ten-task table. |
-| Mehakpreet | 48 hours | Revised retrospective estimate after overlap review; not measured actual time. | Individual nine-package table. |
-| Sandesh | 35 hours | Member-supplied retrospective task estimate replacing earlier partial record. | Individual ten-task table. |
+| Mehakpreet | 48 hours | Retrospective task estimate. | Individual nine-package table. |
+| Sandesh | 35 hours | Member-supplied retrospective task estimate. | Individual ten-task table. |
 
-We count each total once and do not add unlike records into a precise team billable total. Assignment 2 baseline time and later assisted integration are not silently reassigned to another member.
+The individual sections describe the work covered by these records. Assignment 2 baseline work is separate from the group project hours.
 
 ## Risks and responses
 
@@ -63,7 +67,7 @@ We count each total once and do not add unlike records into a precise team billa
 | Late integration | One combined release and targeted acceptance; less time remained for VM recovery. |
 | Incomplete daily logs | Confirmed hours, retrospective estimates and partial sessions kept distinct. |
 | VM LocalDB failure | Preserved troubleshooting/failure record; no successful alternative claimed. |
-| Final source visibility | Safe cumulative update prepared; owner still needs to push/review/merge before submission. |
+| Board maintenance | Four initial issues did not capture later module delivery; the task register consolidates ownership and outcomes. |
 
 ## Our strengths and weaknesses
 

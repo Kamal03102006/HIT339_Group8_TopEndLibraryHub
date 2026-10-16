@@ -1,6 +1,6 @@
 # Installation and running instructions
 
-We use these instructions for the combined .NET 10 MVC release at each physical branch. Our Windows-tested revision is b79faf3; the cumulative update records the final documentation commit. Our separate VM installation remains unsuccessful.
+These instructions install the combined .NET 10 MVC application for each physical branch. The Windows-tested revision is b79faf3. The separate VM attempt failed during LocalDB installation; its result is recorded below.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ dotnet restore .\TopEndLibraryHub.csproj
 dotnet dev-certs https --trust
 ```
 
-The integration branch must first be pushed from the supplied bundle. After it is reviewed and merged, master can be used at the same final revision. Record the actual commit tested. The project is `TopEndLibraryHub.csproj`; the solution is `TopEndLibraryHub.slnx`.
+The source branch is integration/group8-release-16oct. The project is `TopEndLibraryHub.csproj`; the solution is `TopEndLibraryHub.slnx`. The commit printed by git rev-parse identifies the installed revision.
 
 ## Select the database and configuration
 
@@ -80,7 +80,7 @@ On the VM, follow the guide from source download through migration/seed and laun
 
 During our VM attempt we installed Git and .NET in the Darwin VM, but SQL Server 2022 LocalDB installation failed with Error 1920: SQL Server VSS Writer could not start. An administrator attempt also failed, and Event Viewer reported a startup timeout. Another VM/environment blocked installation through administrator restrictions. The underlying cause is not confirmed. These are failed attempts, not installation passes.
 
-Use a suitable environment or obtain lecturer agreement to an alternative verification method. Repeating the same blocked installer does not establish that the instructions work. Build-file locks in a OneDrive project previously cleared after stopping the app/Visual Studio and shutting down build servers; generated bin/obj files can then be rebuilt. Do not remove source, screenshots, migrations or database files during cleanup.
+For build-file locks in a OneDrive project, stop the app and Visual Studio, then run dotnet build-server shutdown. Remove only generated bin/obj output before rebuilding. Retain source, screenshots, migrations and database files.
 
 ## Repeatable release checks
 
@@ -97,4 +97,4 @@ In a second PowerShell window in the same folder:
 .\scripts\Test-CatalogueApi.ps1 -BaseUrl 'https://localhost:7197'
 ```
 
-The API script prompts for the private local key without displaying it. Clients send X-Api-Key. Use the actual URL printed by the application if different. SQL tests create unique TopEndLibraryHub_Tests_* databases and clean up only those; they do not reset application data. Our Windows run passed all 33 tests, but does not establish a VM installation pass.
+The API script prompts for the private local key without displaying it. Clients send X-Api-Key. Use the actual URL printed by the application if different. SQL tests create unique TopEndLibraryHub_Tests_* databases and clean up only those; they do not reset application data. Our Windows run passed all 33 tests; the separate VM installation result is recorded above.

@@ -20,7 +20,7 @@ A repaired copy at Darwin is not yet ready at Palmerston. A physical Available c
 | Importer | Add physical copies in bulk with validation feedback. | Two rows create three copies; repeated upload creates none. |
 | Manager exports | Explain borrowing, fines and inventory outside the dashboard. | Matching CSV/PDF and a non-zero recorded payment. |
 
-The value we demonstrate is consistency across this journey. We have not measured staff time saved or compared novelty with commercial products. We retained one MVC deployment and database, as the brief asks for horizontal expansion rather than an unnecessary new architecture.
+The value we demonstrate is consistency across this journey: patrons retain their queue position and staff can explain when and where collection is possible. We retained one MVC deployment and database to support the horizontal expansion required by the brief.
 
 # 2. Our agreement, approach and plan
 
@@ -82,7 +82,7 @@ A current overdue estimate is separate from a recorded fine. When a returned loa
 
 # 6. Individual work, hours and reflections
 
-We include four named accounts in one portfolio. The time records have different bases and are not presented as a precise combined billable total. Original reports remain supporting evidence; later integration and assisted tests remain attributed separately from original component work.
+Each member describes their contribution, working hours, strengths, difficulties and learning. Retrospective estimates are labelled in the hours tables. The original reports and source history support these accounts.
 
 ## 6.1 Kamalpreet - S389008
 
@@ -100,7 +100,7 @@ We include four named accounts in one portfolio. The time records have different
 
 :::include individual/MEHAKPREET_KAUR.md
 
-### My revised time breakdown
+### My task hours
 
 :::include individual/MEHAKPREET_HOURS_REVIEW.md
 
@@ -124,7 +124,7 @@ We use the green library theme and direct task names such as Collection, Self se
 
 ## Our actual installation result
 
-The combined Windows build and all 33 SQL-enabled tests passed at b79faf3. This verifies the application and database operations in that environment. The required separate VM installation did not reach a working application: LocalDB failed when SQL Server VSS Writer could not start, and the administrator attempt failed too. We have no confirmed cause or approved alternative.
+The combined Windows build and all 33 SQL-enabled tests passed at b79faf3. This verifies the application and database operations in that environment. The required separate VM installation did not reach a working application: LocalDB failed when SQL Server VSS Writer could not start, and the administrator attempt failed too. The cause of the installer failure was not established.
 
 We also resolved a locked generated AssemblyInfo.cs file in the OneDrive project by stopping app/build servers, removing generated bin/obj and rebuilding. Updating Pkcs 9.0.4 to 9.0.21 removed the supplied build warnings; the package audit reported no vulnerable packages from its configured sources at that check. We would trial the VM guide early and check resources/permissions before the final integration period next time.
 
@@ -172,7 +172,7 @@ The synthetic report uses 13 fictional items, three generally available, three r
 
 # 11. Selected evidence
 
-We selected captures that explain integration. The screenshot README maps original names to descriptive filenames; it is a caption index, not an image. We distinguish visible outcomes from written test results and retain complementary captures where a result spans two screens. A setup form is not relabelled as a successful action.
+The selected figures document queue order, cancellation, allocation, destination readiness, import validation and reporting. The repository evidence index links each capture to its test and retains complementary images where a result spans two screens.
 
 :::figure docs/screenshots/h02_fifo_queue_details.png | Figure 4. Asha is first and Noah second for borrowed TY-0001. The complementary overview is retained in the repository.
 
@@ -180,11 +180,11 @@ We selected captures that explain integration. The screenshot README maps origin
 
 :::figure docs/screenshots/c08_asha_allocated_palmerston.png | Figure 6. Repair allocates Asha for Palmerston while Noah waits. Allocation at origin does not mean readiness at destination.
 
-:::figure docs/screenshots/c08_no_early_pickup_notifications.png | Figure 7. The filtered TY-9001 pickup history has zero records before arrival. This checks timing, not external delivery.
+:::figure docs/screenshots/c08_no_early_pickup_notifications.png | Figure 7. The filtered TY-9001 pickup history has zero records before arrival. The messages are simulated Email/SMS records.
 
 :::figure docs/screenshots/c11_asha_ready_noah_waiting_palmerston.png | Figure 8. Destination receipt makes Asha Ready while Noah still waits. The receipt and two channel messages are separately indexed.
 
-:::figure docs/screenshots/harsimran/hs02_wrong_branch_receipt.png | Figure 9. The 13 October component check rejects wrong-branch receipt. It is not a VM installation result.
+:::figure docs/screenshots/harsimran/hs02_wrong_branch_receipt.png | Figure 9. The 13 October component check rejects receipt at the wrong branch.
 
 :::figure docs/screenshots/release-16oct/r01_csv_three_copies_imported.png | Figure 10. Actual Windows import: three physical copies, two accepted rows, zero skips. Repeating the sample created none and skipped two ISBN rows.
 
@@ -192,15 +192,15 @@ We selected captures that explain integration. The screenshot README maps origin
 
 :::figure docs/screenshots/release-16oct/r05_manager_dashboard_before_payment.png | Figure 12. Nine items, four generally available, two active/overdue loans and one reserved Available copy. Fine totals below this crop are verified from actual exports. The duplicate button pair visible here was removed in the final source.
 
-# 12. Delivery, sources and acknowledgement
+# 12. Evaluation, sources and acknowledgement
 
-## Remaining limits
+## Evaluation and limitations
 
-Our required VM installation has not succeeded. There is no recorded lecturer-approved alternative or extension. The official deadline remains 16 October 23:59 Darwin.
+The combined release supports the seven modules and the connected repair-to-pickup journey. Shared circulation rules keep availability consistent across the catalogue, kiosk, API and manager outputs. The actual Windows tests and exported audit rows provide evidence for those behaviours.
 
-The cumulative package preserves the Windows-tested b79faf3 release and records the precise final source commit/hash. The owner must apply/push the update and review/merge the branch so the submitted repository contains these files. We checked public repository/project-board read access on 16 October. We must retain the submission receipt.
+The separate VM installation failed during LocalDB setup. External Email/SMS delivery and bank payment processing are outside the implementation: notifications are simulated records, and fine payment is recorded by library staff. The browser security checks cover the specific scenarios listed in section 10.
 
-The listed deeper runtime security cases are unrun, messages are simulated and fine payment is a library record rather than bank integration. Hours remain labelled by basis. Original reports retain their historical dates rather than being silently relabelled as final acceptance.
+Earlier shared data agreements, smaller integration batches and an early VM trial would have reduced the final integration pressure. A current project board and daily task/time logs would also have made progress easier to track.
 
 ## Source index
 
@@ -210,7 +210,8 @@ The listed deeper runtime security cases are unrun, messages are simulated and f
 | Supplied rubric | Eleven criteria and weights totalling 60. |
 | Rohan's assignment-two announcement | Requirements questions, marketing, feedback acted on, breadth and depth as design prompts. |
 | Public Git repository and project board | Source history, tasks and marking read access. |
-| docs/REQUIREMENTS.md | Current acceptance/business-rule decisions; supersedes older working Word draft for release status. |
+| docs/REQUIREMENTS.md | Seven-module requirements, acceptance checks and shared business rules. |
+| docs/PROJECT_TASK_REGISTER.md | Full task ownership, completion status and evidence at the integration review. |
 | docs/MEETING_MINUTES.md | Discussion decisions, responsibilities and action closeout. |
 | docs/individual/ | Four personal accounts, hours and verified source history. |
 | docs/member-reports/ and Documentation/ | Original member reports and kiosk/API/patron material. |

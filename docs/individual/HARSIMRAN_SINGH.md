@@ -10,7 +10,7 @@ My report supplied on 16 October contains [seven preserved screenshots](../scree
 
 ## Confirmed working hours
 
-My confirmed task total is 31 hours, superseding the earlier planning-estimate label in my component report. I did not supply daily start/end times.
+My confirmed task total is **31 hours**, allocated as follows.
 
 | Task | Confirmed hours |
 | --- | ---: |

@@ -25,7 +25,3 @@ Testing was essential throughout the project. I tested the kiosk welcome page, c
 If I were to complete a similar project again, I would establish shared database conventions and integration requirements earlier, coordinate changes to common files more closely, and test merged functionality more frequently. I would also maintain a more detailed development log from the beginning so that my time spent coding, debugging, testing and documenting could be recorded accurately. These improvements would help reduce integration problems and make collaboration more efficient.
 
 Overall, this project strengthened my practical skills in ASP.NET Core MVC, C#, Entity Framework Core, SQL Server, authentication, API development, testing and GitHub collaboration. More importantly, it taught me how to approach unfamiliar technical challenges systematically, take responsibility for my assigned work and persist when a solution does not work initially. I am proud of completing my kiosk and API contribution and successfully integrating it into the group repository. The experience has increased my confidence in contributing to larger software development projects and highlighted the importance of teamwork, testing, security and continuous learning.
-
-## My time record
-
-My revised record is a **48-hour retrospective estimate**, consolidated after I requested a review of overlapping entries. It is not a dated actual timesheet. My component reflection remains separate from the later combined-release verification.

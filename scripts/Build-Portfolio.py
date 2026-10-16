@@ -60,8 +60,12 @@ def table(rows,source):
  else:w=[1/n]*n
  if n==3 and ('before' in headers):w=[.52,.24,.24]
  if n==3 and ('marks' in headers):w=[.33,.13,.54]
+ if n==3 and ('estimated session' in headers):w=[.22,.60,.18]
+ if n==4 and rows[0][0]=='Stage':w=[.10,.25,.40,.25]
+ if n==4 and 'deliverable or result' in headers:w=[.25,.20,.13,.42]
  data=[[p(c,'thead' if i==0 else 'cell',source) for c in r] for i,r in enumerate(rows)]
- t=Table(data,colWidths=[WIDTH*x for x in w],repeatRows=1,hAlign='LEFT');t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),LIGHT),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),('TOPPADDING',(0,0),(-1,-1),6),('BOTTOMPADDING',(0,0),(-1,-1),6),('LINEBELOW',(0,0),(-1,0),.7,LINE),('LINEBELOW',(0,1),(-1,-1),.35,LINE)]));return [t,Spacer(1,10)]
+ pad=4.5 if n==2 and 'hour' in headers else 6
+ t=Table(data,colWidths=[WIDTH*x for x in w],repeatRows=1,hAlign='LEFT');t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),LIGHT),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),('TOPPADDING',(0,0),(-1,-1),pad),('BOTTOMPADDING',(0,0),(-1,-1),pad),('LINEBELOW',(0,0),(-1,0),.7,LINE),('LINEBELOW',(0,1),(-1,-1),.35,LINE)]));return [t,Spacer(1,10)]
 def arrow(d,x,y,a,b):
  import math
  d.add(Line(x,y,a,b,strokeColor=MUTED));angle=math.atan2(b-y,a-x);size=5
@@ -117,6 +121,7 @@ def parse(text,source):
   if h:
    level=len(h.group(1));title=h.group(2)
    if title=='My source history':items.append(CondPageBreak(320))
+   if title=='Rubric coverage':items.append(CondPageBreak(470))
    if title=='My acknowledgement of assistance':items.append(PageBreak())
    if level==1 or (level==2 and re.match(r'6\.[2-4] ',title)):
     if items and not isinstance(items[-1],PageBreak):items.append(PageBreak())
@@ -139,7 +144,7 @@ def decorate(c,doc):
  c.line(M,36,W-M,36);c.drawString(M,23,'Group 8  |  Source, decisions and actual outcomes');c.drawRightString(W-M,23,str(doc.page));c.restoreState()
 story=[Spacer(1,32),p('TopEndLibraryHub','title'),p('Group Portfolio','subtitle'),p('HIT339 Distributed Development  |  Group 8'),p('16 October 2026'),Spacer(1,15)]
 story+=table([['Group member','Student number'],['Kamalpreet','S389008'],['Harsimran Singh','S388232'],['Mehakpreet Kaur','S390303'],['Sandesh Bhattarai','S390535']],ROOT/'docs')
-story+=[Spacer(1,14),p('A family can keep its place while an item is repaired, moved to the chosen branch and made ready for collection.','subtitle'),p('[Source repository]('+URL+') | [Project board](https://github.com/users/Kamal03102006/projects/1)'),p('Windows-tested revision: **b79faf3**. Final handoff branch: integration/group8-release-16oct. The cumulative package records the exact final commit.'),p('Recorded results: 33 Windows tests and ten HTTPS API checks passed; actual imports and report/payment reconciliation verified. The separate VM installation remains unsuccessful and is disclosed in section 8.')]
+story+=[Spacer(1,14),p('A family can keep its place while an item is repaired, moved to the chosen branch and made ready for collection.','subtitle'),p('[Source repository]('+URL+') | [Project board](https://github.com/users/Kamal03102006/projects/1)'),p('Windows-tested revision: **b79faf3**. Source branch: integration/group8-release-16oct.'),p('Recorded results: 33 Windows tests and ten HTTPS API checks passed; actual imports and report/payment reconciliation verified. The separate VM installation result is recorded in section 8.')]
 body=(ROOT/'docs/PORTFOLIO_CONTENT.md').read_text();body=':::toc'+body.split(':::toc',1)[1];story+=parse(body,ROOT/'docs')
 doc=Doc(str(OUT),pagesize=A4,leftMargin=M,rightMargin=M,topMargin=52,bottomMargin=48,title='TopEndLibraryHub - HIT339 Group 8 Portfolio',author='HIT339 Group 8',subject='Project management, implementation, individual accounts and verification')
 doc.addPageTemplates(PageTemplate(id='portfolio',frames=[Frame(M,48,WIDTH,H-100,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0)],onPage=decorate));doc.multiBuild(story,maxPasses=5)

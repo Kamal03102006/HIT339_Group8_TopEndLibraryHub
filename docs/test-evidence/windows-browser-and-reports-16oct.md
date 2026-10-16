@@ -1,6 +1,6 @@
 # Our actual Windows import and report evidence
 
-I ran the browser checks and supplied the files as Kamalpreet. We inspected the captures, parsed the actual CSVs and rendered both pages of the actual PDF. These results follow the b79faf3 release import.
+I ran the Windows browser checks on the b79faf3 release and retained the captures and exported files. The audit compared the dashboard, parsed CSV rows and both pages of the PDF export.
 
 | Import | Actual result |
 | --- | --- |

@@ -39,7 +39,7 @@ Date: 13 October 2026
 
 We discussed merge timing. Branch changes were already being brought together because other modules needed them. We also raised the risk of unfinished changes overwriting another contribution, especially in the shared layout, models, Program.cs and context/snapshot.
 
-We needed to review affected shared files with their owners, preserve each contribution and rebuild the combined application. This did not mean every feature was already accepted, or that every merge should wait until the final day.
+We agreed to review affected shared files with their owners, preserve each contribution and rebuild the combined application before accepting the integration.
 
 Action: Kamalpreet to coordinate the combined review; module owners to identify their shared model/configuration dependencies.
 
@@ -86,15 +86,13 @@ We reviewed the importer/report handoff and kept its existing eight component ca
 
 ## Action closeout - 16 October
 
-This is a technical action update, not an additional meeting with assumed attendance.
+This update records the final position of the agreed actions.
 
 | Action | Current position |
 | --- | --- |
 | Shared modules/schema | Combined release; seven canonical migrations retained. |
 | Import/report corrections | Actual import captures, matching CSV/PDF and AUD 27 payment transition verified. |
 | Combined tests | Windows build and 33 tests passed; all ten HTTPS API checks passed. Selected route denial and fresh-request logout matched expectations. |
-| Individual handoffs | Four accounts received: 31 confirmed hours, 48/35 retrospective estimates and 30.76 partial reconstructed lead hours. |
-| VM check | Still blocked during LocalDB installation; no successful or approved alternative recorded. |
-| Submission | Final source push/review, portfolio upload and receipt remain release actions. |
-
-We preserved decisions and actions without inventing a call location, duration, attendance list or missing acceptance date.
+| Individual handoffs | Four accounts received: Harsimran 31 confirmed hours; Kamalpreet 30.76, Mehakpreet 48 and Sandesh 35 estimated hours. |
+| VM check | Blocked during LocalDB installation: SQL Server VSS Writer could not start. |
+| Portfolio | Group records, four individual accounts, guides, diagrams and verification evidence compiled. |

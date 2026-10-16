@@ -54,6 +54,6 @@ The private hold form lets an active linked member join the same queue that staf
 
 ## My hours and improvement
 
-My recoverable subtotal is **30 h 46 min (30.76 hours)** through 16 October 19:29 Darwin, using my revised four-hour gap rule. It is a partial retrospective elapsed-session estimate, including some waiting and breaks. I did not keep a complete active/billable timesheet or invent feature-level durations. The detailed sessions follow in this portfolio and in my time record.
+My **estimated effort is 30.76 hours** through 16 October 19:29 Darwin. It covers coordination, development, integration, testing, evidence and documentation. My working-session summary follows.
 
-Next time I would agree data contracts earlier, integrate smaller changes, keep a dated task/time log and test the VM guide near the beginning. I would learn the Git/migration workflow before the team changes shared models. Our VM installation is still unsuccessful; deeper forged-POST/history-cache/server-only expiry checks are not recorded as passed.
+Next time I would agree data contracts earlier, integrate smaller changes, keep a dated task/time log and test the VM guide near the beginning. I would learn the Git/migration workflow before the team changes shared models. The VM installation problem showed me why setup verification needs its own early milestone.

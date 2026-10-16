@@ -1,0 +1,57 @@
+{
+  "url": "https://github.com/users/Kamal03102006/projects/1",
+  "reviewedAtUtc": "2026-10-16T12:13:47.542334+00:00",
+  "totalItems": 4,
+  "hasNextPage": false,
+  "access": "public read-only",
+  "items": [
+    {
+      "issue": 1,
+      "title": "Agree team responsibilities and availability.",
+      "status": "Todo",
+      "assignees": [
+        "bhattarai-sandesh",
+        "Kamal03102006",
+        "preetmehakkaur9-lab"
+      ],
+      "estimatedHours": 2,
+      "actualHours": null,
+      "targetDate": null
+    },
+    {
+      "issue": 2,
+      "title": "Write requirements and acceptance checks for all seven modules.",
+      "status": "In Progress",
+      "assignees": [
+        "Kamal03102006"
+      ],
+      "estimatedHours": 2,
+      "actualHours": null,
+      "targetDate": null
+    },
+    {
+      "issue": 3,
+      "title": "Verify every member can clone, build, and run the project.",
+      "status": "Todo",
+      "assignees": [
+        "bhattarai-sandesh",
+        "Kamal03102006",
+        "preetmehakkaur9-lab"
+      ],
+      "estimatedHours": 2,
+      "actualHours": null,
+      "targetDate": null
+    },
+    {
+      "issue": 4,
+      "title": "Agree shared database changes and rules for borrowing, holds, and transfers.",
+      "status": "Todo",
+      "assignees": [
+        "Kamal03102006"
+      ],
+      "estimatedHours": 2,
+      "actualHours": null,
+      "targetDate": null
+    }
+  ]
+}

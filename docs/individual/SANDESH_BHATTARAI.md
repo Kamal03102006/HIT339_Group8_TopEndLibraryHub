@@ -32,7 +32,7 @@ My importer reduces repeated manual entry by creating separately coded physical 
 
 ## My hours
 
-My updated report supplies a **35-hour retrospective task estimate**, replacing the earlier 12.5-hour partial record. I count it once; these are task estimates, not a contemporaneous daily timesheet.
+My estimated effort is **35 hours**, allocated as follows.
 
 | Task | Estimated hours |
 | --- | ---: |

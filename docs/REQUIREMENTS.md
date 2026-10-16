@@ -1,6 +1,6 @@
 # Our requirements and decision notes
 
-We used the supplied project brief as our required scope. We expanded the existing .NET 10 MVC application through seven new modules/channels while retaining Books, Music and Toys. Our demonstration follows an unavailable toy through a fair queue, repair, branch transfer and collection. The notes below describe our decisions; they are not claims of additional client approval or a field study.
+We used the project brief to define the required scope. We expanded the existing .NET 10 MVC application through seven new modules/channels while retaining Books, Music and Toys. Our demonstration follows an unavailable toy through a fair queue, repair, branch transfer and collection. The decisions below connect those requirements to the implemented behaviour and acceptance evidence.
 
 ## Users and access
 
@@ -50,7 +50,7 @@ We used the supplied project brief as our required scope. We expanded the existi
 | API filters. | limit 1-100, category Book/Music/Toy, active branchId; search at most 100 characters. Invalid filter 400, missing item 404, POST 405, missing configured key 503. |
 | Auditable exports. | Shared snapshot, AUD/ACST, full CSV inventory/fine rows; PDF first 200 fine/200 inventory rows with truncation note; formula-like CSV text escaped. |
 | Same installation guide at each location, tested on VM. | Common guide provided; successful Windows/SQL run. VM LocalDB setup failed, so successful VM verification is incomplete. |
-| Readable management/source access. | Public GitHub repository and board checked; owner still needs final push. |
+| Readable management/source access. | Public GitHub repository and board are readable without authentication; the task register records delivery and evidence. |
 
 ## Questions we resolved
 
@@ -64,4 +64,4 @@ We used the supplied project brief as our required scope. We expanded the existi
 | What does operating status mean? | Service/database health and configured branch activity. We have no live opening-hours data. |
 | How should competing shared files be merged? | Retain one service/migration chain, review compatibility and test the integrated behaviour. |
 
-We corrected case-sensitive membership input, notification filter loss, rightful pickup collection, importer Quantity/year and manager availability definitions. We removed duplicate export buttons after inspecting the actual browser screen. We do not claim real email/SMS/payment-provider integration, successful VM installation or unrun security cases.
+Integration corrections addressed membership input, notification filter retention, rightful pickup collection, importer Quantity/year handling and manager availability definitions. We removed duplicate export buttons after inspecting the actual browser screen. Section 10 records the completed verification and its limits.

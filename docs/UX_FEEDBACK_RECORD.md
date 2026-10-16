@@ -1,6 +1,6 @@
 # Our UX observations and improvements
 
-We kept informal patron feedback separate from internal acceptance. Mehakpreet's record identifies Anjana, Robinpreet and **Navdeep**, confirmed through the member follow-up. No reviewer requested a specific further change; we do not attribute an invented issue to them.
+Mehakpreet collected informal patron feedback from Anjana, Robinpreet and **Navdeep**. They requested no specific further changes. Our internal testing also identified the input and workflow observations below.
 
 | Observation | Change or response | Result/limit |
 | --- | --- | --- |

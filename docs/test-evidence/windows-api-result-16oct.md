@@ -1,6 +1,6 @@
 # My Windows HTTPS API result
 
-Tester: Kamalpreet, S389008. I used a fresh private local key and ran Test-CatalogueApi.ps1 against https://localhost:7197. All ten checks passed. I supplied the final passing output and confirmed all ten; the key was not printed.
+Tester: Kamalpreet, S389008. I used a fresh private local key and ran Test-CatalogueApi.ps1 against https://localhost:7197. All ten checks passed; the script kept the key private.
 
 | Case | HTTP result |
 | --- | ---: |
