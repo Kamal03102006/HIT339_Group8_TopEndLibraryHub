@@ -33,7 +33,7 @@ Repository: https://github.com/Kamal03102006/HIT339_Group8_TopEndLibraryHub
 
 Project board: https://github.com/users/Kamal03102006/projects/1
 
-Both pages were publicly readable without authentication in the 16 October access check. At that review, the board contained four foundation issues: three marked Todo and one In Progress. Module delivery and acceptance had progressed beyond those entries. The task register below records the wider work and its evidence. Keeping the board current was a weakness in our project management.
+Both pages were publicly readable without authentication in the 16 October access check. Our final board review at 22:20 Darwin verified 17 assigned tasks: 14 Done, two In Progress and one Todo. The four foundation checks, seven modules, combined acceptance, guides and portfolio were marked Done. The separate VM check remained blocked. The delivery register below links the completed work to its evidence.
 
 ## Task completion register
 
@@ -67,7 +67,7 @@ The individual sections describe the work covered by these records. Assignment 2
 | Late integration | One combined release and targeted acceptance; less time remained for VM recovery. |
 | Incomplete daily logs | Confirmed hours, retrospective estimates and partial sessions kept distinct. |
 | VM LocalDB failure | Preserved troubleshooting/failure record; no successful alternative claimed. |
-| Board maintenance | Four initial issues did not capture later module delivery; the task register consolidates ownership and outcomes. |
+| Board maintenance | Updated the initial four issues to a 17-task board with owners, delivery statuses and a visible VM blocker. |
 
 ## Our strengths and weaknesses
 

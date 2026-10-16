@@ -15,7 +15,7 @@ The 16 October integration combines the lead's tested `9b28459` source with Sand
 
 Our Windows build and all 33 tests passed with none skipped at b79faf3. All ten HTTPS API checks passed. Actual imports, matching manager CSV/PDF, a non-zero payment transition and selected route/logout checks are recorded in [release checks](docs/RELEASE_CHECKS_16OCT.md). The final source includes documentation and a duplicate-button cleanup without changing report calculations. Our VM installation remains blocked.
 
-The complete [Group Portfolio PDF](docs/HIT339_Group8_Portfolio.pdf) is the submission document. The [task register](docs/PROJECT_TASK_REGISTER.md) records ownership and evidence. The [board closeout guide](docs/PROJECT_BOARD_UPDATES.md) identifies the live GitHub updates required. Push the final integration source before submitting its repository link.
+The complete [Group Portfolio PDF](docs/HIT339_Group8_Portfolio.pdf) is the submission document. The [task register](docs/PROJECT_TASK_REGISTER.md) records ownership and evidence. The [board closeout guide](docs/PROJECT_BOARD_UPDATES.md) records the verified 17-task board and remaining publication/submission actions. Push the final integration source before submitting its repository link.
 
 ## Download and install
 

@@ -8,7 +8,7 @@ The supplied rubric totals 60: 37 group and 23 individual marks. The portfolio c
 | Team contracts | 2 | Four-member acceptance on original creation/sharing day; calendar date not retained. |
 | Requirements | 4 | Seven modules, shared rules, decisions and acceptance matrix. |
 | Team approach | 4 | Named ownership, shared contracts and tested integration. |
-| Project plan | 5 | Milestones, dependencies, risks and public links. |
+| Project plan | 5 | Milestones, dependencies, risks and a verified 17-task public board with owners and statuses. |
 | Task allocations | 10 | Four named accounts; confirmed/estimated/session hours distinguished. |
 | Meeting minutes | 2 | Discussion decisions, owners, actions and final technical status. |
 | Strengths/weaknesses | 8 | Four first-person examples, learning and improvements. |

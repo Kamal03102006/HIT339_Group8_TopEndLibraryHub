@@ -200,7 +200,7 @@ The combined release supports the seven modules and the connected repair-to-pick
 
 The separate VM installation failed during LocalDB setup. External Email/SMS delivery and bank payment processing are outside the implementation: notifications are simulated records, and fine payment is recorded by library staff. The browser security checks cover the specific scenarios listed in section 10.
 
-Earlier shared data agreements, smaller integration batches and an early VM trial would have reduced the final integration pressure. A current project board and daily task/time logs would also have made progress easier to track.
+Earlier shared data agreements, smaller integration batches and an early VM trial would have reduced the final integration pressure. Updating the board after each handoff and keeping daily task/time logs would have made progress easier to track throughout development.
 
 ## Source index
 
