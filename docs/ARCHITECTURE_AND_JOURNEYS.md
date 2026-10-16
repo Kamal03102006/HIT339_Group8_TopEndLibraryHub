@@ -27,7 +27,7 @@ flowchart TD
 | CSV importer | CsvImportController | Book inheritance, required PublicationYear, Quantity physical copies, selected active branch | Valid rows become separately coded copies; skipped rows have reasons |
 | Manager reporting | ManagerReportingService and ManagerReportExport | Same general availability as catalogue/API; recorded fines separate from current estimates | Dashboard, CSV and PDF reconcile to fine/inventory audit rows |
 
-A physical Available status is not sufficient for general borrowing. Active loans, transfers, usable allocations and eligible waiting requests are considered. The rightful Ready member can collect while later requests remain waiting. SQL Server locking and filtered unique indexes protect circulation; the separate real-provider tests still require execution on Windows.
+A physical Available status is not sufficient for general borrowing. Active loans, transfers, usable allocations and eligible waiting requests are considered. The rightful Ready member can collect while later requests remain waiting. SQL Server locking and filtered unique indexes protect circulation. The Windows run passed all 33 tests, including the three real-provider migration and circulation cases.
 
 ## Family pickup journey
 
@@ -37,11 +37,11 @@ A physical Available status is not sufficient for general borrowing. Active loan
 | Request | Linked active member chooses pickup branch | Create own request; reject duplicate; show private FIFO position | Earlier Sky/Asha/Noah results and indexed captures |
 | Prepare | Staff return/repair the item | Allocate next eligible request; do not announce pickup at the wrong branch | Existing repair/allocation and zero-notice captures |
 | Move | Staff dispatch and receive at pickup branch | InTransit blocks borrowing; destination receipt makes request Ready | Harsimran's component captures and lead integration evidence |
-| Collect | Rightful member checks out at physical branch | Fulfil allocation, create one loan and record simulated confirmation | Earlier staff collection evidence; final SQL kiosk/concurrency checks pending |
-| Reuse | Return a usable copy | Record any late fine, then promote next eligible request | Earlier queue results; production fine test and pending SQL return test |
+| Collect | Rightful member checks out at physical branch | Fulfil allocation, create one loan and record simulated confirmation | Staff collection evidence and passing Windows rightful-owner/concurrent-checkout SQL cases |
+| Reuse | Return a usable copy | Record any late fine, then promote next eligible request | Queue captures and passing Windows SQL late-return/fine/promotion case |
 
 ## Import and management journey
 
 An administrator selects an active branch and uploads the documented CSV. Quantity=2 produces two copies with unique library codes. Missing headers reject the upload; invalid rows explain their errors; re-uploading an existing ISBN skips it. The manager then reviews the same collection through the dashboard, CSV and PDF. Reserved/transit items remain unavailable to the general public. Fine audits identify each loan, amount, payment state and payment timestamp; current overdue estimates remain separate. Inventory audits explain each copy's branch, status, restriction and general availability.
 
-The automated synthetic fixture checks these calculations and generates an inspected two-page PDF. Windows upload, exported files, route access and SQL transactions remain final release checks. See [release verification](RELEASE_CHECKS_16OCT.md), [the screenshot index](screenshots/README.md) and [the import/report guide](IMPORT_AND_REPORT_GUIDE.md). All captures retain their historical dates and evidence limits.
+The automated synthetic fixture checks these calculations and generates a two-page PDF. The actual Windows browser imports, exported CSV/PDF, AUD 27 payment reconciliation, selected route restrictions and real SQL transactions were also checked. See [release verification](RELEASE_CHECKS_16OCT.md), [the screenshot index](screenshots/README.md) and [the import/report guide](IMPORT_AND_REPORT_GUIDE.md). Captures retain their original dates and dataset context.

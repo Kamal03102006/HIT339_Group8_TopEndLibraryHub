@@ -4,4 +4,4 @@ Submit one [Group Portfolio PDF](HIT339_Group8_Portfolio.pdf) and the final repo
 
 Use the cumulative updater, push integration/group8-release-16oct, review/merge it and check the final source is visible. Read the PDF, upload it with the repository link at the group submission point and keep the receipt. The package manifest records the exact final commit/hash and the Windows-tested b79faf3 revision.
 
-The PDF discloses the incomplete VM installation and the distinct time bases. We have no recorded extension approval. The official deadline is 16 October 23:59 Darwin.
+The PDF records the unsuccessful VM installation and labels the time estimates. The official deadline is 16 October 23:59 Darwin.

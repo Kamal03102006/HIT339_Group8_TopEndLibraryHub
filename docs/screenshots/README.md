@@ -2,6 +2,8 @@
 
 This README.md is a text index, not a screenshot. It explains what each image demonstrates and links it to the test record.
 
+The final evidence set contains **48 images**: 28 lead captures, seven Harsimran captures, eight Sandesh captures and five Windows release captures. Counts in the dated sections below describe their original checkpoints.
+
 The audit verified the 21 images pushed in a1e8190. Fourteen were newly inspected; seven matched previously inspected files byte for byte. There were no exact duplicate files. All 21 are retained under descriptive names with their image bytes unchanged. Three historical 11 October notification photos were restored from existing uploads, giving 24 evidence images.
 
 ## Current hold and circulation evidence
@@ -46,9 +48,9 @@ These three images show the earlier 11 October interface and data. They support 
 - The new Asha request #5 image says Awaiting return. It documents the next-cycle setup, not the later damaged-return outcome. The initial #3/#4 damaged queue image does show Awaiting repair.
 - Wrong-member rejection and repeat checkout with one active loan remain reported where no result image was supplied. The Collected image alone does not prove the active-loan count.
 - The later four/six pickup totals and 6 → 6 restart result remain written tester reports. No additional screenshots were requested for that repair/restart check; its absence is not a new screenshot task.
-- Kiosk/API/privacy, CSV import, expanded exports and clean-VM evidence belong to their remaining tests/member handoffs. The available rubric does not prescribe an image for every click or test.
+- Final kiosk/API/access, CSV import and expanded export results are recorded in [release checks](../RELEASE_CHECKS_16OCT.md). The separate VM installation remains blocked.
 
-See [the screenshot audit](../SCREENSHOT_AUDIT.md), [circulation results](../CIRCULATION_INTEGRATION_TEST_RECORD.md), [hold results](../HOLD_WORKFLOW_TEST_RECORD.md) and [notification results](../NOTIFICATION_TEST_RECORD.md). Selected figures and these captions will be included in the final portfolio.
+See [the screenshot audit](../SCREENSHOT_AUDIT.md), [circulation results](../CIRCULATION_INTEGRATION_TEST_RECORD.md), [hold results](../HOLD_WORKFLOW_TEST_RECORD.md) and [notification results](../NOTIFICATION_TEST_RECORD.md). Selected figures and captions are included in the final portfolio.
 
 ## Original filename mapping
 
@@ -116,3 +118,15 @@ Eight original component captures are added under screenshots/sandesh. The earli
 ## Additional member handoff on 16 October
 
 [Harsimran's seven component images](harsimran/README.md) are preserved separately with their 13 October date and original embedded-image mapping. These supplement the earlier index; they are not new combined-release or VM passes.
+
+## Actual Windows release evidence - 16 October
+
+| Image | Observed result |
+| --- | --- |
+| [Three physical copies](release-16oct/r01_csv_three_copies_imported.png) | Two accepted rows create three copies with no skipped rows. |
+| [Repeated upload](release-16oct/r02_csv_repeat_two_rows_skipped.png) | Zero new copies and two skipped ISBN rows. |
+| [Mixed validation](release-16oct/r03_csv_mixed_validation.png) | One accepted row/copy and two skipped rows; lower error details are outside the capture. |
+| [Missing year header](release-16oct/r04_csv_missing_year_header.png) | Upload rejected for missing PublicationYear. |
+| [Manager dashboard](release-16oct/r05_manager_dashboard_before_payment.png) | Nine-item dataset with four generally available copies. The actual CSV/PDF and later payment audit are in test-evidence. |
+
+These five captures complete the 48-image index. The actual Windows results are documented in [the release audit](../test-evidence/windows-browser-and-reports-16oct.md).

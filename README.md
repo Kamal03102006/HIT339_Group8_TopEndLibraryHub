@@ -97,7 +97,7 @@ With the local application running and API configured:
 .\scripts\Test-CatalogueApi.ps1 -BaseUrl 'https://localhost:7197'
 ```
 
-The script asks for the API key without displaying it and checks missing/wrong/valid keys, read-only methods, categories/status, validation and absence of private account fields. Use the actual HTTPS address printed by the application. Keep its output and the test TRX file. Finish the targeted browser and VM checks in [release checks](docs/RELEASE_CHECKS_16OCT.md).
+The script asks for the API key without displaying it and checks missing/wrong/valid keys, read-only methods, categories/status, validation and absence of private account fields. Use the actual HTTPS address printed by the application. Our passing Windows/API and selected browser outcomes are in [release checks](docs/RELEASE_CHECKS_16OCT.md), together with the unsuccessful VM result and the limits of the completed checks.
 
 Representative CSVs are in [docs/samples](docs/samples); [the import/report guide](docs/IMPORT_AND_REPORT_GUIDE.md) gives exact expected sample outcomes. Synthetic generated exports are labelled under [test evidence](docs/test-evidence). Historical screenshots and their limits are in [the screenshot index](docs/screenshots/README.md).
 

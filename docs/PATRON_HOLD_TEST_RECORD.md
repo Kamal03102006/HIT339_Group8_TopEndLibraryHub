@@ -123,7 +123,7 @@ The extra identity fields are deliberately untrusted. The posted BorrowerId valu
 
 ## What this does not finish
 
-The new placement path closes a source gap after acceptance, not the entire 60-mark assessment. Outstanding group work includes importer/report corrections and integration, remaining kiosk/API/circulation/notification acceptance, a successful clean-VM installation and missing team records. Contracts, actual or clearly labelled retrospective hours, real minutes, four individual reflections/value accounts and the final portfolio PDF remain required.
+At this 15 October checkpoint, the patron placement path was implemented while importer/report integration, broader acceptance, VM verification and team records were still in progress. The final 16 October results and records are indexed in RELEASE_CHECKS_16OCT.md. Contracts, actual or clearly labelled retrospective hours, real minutes, four individual reflections/value accounts and the final portfolio PDF remain required.
 
 Technical references used during implementation: Microsoft [MVC model binding](https://learn.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-10.0) and [MVC antiforgery protection](https://learn.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-10.0). The controller uses a dedicated form model and trusted principal ownership; the tests above verify behaviour rather than inferring runtime success from these references.
 

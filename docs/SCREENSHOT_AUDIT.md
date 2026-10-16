@@ -1,6 +1,6 @@
 # Screenshot audit
 
-Current evidence set: 36 retained captures—28 lead images plus eight Sandesh component captures. Earlier audit counts below describe their dated checkpoint.
+Current evidence set: **48 retained captures**: 28 lead images, seven Harsimran component captures, eight Sandesh component captures and five actual Windows import/dashboard captures from 16 October. The earlier counts below describe their dated checkpoints. The current release results are in [RELEASE_CHECKS_16OCT.md](RELEASE_CHECKS_16OCT.md).
 
 Source checkpoint: a1e8190 on feature/holds-notifications, pushed following the 14 October circulation tests. All 21 repository images were accounted for. Seven were unchanged previously inspected images; fourteen new captures were inspected individually. Three existing historical uploads were restored. Descriptive filenames and the old-to-new mapping are in screenshots/README.md.
 
@@ -18,9 +18,9 @@ Source checkpoint: a1e8190 on feature/holds-notifications, pushed following the 
 
 The two misleading original names were corrected to describe their visible states. No image was cropped, re-encoded or edited. No new screenshots are requested solely to recreate the already completed repair/restart check. If stronger proof is captured naturally during later integration tests, add it with its actual inputs and result.
 
-## Remaining submission work
+## Final release verification
 
-This audit concerns the supplied screenshots. Kiosk/API/concurrent checkout, importer/report handoff, clean-VM installation, genuine team/member records and final portfolio assembly are still outstanding in ASSESSMENT_CHECKLIST.md. Missing supplied evidence is not a claim that a teammate has done no work.
+The final release passed 33 Windows tests, including real SQL circulation cases, and ten HTTPS API checks. The actual browser imports, manager CSV/PDF and AUD 27 payment transition were inspected. Four individual records and the portfolio are complete. The separate VM installation remains blocked; deeper browser security checks remain outside the completed scenarios.
 
 The subsequent [whole-commit review](PROJECT_PROGRESS_REVIEW.md) covers application source, migrations, all rubric statuses and remaining owner deliverables. The earlier staff-only patron-placement gap was addressed by source commit 70db5b7. The subsequent PH01–PH03 inspection is recorded below; remaining POST/privacy checks are separate.
 
@@ -32,4 +32,4 @@ The queue image does not picture duplicate rejection, and the account capture do
 
 ## Additional Sandesh evidence intake
 
-Eight original captures from Sandesh's supplied report have been inspected and retained under screenshots/sandesh, alongside the unchanged earlier 28. See [the handoff](SANDESH_MEMBER_HANDOFF.md) for visible facts and member-reported inputs. Current retained count is 36. Raw CSV and PDF output files are still requested; the supplied images are captures of those files.
+Eight original captures from Sandesh's report are retained under screenshots/sandesh, alongside the earlier 28. This intake brought that historical checkpoint to 36. The later Harsimran and Windows captures bring the current total to 48. Actual final Windows CSV/PDF files are retained under test-evidence and reconciled separately from these component screenshots.
